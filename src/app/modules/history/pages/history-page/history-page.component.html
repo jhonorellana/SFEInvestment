@@ -1,0 +1,4 @@
+<div class="history-page">
+            <app-search (devuelveData)="recibeData($event)"></app-search>
+            <app-section-generic [dataMonAmortizationOwner]="MonamortizationOwnerList$ |async" [dataDailyamortization]="DailyamortizationList$ |async" [dataMonhtlyamortization]="MonthlyamortizationList$ |async "  [title]="'Vencimientos mensuales'"></app-section-generic>
+</div>

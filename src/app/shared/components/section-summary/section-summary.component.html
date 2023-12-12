@@ -1,0 +1,61 @@
+<div class="section--generic_jao">
+  <h1 class="section--generic__title">{{title}}</h1>
+  <div class="row">
+    <div class="col-4">
+      <table class="table table-striped table-hover table-sm table-bordered table-success">
+        <thead>
+          <tr>
+            <th>Tipo</th>
+            <th>Propietario</th>
+            <th>Capital</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of dataOwnerlist">
+            <td>{{ item.tipo }}</td>
+            <td>{{ item.propietario }}</td>
+            <!-- Aplicar el formato al capital usando el filtro 'number' -->
+            <td align="right">{{ item.capital | number:'1.2-2' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+    <div class="row">
+      <div class="col-4">
+          <table class="table table-striped table-hover table-sm table-bordered table-success">
+            <thead>
+              <tr>
+                <th>Empresa</th>
+                <th>Capital</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of dataEnterpriselist">
+                  <td>{{ item.empresa }}</td>
+                  <td align="right">{{ item.capital | number:'1.2-2' }}</td>
+                </tr>
+            </tbody>
+           </table>
+      </div>
+    </div>
+
+<BR>
+  <BR>
+    <BR>
+      <BR>
+        <BR>
+          <BR>
+            <BR>
+              <BR>
+                <BR>
+
+
+
+
+
+
+
+</div>

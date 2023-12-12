@@ -1,0 +1,162 @@
+[
+  {
+    "date": "2023-01-06",
+    "enterprise": "La Favoritosky",
+    "quantity": 500,
+    "value": 1000.00,
+    "price": 2.00,
+    "transactions": 10
+  },
+  {
+    "date": "2023-01-07",
+    "enterprise": "La Favorita",
+    "quantity": 502,
+    "value": 1002.00,
+    "price": 2.01,
+    "transactions": 8
+  },
+  {
+    "date": "2023-01-08",
+    "enterprise": "La Favorita",
+    "quantity": 500,
+    "value": 1010.00,
+    "price": 2.02,
+    "transactions": 6
+  },
+  {
+    "date": "2023-01-09",
+    "enterprise": "La Favorita",
+    "quantity": 502,
+    "value": 1020.00,
+    "price": 2.03,
+    "transactions": 20
+  },
+  {
+    "date": "2023-01-10",
+    "enterprise": "La Favorita",
+    "quantity": 1000,
+    "value": 2000.00,
+    "price": 2.00,
+    "transactions": 5
+  },
+  {
+    "date": "2023-01-13",
+    "enterprise": "La Favorita",
+    "quantity": 800,
+    "value": 1608.00,
+    "price": 2.01,
+    "transactions": 5
+  },
+  {
+    "date": "2023-01-14",
+    "enterprise": "La Favorita",
+    "quantity": 1200,
+    "value": 2450.00,
+    "price": 2.10,
+    "transactions": 9
+  },
+  {
+    "date": "2023-01-15",
+    "enterprise": "La Favorita",
+    "quantity": 1800,
+    "value": 3060.00,
+    "price": 2.08,
+    "transactions": 5
+  },
+  {
+    "date": "2023-01-16",
+    "enterprise": "La Favorita",
+    "quantity": 12000,
+    "value": 24500.00,
+    "price": 2.10,
+    "transactions": 9
+  },
+  {
+    "date": "2023-01-17",
+    "enterprise": "La Favorita",
+    "quantity": 300,
+    "value": 660.00,
+    "price": 2.20,
+    "transactions": 15
+  },
+  {
+    "date": "2023-01-06",
+    "enterprise": "Cerveceria Nacional",
+    "quantity": 500,
+    "value": 2000.00,
+    "price": 4.00,
+    "transactions": 10
+  },
+  {
+    "date": "2023-01-07",
+    "enterprise": "Cerveceria Nacional",
+    "quantity": 502,
+    "value": 2002.00,
+    "price": 4.01,
+    "transactions": 8
+  },
+  {
+    "date": "2023-01-08",
+    "enterprise": "Cerveceria Nacional",
+    "quantity": 500,
+    "value": 2010.00,
+    "price": 4.02,
+    "transactions": 6
+  },
+  {
+    "date": "2023-01-09",
+    "enterprise": "Cerveceria Nacional",
+    "quantity": 502,
+    "value": 2020.00,
+    "price": 4.03,
+    "transactions": 20
+  },
+  {
+    "date": "2023-01-10",
+    "enterprise": "Cerveceria Nacional",
+    "quantity": 1000,
+    "value": 2000.00,
+    "price": 4.00,
+    "transactions": 5
+  },
+  {
+    "date": "2023-01-13",
+    "enterprise": "Cerveceria Nacional",
+    "quantity": 800,
+    "value": 3208.00,
+    "price": 4.01,
+    "transactions": 5
+  },
+  {
+    "date": "2023-01-14",
+    "enterprise": "Cerveceria Nacional",
+    "quantity": 1200,
+    "value": 4850.00,
+    "price": 4.10,
+    "transactions": 9
+  },
+  {
+    "date": "2023-01-15",
+    "enterprise": "Cerveceria Nacional",
+    "quantity": 1800,
+    "value": 7260.00,
+    "price": 4.08,
+    "transactions": 5
+  },
+  {
+    "date": "2023-01-16",
+    "enterprise": "Cerveceria Nacional",
+    "quantity": 12000,
+    "value": 48500.00,
+    "price": 4.10,
+    "transactions": 9
+  },
+  {
+    "date": "2023-01-17",
+    "enterprise": "Cerveceria Nacional",
+    "quantity": 300,
+    "value": 1260.00,
+    "price": 4.20,
+    "transactions": 15
+  }
+]
