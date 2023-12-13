@@ -1,6 +1,6 @@
 export interface InvestenterpriseModel
   {
     empresa: string;
-    capital: string;
+    capital: number;
   }
 

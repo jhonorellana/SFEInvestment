@@ -16,10 +16,25 @@ export class PortfolioService {
   private readonly URL = environment.api2;
   constructor(private httpClient: HttpClient, private datePipe: DatePipe) {}
 
-    getInvestOwner$(): Observable<any>{
+    getInvestOwnernew$(): Observable<any>{
           return this.httpClient.get(`${this.URL}investownernew`);
     }
 
+    getInvestOwner$(): Observable<any>{
+      return this.httpClient.get(`${this.URL}investowner`);
+    }
+
+    getTotalInvestOwner$(): Observable<any>{
+      return this.httpClient.get(`${this.URL}totalinvestowner`);
+    }
+
+    getInvestEnterprise(): Observable<any>{
+      return this.httpClient.get(`${this.URL}investenterprise`);
+    }
+
+    getInvestVSbond(): Observable<any>{
+      return this.httpClient.get(`${this.URL}investvsbond`);
+    }
 
 
 }

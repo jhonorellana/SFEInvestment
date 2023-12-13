@@ -1,5 +1,5 @@
 export interface InvestownernewModel
 {
-  y: number;
-  name: string;
+  inversionpropietario: string;
+  capital: number;
 }
