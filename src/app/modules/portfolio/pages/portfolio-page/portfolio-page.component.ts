@@ -11,16 +11,10 @@ export class PortfolioPageComponent implements OnInit {
 
   constructor(
     private portfolioService: PortfolioService,
-   // private cdr: ChangeDetectorRef // Importa el ChangeDetectorRef
+    private cdr: ChangeDetectorRef // Importa el ChangeDetectorRef
   ) {}
 
   dataInvestownernewlist: Array<InvestownernewModel> = [];
-  dataPointChart: Array<InvestownernewModel> = [];
-  yoyo: Array<any> = [];
-  namename: Array<any> = [];
-
-/*
-
   chartOptions = {
     animationEnabled: true,
     title: {
@@ -30,80 +24,41 @@ export class PortfolioPageComponent implements OnInit {
       type: "pie",
       startAngle: -90,
       indexLabel: "{name}: {y}",
-      yValueFormatString: "#,###.##'%'",
-      dataPoints: [
-        { y: 14.1, name: "Toys" },
-        { y: 28.2, name: "Electronics" },
-        { y: 14.4, name: "Groceries" },
-        { y: 43.3, name: "Furniture" }
-      ],
-    }
-    ]
+      yValueFormatString: "'$'#,###.##",
+      dataPoints: this.dataInvestownernewlist,
+    }]
   };
-
-*/
-
-
-  chartOptions = {
-    animationEnabled: true,
-    title: {
-      text: "capital por propietario"
-    },
-    data: [{
-      type: "pie",
-      startAngle: -90,
-      indexLabel: "{name}: {y}",
-      yValueFormatString: "#,###.##'%'",
-      dataPoints: this.dataPointChart,
-    }
-    ]
-  };
-
-
-
-
 
   ngOnInit(): void {
+    this.cargaDatos();
+  }
+
+  ngAfterViewInit(): void {
+    // No es necesario renderizar el gráfico nuevamente aquí,
+    // ya que `ngOnInit` carga los datos y renderiza el gráfico.
+  }
+
+  private cargaDatos(): void {
     this.portfolioService.getInvestOwner$()
       .subscribe(
         (response: InvestownernewModel[]) => {
           this.dataInvestownernewlist = response;
-          console.log(this.dataInvestownernewlist);
-
-
-          // Actualiza directamente dataPoints en el objeto chartOptions
+          // Actualiza directamente la referencia de dataPoints
           this.chartOptions.data[0].dataPoints = this.dataInvestownernewlist.map(entry => ({
-           name: entry.name,
-           y: entry.y
+            name: entry.name,
+            y: entry.y
           }));
+          console.log(this.chartOptions.data[0].dataPoints)
+          console.log(this.dataInvestownernewlist)
 
-
-
-          this.yoyo = this.dataInvestownernewlist.map(function(elem){
-            return elem.y;
-          })
-
-          this.namename = this.dataInvestownernewlist.map(function(elem){
-            return elem.name;
-          })
-
-          this.dataPointChart = this.dataInvestownernewlist.map(entry => ({
-            y: entry.y,
-            name: entry.name
-          }));
-
-          console.log(this.dataPointChart);
-          console.log(this.yoyo);
-          console.log(this.namename);
           // Detecta los cambios manualmente
-         // this.cdr.detectChanges();
+          this.cdr.detectChanges();
         },
         err => {
           console.log('Error de conexión');
         }
       );
 
-
-
+      return
   }
 }
