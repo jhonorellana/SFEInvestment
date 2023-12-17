@@ -48,7 +48,7 @@
 .cashflow-page .cashflow-form .form-group {
   display: flex;
   justify-content: flex-start;
-  flex-direction: column;
+  flex-direction: row;
 }
 
 .cashflow-page .cashflow-form .form-group input {

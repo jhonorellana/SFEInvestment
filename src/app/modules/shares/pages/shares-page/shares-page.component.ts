@@ -128,6 +128,7 @@ export class SharesPageComponent implements OnInit {
           console.log('Error de conexion');
         }
       );
+
     }
 
     ConstruirGraficoEmisorAnio2018(anio: string): void{
@@ -205,7 +206,6 @@ export class SharesPageComponent implements OnInit {
         console.log('Error de conexion');
       }
     );
-
     }
 
 
@@ -236,7 +236,6 @@ export class SharesPageComponent implements OnInit {
 
 
         }]
-
       };
 
       this.cdr.detectChanges();
@@ -245,13 +244,12 @@ export class SharesPageComponent implements OnInit {
         console.log('Error de conexion');
       }
     );
-
     }
 
 
     ConstruirGraficoEmisorAnio2021(anio: string): void{
       const {cmbEmisor, cmbPrueba} = this.formAcciones.value
-      const observador2020$ = this.searchService.ObtenerAccionesCompaniaAnio$(cmbEmisor,anio)
+      const observador2021$ = this.searchService.ObtenerAccionesCompaniaAnio$(cmbEmisor,anio)
     .subscribe(
       (respuesta: SharesModel[]) => {
        this.dataShareslist = respuesta;
@@ -293,7 +291,7 @@ export class SharesPageComponent implements OnInit {
 
   ConstruirGraficoEmisorAnio2022(anio: string): void{
     const {cmbEmisor, cmbPrueba} = this.formAcciones.value
-    const observador2020$ = this.searchService.ObtenerAccionesCompaniaAnio$(cmbEmisor,anio)
+    const observador2022$ = this.searchService.ObtenerAccionesCompaniaAnio$(cmbEmisor,anio)
   .subscribe(
     (respuesta: SharesModel[]) => {
      this.dataShareslist = respuesta;
@@ -327,14 +325,13 @@ export class SharesPageComponent implements OnInit {
       console.log('Error de conexion');
     }
   );
-
   }
 
 
 
   ConstruirGraficoEmisorAnio2023(anio: string): void{
     const {cmbEmisor, cmbPrueba} = this.formAcciones.value
-    const observador2020$ = this.searchService.ObtenerAccionesCompaniaAnio$(cmbEmisor,anio)
+    const observador2023$ = this.searchService.ObtenerAccionesCompaniaAnio$(cmbEmisor,anio)
   .subscribe(
     (respuesta: SharesModel[]) => {
      this.dataShareslist = respuesta;
@@ -368,8 +365,6 @@ export class SharesPageComponent implements OnInit {
       console.log('Error de conexion');
     }
   );
-
-
 
   }
 

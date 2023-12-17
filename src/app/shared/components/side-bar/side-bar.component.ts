@@ -32,6 +32,16 @@ export class SideBarComponent implements OnInit {
         router: ['/', 'cashflow'],
       },
       {
+        name: 'Portafolio',
+        icon: 'uil uil-bag',
+        router: ['/', 'portfolio'],
+      },
+      {
+        name: 'Acciones',
+        icon: 'uil uil-chart-line',
+        router: ['/', 'shares'],
+      },
+      {
         name: 'Inversiones',
         icon: 'uil uil-analytics',
         router: ['/', 'investment'],
@@ -45,16 +55,6 @@ export class SideBarComponent implements OnInit {
         name: 'Indicadores',
         icon: 'uil uil-chart-pie',
         router: ['/', 'portfolio'],
-      },
-      {
-        name: 'Portafolio',
-        icon: 'uil uil-bag',
-        router: ['/', 'portfolio'],
-      },
-      {
-        name: 'Acciones',
-        icon: 'uil uil-chart-line',
-        router: ['/', 'shares'],
       },
       {
         name: 'Comparaciones',
