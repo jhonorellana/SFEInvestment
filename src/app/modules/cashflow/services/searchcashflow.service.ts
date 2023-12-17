@@ -18,12 +18,12 @@ export class SearchcashflowService {
 
   }
 
-  SearchMonthlyAmortization$(fechaInicio: string, fechaFin: string): Observable<any>{
+  SearchAmortizationBetweenDates$(fechaInicio: string, fechaFin: string): Observable<any>{
     return this.http.get(`${this.URL}amortizationdates?initialDate=${fechaInicio}&finalDate=${fechaFin}`);
 
   }
 
-  SearchMonAmortizationOwner$(fechaInicio: string, fechaFin: string): Observable<any>{
+  SearchAmortizationBetweenDatesSummary$(fechaInicio: string, fechaFin: string): Observable<any>{
     return this.http.get(`${this.URL}amortizationdatessumary?initialDate=${fechaInicio}&finalDate=${fechaFin}`);
 
   }

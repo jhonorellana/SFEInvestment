@@ -56,8 +56,8 @@ export class CashflowPageComponent implements OnInit{
 
 
     this.MonthlyamortizationList$ = this.searchcashflowService.SearchYearlyAmortization$(this._fechaInicio,this._fechaFin)
-    this.DailyamortizationList$ = this.searchcashflowService.SearchMonthlyAmortization$(this._fechaInicio,this._fechaFin)
-    this.MonamortizationOwnerList$ = this.searchcashflowService.SearchMonAmortizationOwner$(this._fechaInicio,this._fechaFin)
+    this.DailyamortizationList$ = this.searchcashflowService.SearchAmortizationBetweenDates$(this._fechaInicio,this._fechaFin)
+    this.MonamortizationOwnerList$ = this.searchcashflowService.SearchAmortizationBetweenDatesSummary$(this._fechaInicio,this._fechaFin)
   }
 
   enviarConsulta():void{
@@ -65,8 +65,8 @@ export class CashflowPageComponent implements OnInit{
     const { fechaInicio, fechaFin} = this.formBusqueda.value
 
     this.MonthlyamortizationList$ = this.searchcashflowService.SearchYearlyAmortization$(fechaInicio, fechaFin)
-    this.DailyamortizationList$ = this.searchcashflowService.SearchMonthlyAmortization$(fechaInicio, fechaFin)
-    this.MonamortizationOwnerList$ = this.searchcashflowService.SearchMonAmortizationOwner$(fechaInicio, fechaFin)
+    this.DailyamortizationList$ = this.searchcashflowService.SearchAmortizationBetweenDates$(fechaInicio, fechaFin)
+    this.MonamortizationOwnerList$ = this.searchcashflowService.SearchAmortizationBetweenDatesSummary$(fechaInicio, fechaFin)
 
 
   }
