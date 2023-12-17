@@ -1,6 +1,6 @@
 export interface SharesModel
 {
-  fecha: string;
+  fecha: Date;
   emisor: string;
   cantidad: number;
   valor: number;
