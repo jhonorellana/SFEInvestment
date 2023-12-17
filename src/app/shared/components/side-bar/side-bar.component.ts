@@ -29,7 +29,7 @@ export class SideBarComponent implements OnInit {
       {
         name: 'Flujo Efectivo',
         icon: 'uil uil-usd-circle',
-        router: ['/', 'flow'],
+        router: ['/', 'cashflow'],
       },
       {
         name: 'Inversiones',

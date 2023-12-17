@@ -1,0 +1,31 @@
+<div class="cashflow-page">
+  <div class="cashflow-wrapper">
+      <form (ngSubmit)="enviarConsulta()" [formGroup] = formBusqueda class="cashflow-form">
+          <div class="form-group">
+              <label for="fechaInicio">Fecha Inicio</label>
+              <input formControlName="fechaInicio" type="text" placeholder="Fecha Inicio" class="form-input">
+          </div>
+          <div class="form-group">
+              <label for="fechaFin">Fecha Fin</label>
+              <input formControlName="fechaFin" type="text" placeholder="Fecha Fin" class="form-input">
+          </div>
+          <div >
+              Ocurrio un error con tu email o password
+          </div>
+          <div class="form-action">
+            <button [disabled]="formBusqueda.invalid" class="login social-btn">Buscar</button>
+          </div>
+      </form>
+      <div>
+        <hr>
+        Raw: {{formBusqueda.value | json}}
+      </div>
+  </div>
+
+<app-section-generic [dataMonAmortizationOwner]="MonamortizationOwnerList$ |async" [dataDailyamortization]="DailyamortizationList$ |async" [dataMonhtlyamortization]="MonthlyamortizationList$ |async "  [title]="'Vencimientos mensuales'"></app-section-generic>
+
+
+</div>
+
+
+
