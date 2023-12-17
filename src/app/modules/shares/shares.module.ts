@@ -6,6 +6,7 @@ import { SharesPageComponent } from './pages/shares-page/shares-page.component';
 import { SharedModule } from '@shared/shared.module';
 
 import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
     CommonModule,
     SharesRoutingModule,
     SharedModule,
-    CanvasJSAngularChartsModule
+    CanvasJSAngularChartsModule,
+    ReactiveFormsModule
   ]
 })
 export class SharesModule { }

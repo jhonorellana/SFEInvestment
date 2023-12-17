@@ -1,6 +1,11 @@
-<div class="shares-paget">
+<div class="shares-page">
+  <form [formGroup]="formAcciones" (ngSubmit)="enviarConsulta()">
     <div class="col-2">
-      <select name="cmbEmisor" id="cmbEmisor" class="form-select mb-3" aria-label="Emisor">
+      <select formControlName="cmbPrueba" id="cmbPrueba" class="form-select mb-3" aria-label="Emisor">
+        <option value=34>ALICOSTA BK HOLDING S A</option>
+        <option value=64>ALIMENTOS ECUATORANOS ALIMEC S.A</option>
+      </select>
+      <select formControlName="cmbEmisor" id="cmbEmisor" class="form-select mb-3" aria-label="Emisor">
         <option value=34>ALICOSTA BK HOLDING S A</option>
         <option value=64>ALIMENTOS ECUATORANOS ALIMEC S.A</option>
         <option value=56>BANCO AMAZONAS</option>
@@ -59,7 +64,10 @@
         <option value=39>VALLE GRANDE FORESTAL</option>
       </select>
     </div>
-
+    <div class="form-action">
+      <button [disabled]="formAcciones.invalid" class="login social-btn">Buscar</button>
+    </div>
+  </form>
 
 <div>
   <canvasjs-chart [options]="chartOptions1" [styles]="{width: '100%', height:'360px'}"></canvasjs-chart>
