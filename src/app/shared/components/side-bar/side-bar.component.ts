@@ -49,12 +49,12 @@ export class SideBarComponent implements OnInit {
       {
         name: 'Balance',
         icon: 'uil uil-balance-scale',
-        router: ['/', 'statistics'],
+        router: ['/', 'balance'],
       },
       {
         name: 'Indicadores',
         icon: 'uil uil-chart-pie',
-        router: ['/', 'portfolio'],
+        router: ['/', 'statistics'],
       },
       {
         name: 'Comparaciones',

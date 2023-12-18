@@ -37,7 +37,7 @@ export class PortfolioPageComponent implements OnInit, AfterViewInit, OnDestroy 
           this.chartOptions1 = {
             animationEnabled: true,
             title: {
-              text: "Tipo inversión por propietario"
+              text: "Tipo de inversión por propietario"
             },
             data: [{
               type: "pie",
@@ -65,7 +65,7 @@ export class PortfolioPageComponent implements OnInit, AfterViewInit, OnDestroy 
           this.chartOptions2 = {
             animationEnabled: true,
             title: {
-              text: "Inversión consolidado por propietario"
+              text: "Capital consolidado por propietario"
             },
             data: [{
               type: "pie",
@@ -94,7 +94,7 @@ export class PortfolioPageComponent implements OnInit, AfterViewInit, OnDestroy 
           this.chartOptions3 = {
             animationEnabled: true,
             title: {
-              text: "Inversión por Empresa"
+              text: "Capital invertido por Empresa"
             },
             data: [{
               type: "pie",
