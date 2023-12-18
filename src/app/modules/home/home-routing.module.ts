@@ -30,6 +30,10 @@ const routes: Routes = [
     loadChildren: () => import('@modules/portfolio/portfolio.module').then(m => m.PortfolioModule)
   },
   {
+    path: 'balance',
+    loadChildren: () => import('@modules/balance/balance.module').then(m => m.BalanceModule)
+  },
+  {
     path: 'shares',
     loadChildren: () => import('@modules/shares/shares.module').then(m => m.SharesModule)
   },

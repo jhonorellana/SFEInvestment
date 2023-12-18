@@ -1,0 +1,27 @@
+<div class="balance-page">
+  <div class="balance-wrapper">
+      <form (ngSubmit)="enviarConsulta()" [formGroup] = formBalance class="balance-form">
+          <div class="form-group">
+              <label for="fechaInicio">Fecha Inicio: </label>
+              <input formControlName="fechaInicio" type="text" placeholder="Fecha Inicio" class="form-input">
+          </div>
+          <div class="form-group">
+              <label for="fechaFin">Fecha Fin: </label>
+              <input formControlName="fechaFin" type="text" placeholder="Fecha Fin" class="form-input">
+          </div>
+          <div class="form-action">
+            <button [disabled]="formBalance.invalid" class="login social-btn">Buscar</button>
+          </div>
+      </form>
+  </div>
+
+
+
+
+
+
+
+
+
+</div>
+
