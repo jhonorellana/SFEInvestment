@@ -14,7 +14,7 @@ export class BalanceService {
   constructor(private http: HttpClient) { }
 
   BalanceCompute$(fechaInicio: string, fechaFin: string): Observable<any>{
-    return this.http.get(`${this.URL}amortizationdates?initialDate=${fechaInicio}&finalDate=${fechaFin}`);
+    return this.http.get(`${this.URL}balance?initialDate=${fechaInicio}&finalDate=${fechaFin}`);
 
   }
 

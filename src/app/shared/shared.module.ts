@@ -9,6 +9,7 @@ import { IndicatorsHeaderComponent } from './components/indicators-header/indica
 import { IndicatorsBodyComponent } from './components/indicators-body/indicators-body.component';
 import { RouterModule } from '@angular/router';
 import { SectionSummaryComponent } from './components/section-summary/section-summary.component';
+import { BalanceDetailComponent } from './components/balance-detail/balance-detail.component';
 
 
 
@@ -21,7 +22,8 @@ import { SectionSummaryComponent } from './components/section-summary/section-su
     SectionGenericComponent,
     IndicatorsHeaderComponent,
     IndicatorsBodyComponent,
-    SectionSummaryComponent
+    SectionSummaryComponent,
+    BalanceDetailComponent
   ],
   imports: [
     CommonModule,
@@ -35,7 +37,8 @@ import { SectionSummaryComponent } from './components/section-summary/section-su
     SectionGenericComponent,
     SectionSummaryComponent,
     IndicatorsHeaderComponent,
-    IndicatorsBodyComponent
+    IndicatorsBodyComponent,
+    BalanceDetailComponent
   ]
 })
 export class SharedModule { }
