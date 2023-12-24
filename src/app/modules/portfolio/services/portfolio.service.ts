@@ -36,5 +36,11 @@ export class PortfolioService {
       return this.httpClient.get(`${this.URL}investvsbond`);
     }
 
+    getCapitalByOwnerTypeInvest(tipo: string): Observable<any>{
+      return this.httpClient.get(`${this.URL}capitalbytypeinvestOwner?type=${tipo}`);
+    }
+
+
+
 
 }

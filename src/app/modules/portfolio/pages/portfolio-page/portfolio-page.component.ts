@@ -15,6 +15,7 @@ export class PortfolioPageComponent implements OnInit, AfterViewInit, OnDestroy 
 
   listaObservadores$: Subscription[] = [];
   dataInvestownernewlist: InvestownernewModel[] = [];
+  dataInvestownernewlist2: InvestownernewModel[] = [];
   dataInvestownerlist: InvestownerModel[] = [];
   dataInvestenterpriselist: InvestenterpriseModel[] = [];
   dataTypeinvestlist: TypeinvestModel[] = [];
@@ -23,6 +24,8 @@ export class PortfolioPageComponent implements OnInit, AfterViewInit, OnDestroy 
   chartOptions2: any = {}; // Puedes ajustar el tipo según la estructura de tu objeto.
   chartOptions3: any = {}; // Puedes ajustar el tipo según la estructura de tu objeto.
   chartOptions4: any = {}; // Puedes ajustar el tipo según la estructura de tu objeto.
+  chartOptions5: any = {}; // Puedes ajustar el tipo según la estructura de tu objeto.
+  chartOptions6: any = {}; // Puedes ajustar el tipo según la estructura de tu objeto.
 
   constructor(
     private portfolioService: PortfolioService,
@@ -146,13 +149,70 @@ export class PortfolioPageComponent implements OnInit, AfterViewInit, OnDestroy 
 
 
 
+      const observador5$ = this.portfolioService.getCapitalByOwnerTypeInvest('BONO')
+      .subscribe(
+        (response: InvestownernewModel[]) => {
+          this.dataInvestownernewlist = response;
+          this.chartOptions5 = {
+            animationEnabled: true,
+            title: {
+              text: "Bonos por propietario"
+            },
+            data: [{
+              type: "pie",
+              startAngle: -90,
+              indexLabel: "{name}: {y}",
+              yValueFormatString: "'$'#,###.##",
+              dataPoints: this.dataInvestownernewlist.map(entry => ({
+                name: entry.inversionpropietario,
+                y: entry.capital
+              }))
+            }]
+          };
+          this.cdr.detectChanges();
+        },
+        err => {
+          console.log('Error de conexión');
+        }
+      );
+
+
+      const observador6$ = this.portfolioService.getCapitalByOwnerTypeInvest('INVERSIONES')
+      .subscribe(
+        (response: InvestownernewModel[]) => {
+          this.dataInvestownernewlist2 = response;
+          this.chartOptions6 = {
+            animationEnabled: true,
+            title: {
+              text: "Otras Inversiones por propietario"
+            },
+            data: [{
+              type: "pie",
+              startAngle: -90,
+              indexLabel: "{name}: {y}",
+              yValueFormatString: "'$'#,###.##",
+              dataPoints: this.dataInvestownernewlist2.map(entry => ({
+                name: entry.inversionpropietario,
+                y: entry.capital
+              }))
+            }]
+          };
+          this.cdr.detectChanges();
+        },
+        err => {
+          console.log('Error de conexión');
+        }
+      );
 
 
 
 
 
 
-    this.listaObservadores$ = [observador1$, observador2$, observador3$];
+
+
+
+    this.listaObservadores$ = [observador1$, observador2$, observador3$, observador4$, observador6$];
   }
 
   ngAfterViewInit(): void {
