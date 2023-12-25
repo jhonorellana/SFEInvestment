@@ -52,15 +52,16 @@ export class SideBarComponent implements OnInit {
         router: ['/', 'balance'],
       },
       {
+        name: 'Comparaciones',
+        icon: 'uil uil-comparison',
+        router: ['/', 'variations'],
+      },
+      {
         name: 'Indicadores',
         icon: 'uil uil-chart-pie',
         router: ['/', 'statistics'],
-      },
-      {
-        name: 'Comparaciones',
-        icon: 'uil uil-comparison',
-        router: ['/', 'portfolio'],
       }
+
     ]
 
     this.mainMenu.accessLink = [

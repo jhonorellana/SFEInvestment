@@ -10,12 +10,28 @@ const routes: Routes = [
     loadChildren: () => import('@modules/investment/investment.module').then(m => m.InvestmentModule)
   },
   {
+    path: 'cashflow',
+    loadChildren: () => import('@modules/cashflow/cashflow.module').then(m => m.CashflowModule)
+  },
+  {
+    path: 'portfolio',
+    loadChildren: () => import('@modules/portfolio/portfolio.module').then(m => m.PortfolioModule)
+  },
+  {
+    path: 'shares',
+    loadChildren: () => import('@modules/shares/shares.module').then(m => m.SharesModule)
+  },
+  {
     path: 'investment',
     loadChildren: () => import('@modules/investment/investment.module').then(m => m.InvestmentModule)
   },
   {
-    path: 'cashflow',
-    loadChildren: () => import('@modules/cashflow/cashflow.module').then(m => m.CashflowModule)
+    path: 'balance',
+    loadChildren: () => import('@modules/balance/balance.module').then(m => m.BalanceModule)
+  },
+  {
+    path: 'variations',
+    loadChildren: () => import('@modules/variations/variations.module').then(m => m.VariationsModule)
   },
   {
     path: 'statistics',
@@ -24,18 +40,6 @@ const routes: Routes = [
   {
     path: 'history',
     loadChildren: () => import('@modules/history/history.module').then(m => m.HistoryModule)
-  },
-  {
-    path: 'portfolio',
-    loadChildren: () => import('@modules/portfolio/portfolio.module').then(m => m.PortfolioModule)
-  },
-  {
-    path: 'balance',
-    loadChildren: () => import('@modules/balance/balance.module').then(m => m.BalanceModule)
-  },
-  {
-    path: 'shares',
-    loadChildren: () => import('@modules/shares/shares.module').then(m => m.SharesModule)
   },
   {
     path: '**',//TODO 404 cuando no existe la ruta

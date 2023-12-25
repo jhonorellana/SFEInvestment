@@ -3,7 +3,9 @@ import { CommonModule } from '@angular/common';
 
 import { VariationsRoutingModule } from './variations-routing.module';
 import { VariationsPageComponent } from './pages/variations-page/variations-page.component';
+import { SharedModule } from '@shared/shared.module';
 
+import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
 
 @NgModule({
   declarations: [
@@ -11,7 +13,9 @@ import { VariationsPageComponent } from './pages/variations-page/variations-page
   ],
   imports: [
     CommonModule,
-    VariationsRoutingModule
+    VariationsRoutingModule,
+    SharedModule,
+    CanvasJSAngularChartsModule
   ]
 })
 export class VariationsModule { }

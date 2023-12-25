@@ -59,6 +59,7 @@ export class SharesPageComponent implements OnInit {
             .subscribe(
               (respuesta: SharesModel[]) => {
                this.dataShareslist = respuesta;
+               //console.log(this.dataShareslist);
 
                this.chartOptions1 = {
                 theme: "light2",
