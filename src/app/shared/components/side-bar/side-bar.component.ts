@@ -57,6 +57,10 @@ export class SideBarComponent implements OnInit {
         router: ['/', 'variations'],
       },
       {
+        name: 'Bonos',
+        icon: 'uil uil-bill',
+        router: ['/', 'variations'],
+      },      {
         name: 'Indicadores',
         icon: 'uil uil-chart-pie',
         router: ['/', 'statistics'],

@@ -28,6 +28,7 @@ export class VariationsPageComponent implements OnInit {
        this.dataVariationslist = respuesta;
        console.log(this.dataVariationslist);
        this.chartOptions1 = {
+        backgroundColor: "#EEFFEE",
         theme: "light1",
         animationEnabled: true,
         zoomEnabled: true,
@@ -42,7 +43,27 @@ export class VariationsPageComponent implements OnInit {
         axisX: {
           labelFontSize: 12,
           intervalType: "month",
-          interval: 1
+          interval: 1,
+          stripLines:[
+            {
+              value: new Date('2019-01-01')
+            },
+            {
+              value: new Date('2020-01-01')
+            },
+            {
+              value: new Date('2021-01-01')
+            },
+            {
+              value: new Date('2022-01-01')
+            },
+            {
+              value: new Date('2023-01-01')
+            },
+            {
+              value: new Date('2024-01-01')
+            }
+            ],
         },
         legend: {
           fontSize: 20, // Tamaño de la fuente para las leyendas
