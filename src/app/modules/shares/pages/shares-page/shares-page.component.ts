@@ -23,6 +23,7 @@ export class SharesPageComponent implements OnInit {
   chartOptions2021: any = {}; // Puedes ajustar el tipo según la estructura de tu objeto.
   chartOptions2022: any = {}; // Puedes ajustar el tipo según la estructura de tu objeto.
   chartOptions2023: any = {}; // Puedes ajustar el tipo según la estructura de tu objeto.
+  chartOptions2024: any = {}; // Puedes ajustar el tipo según la estructura de tu objeto.
       chart: any;
 
   constructor(
@@ -706,6 +707,96 @@ export class SharesPageComponent implements OnInit {
 
   }
 
+
+
+  ConstruirGraficoEmisorAnio2024(anio: string): void{
+    const {cmbEmisor, cmbPrueba} = this.formAcciones.value
+    const observador2024$ = this.searchService.ObtenerAccionesCompaniaAnio$(cmbEmisor,anio)
+  .subscribe(
+    (respuesta: SharesModel[]) => {
+     this.dataShareslist = respuesta;
+
+     this.chartOptions2024 = {
+      backgroundColor: "#EEFFEE",
+      theme: "light2",
+      animationEnabled: true,
+      zoomEnabled: true,
+      title: {
+        text: `Precios año ${anio}`
+      },
+      axisX: {
+        labelFontSize: 12,
+        intervalType: "month",
+        interval: 1,
+        stripLines:[
+          {
+            value: new Date('2024-01-01')
+          },
+          {
+            value: new Date('2024-02-01')
+          },
+          {
+            value: new Date('2024-03-01')
+          },
+          {
+            value: new Date('2024-04-01')
+          },
+          {
+            value: new Date('2024-05-01')
+          },
+          {
+            value: new Date('2024-06-01')
+          },
+          {
+            value: new Date('2024-07-01')
+          },
+          {
+            value: new Date('2024-08-01')
+          },
+          {
+            value: new Date('2024-09-01')
+          },
+          {
+            value: new Date('2024-10-01')
+          },
+          {
+            value: new Date('2024-11-01')
+          },
+          {
+            value: new Date('2024-12-01')
+          }
+          ],
+      },
+      axisY: {
+      },
+      data: [{
+        type: "line",
+        xValueFormatString: "YYYY/MM/DD",
+        yValueFormatString: "$#,###.##",
+        dataPoints: this.dataShareslist.map(entry => ({
+          x: new Date(entry.fecha),
+          y: entry.precio
+        }))
+
+
+      }]
+
+    };
+
+    this.cdr.detectChanges();
+    },
+    err => {
+      console.log('Error de conexion');
+    }
+  );
+
+
+
+
+
+
+  }
+
     ngOnDestroy(): void {
       this.listaObservadores$.forEach(u => u.unsubscribe());
     }
@@ -720,6 +811,7 @@ export class SharesPageComponent implements OnInit {
       this.ConstruirGraficoEmisorAnio2021('2021');
       this.ConstruirGraficoEmisorAnio2022('2022');
       this.ConstruirGraficoEmisorAnio2023('2023');
+      this.ConstruirGraficoEmisorAnio2024('2024');
 
     }
 

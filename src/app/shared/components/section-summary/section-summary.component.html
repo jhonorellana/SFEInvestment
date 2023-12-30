@@ -14,7 +14,6 @@
           <tr *ngFor="let item of dataOwnerlist">
             <td>{{ item.tipo }}</td>
             <td>{{ item.propietario }}</td>
-            <!-- Aplicar el formato al capital usando el filtro 'number' -->
             <td align="right">{{ item.capital | number:'1.2-2' }}</td>
           </tr>
         </tbody>
