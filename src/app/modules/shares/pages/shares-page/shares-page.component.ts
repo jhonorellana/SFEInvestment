@@ -48,6 +48,8 @@ export class SharesPageComponent implements OnInit {
       this.ConstruirGraficoEmisorAnio2021('2021');
       this.ConstruirGraficoEmisorAnio2022('2022');
       this.ConstruirGraficoEmisorAnio2023('2023');
+      this.ConstruirGraficoEmisorAnio2024('2024');
+
 
 
      // this.listaObservadores$ = [ observador2020$, observador2021$, observador2022$, observador2023$];
@@ -74,7 +76,12 @@ export class SharesPageComponent implements OnInit {
                   labelFontSize: 12,
                   intervalType: "year",
                   interval: 1,
+                  minimum: new Date('2017-01-01'),
+                  maximum: new Date('2025-01-01'),
                   stripLines:[
+                    {
+                      value: new Date('2017-01-01')
+                    },
                     {
                       value: new Date('2018-01-01')
                     },
@@ -95,6 +102,9 @@ export class SharesPageComponent implements OnInit {
                     },
                     {
                       value: new Date('2024-01-01')
+                    },
+                    {
+                      value: new Date('2024-12-31')
                     }
                     ],
                 },
@@ -142,7 +152,9 @@ export class SharesPageComponent implements OnInit {
             labelFontSize: 12,
             intervalType: "month",
             interval: 1,
-            stripLines:[
+            minimum: new Date('2017-01-01'),
+            maximum: new Date('2018-01-01'),
+              stripLines:[
               {
                 value: new Date('2017-01-01')
               },
@@ -178,6 +190,9 @@ export class SharesPageComponent implements OnInit {
               },
               {
                 value: new Date('2017-12-01')
+              },
+              {
+                value: new Date('2017-12-31')
               }
               ],
           },
@@ -225,6 +240,8 @@ export class SharesPageComponent implements OnInit {
           labelFontSize: 12,
           intervalType: "month",
           interval: 1,
+          minimum: new Date('2018-01-01'),
+          maximum: new Date('2019-01-01'),
           stripLines:[
             {
               value: new Date('2018-01-01')
@@ -261,6 +278,9 @@ export class SharesPageComponent implements OnInit {
             },
             {
               value: new Date('2018-12-01')
+            },
+            {
+              value: new Date('2018-12-31')
             }
             ],
         },
@@ -308,6 +328,8 @@ export class SharesPageComponent implements OnInit {
           labelFontSize: 12,
           intervalType: "month",
           interval: 1,
+          minimum: new Date('2019-01-01'),
+          maximum: new Date('2020-01-01'),
           stripLines:[
             {
               value: new Date('2019-01-01')
@@ -344,6 +366,9 @@ export class SharesPageComponent implements OnInit {
             },
             {
               value: new Date('2019-12-01')
+            },
+            {
+              value: new Date('2019-12-31')
             }
             ],
         },
@@ -391,6 +416,8 @@ export class SharesPageComponent implements OnInit {
           labelFontSize: 12,
           intervalType: "month",
           interval: 1,
+          minimum: new Date('2020-01-01'),
+          maximum: new Date('2021-01-01'),
           stripLines:[
             {
               value: new Date('2020-01-01')
@@ -427,6 +454,9 @@ export class SharesPageComponent implements OnInit {
             },
             {
               value: new Date('2020-12-01')
+            },
+            {
+              value: new Date('2020-12-31')
             }
             ],
         },
@@ -473,7 +503,9 @@ export class SharesPageComponent implements OnInit {
           labelFontSize: 12,
           intervalType: "month",
           interval: 1,
-          stripLines:[
+          minimum: new Date('2021-01-01'),
+          maximum: new Date('2022-01-01'),
+            stripLines:[
             {
               value: new Date('2021-01-01')
             },
@@ -509,6 +541,9 @@ export class SharesPageComponent implements OnInit {
             },
             {
               value: new Date('2021-12-01')
+            },
+            {
+              value: new Date('2021-12-31')
             }
             ],
         },
@@ -559,6 +594,8 @@ export class SharesPageComponent implements OnInit {
         labelFontSize: 12,
         intervalType: "month",
         interval: 1,
+        minimum: new Date('2022-01-01'),
+        maximum: new Date('2023-01-01'),
         stripLines:[
           {
             value: new Date('2022-01-01')
@@ -595,6 +632,9 @@ export class SharesPageComponent implements OnInit {
           },
           {
             value: new Date('2022-12-01')
+          },
+          {
+            value: new Date('2022-12-31')
           }
           ],
       },
@@ -630,7 +670,8 @@ export class SharesPageComponent implements OnInit {
   .subscribe(
     (respuesta: SharesModel[]) => {
      this.dataShareslist = respuesta;
-
+     console.log(anio);
+     console.log(respuesta);
      this.chartOptions2023 = {
       backgroundColor: "#EEFFEE",
       theme: "light2",
@@ -643,6 +684,8 @@ export class SharesPageComponent implements OnInit {
         labelFontSize: 12,
         intervalType: "month",
         interval: 1,
+        minimum: new Date('2023-01-01'),
+        maximum: new Date('2024-01-01'),
         stripLines:[
           {
             value: new Date('2023-01-01')
@@ -679,6 +722,9 @@ export class SharesPageComponent implements OnInit {
           },
           {
             value: new Date('2023-12-01')
+          },
+          {
+            value: new Date('2023-12-31')
           }
           ],
       },
@@ -711,13 +757,15 @@ export class SharesPageComponent implements OnInit {
 
   ConstruirGraficoEmisorAnio2024(anio: string): void{
     const {cmbEmisor, cmbPrueba} = this.formAcciones.value
+    console.log(anio);
     const observador2024$ = this.searchService.ObtenerAccionesCompaniaAnio$(cmbEmisor,anio)
   .subscribe(
     (respuesta: SharesModel[]) => {
      this.dataShareslist = respuesta;
-
+     console.log(anio);
+     console.log(respuesta);
      this.chartOptions2024 = {
-      backgroundColor: "#EEFFEE",
+      backgroundColor: "#E0FFE0",
       theme: "light2",
       animationEnabled: true,
       zoomEnabled: true,
@@ -728,6 +776,8 @@ export class SharesPageComponent implements OnInit {
         labelFontSize: 12,
         intervalType: "month",
         interval: 1,
+        minimum: new Date('2024-01-01'),
+        maximum: new Date('2025-01-01'),
         stripLines:[
           {
             value: new Date('2024-01-01')
@@ -764,6 +814,9 @@ export class SharesPageComponent implements OnInit {
           },
           {
             value: new Date('2024-12-01')
+          },
+          {
+            value: new Date('2024-12-31')
           }
           ],
       },
@@ -812,6 +865,7 @@ export class SharesPageComponent implements OnInit {
       this.ConstruirGraficoEmisorAnio2022('2022');
       this.ConstruirGraficoEmisorAnio2023('2023');
       this.ConstruirGraficoEmisorAnio2024('2024');
+
 
     }
 
