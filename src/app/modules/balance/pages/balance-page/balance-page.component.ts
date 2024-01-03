@@ -10,6 +10,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 })
 export class BalancePageComponent implements OnInit{
   BalanceList$: Observable<any> = of([])
+  TradingResultList$: Observable<any> = of([])
+
   formBalance: FormGroup = new FormGroup({})
 
   MesActual: string ="";
@@ -47,6 +49,7 @@ export class BalancePageComponent implements OnInit{
     )
 
     this.BalanceList$ = this.balanceService.BalanceCompute$(this._fechaInicio,this._fechaFin)
+    this.TradingResultList$ = this.balanceService.TradingResultCompute$(this._fechaInicio,this._fechaFin)
 
   }
 
@@ -55,6 +58,9 @@ export class BalancePageComponent implements OnInit{
     const { fechaInicio, fechaFin} = this.formBalance.value
 
     this.BalanceList$ = this.balanceService.BalanceCompute$(fechaInicio, fechaFin)
+
+    this.TradingResultList$ = this.balanceService.TradingResultCompute$(fechaInicio, fechaFin)
+    console.log(this.TradingResultList$)
 
 
   }

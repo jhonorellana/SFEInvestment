@@ -1,6 +1,6 @@
 import { Component,Input,OnInit } from '@angular/core';
-import { InvestownerModel } from '@core/models/investowner.model';
 import { BalanceModel } from '@core/models/balance.model';
+import { TradingModel } from '@core/models/trading.model';
 
 @Component({
   selector: 'app-balance-detail',
@@ -10,6 +10,7 @@ import { BalanceModel } from '@core/models/balance.model';
 export class BalanceDetailComponent {
   @Input() title: string = ''
   @Input() dataBalancelist: Array<BalanceModel> = []
+  @Input() dataTradingResultlist: Array<TradingModel> = []
 
   constructor() { }
 
