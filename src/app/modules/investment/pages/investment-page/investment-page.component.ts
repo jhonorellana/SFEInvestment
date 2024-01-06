@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { InvestownerModel } from '@core/models/investowner.model';
-import { InvestenterpriseModel } from '@core/models/investenterprise.model';
+import { OtherinvestmentdetailModel } from '@core/models/otherinvestmentdetail.model';
+import { BonosModel } from '@core/models/bonos.model';
 import { InvestmentService } from '../../services/investment.service';
 import { Subscription } from 'rxjs';
 
@@ -11,7 +12,8 @@ import { Subscription } from 'rxjs';
 })
 export class InvestmentPageComponent implements OnInit{
   dataInvestownerlist: Array<InvestownerModel> = []
-  dataInvestenterpriselist: Array<InvestenterpriseModel> = []
+  dataOtherinvestmentdetaillist: Array<OtherinvestmentdetailModel> = []
+  dataBonoslist: Array<BonosModel> = []
 
   constructor(private investmentService: InvestmentService){}
 
@@ -24,13 +26,20 @@ export class InvestmentPageComponent implements OnInit{
                       }, err => {console.log('Error de conexion');}
                     )
 
-    this.investmentService.getInvestByEnterprise$()
-    .subscribe((response: InvestenterpriseModel[]) => {
-                  this.dataInvestenterpriselist = response
+    this.investmentService.getOtherinvestmentdetail$()
+    .subscribe((response: OtherinvestmentdetailModel[]) => {
+                  this.dataOtherinvestmentdetaillist = response
                 }, err => {console.log('Error de conexion');}
               )
 
-//    console.log(this.dataInvestownerlist)
+    this.investmentService.getBonos$()
+    .subscribe((response: BonosModel[]) => {
+                  this.dataBonoslist = response
+                }, err => {console.log('Error de conexion');}
+               )
+
+
+              //    console.log(this.dataInvestownerlist)
 
   }
 

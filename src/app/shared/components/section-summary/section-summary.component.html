@@ -22,24 +22,82 @@
   </div>
 
 
+  <h1 class="section--generic__title">Detalle Bonos</h1>
+  <div class="row">
+    <div class="col-12">
+        <table class="table table-striped table-hover table-sm table-bordered table-success">
+          <thead>
+            <tr>
+              <th>Propietario</th>
+              <th>Fecha Compra</th>
+              <th>Fecha Emisión</th>
+              <th>Fecha Vencim.</th>
+              <th>Tasa Mensual</th>
+              <th>Tasa Real</th>
+              <th>Rendimiento</th>
+              <th>Mensual</th>
+              <th>Nominal</th>
+              <th>Pagado</th>
+              <th>Con Comision</th>
+              <th>Sin Comision</th>
+              <th>Casa Valores</th>
+              <th>Bolsa Valores</th>
+              <th>Total Comision</th>
+              <th>Precio Compra</th>
+              <th>P. Neto Compra</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of dataBonoslist">
+                <td>{{ item.propietario }}</td>
+                <td>{{ item.fechaCompra }}</td>
+                <td>{{ item.fechaEmision }}</td>
+                <td>{{ item.fechaVencimiento }}</td>
+                <td align="right">{{ item.tasaMensual| number:'1.2-2' }}</td>
+                <td align="right">{{ item.tasaMensualReal| number:'1.2-2' }}</td>
+                <td align="right">{{ item.rendimiento| number:'1.2-2' }}</td>
+                <td align="right">{{ item.interesMensual| number:'1.2-2' }}</td>
+                <td align="right">{{ item.valorNominal| number:'1.2-2' }}</td>
+                <td align="right">{{ item.pagado| number:'1.2-2' }}</td>
+                <td align="right">{{ item.valorConComision| number:'1.2-2' }}</td>
+                <td align="right">{{ item.valorSinComision| number:'1.2-2' }}</td>
+                <td align="right">{{ item.comisionCasa| number:'1.2-2' }}</td>
+                <td align="right">{{ item.comisionBolsa| number:'1.2-2' }}</td>
+                <td align="right">{{ item.totalComisiones| number:'1.2-2' }}</td>
+                <td align="right">{{ item.precioComprado| number:'1.7-7' }}</td>
+                <td align="right">{{ item.precioNetoComprado| number:'1.7-7' }}</td>
+              </tr>
+          </tbody>
+         </table>
+    </div>
+  </div>
+
+
+  <h1 class="section--generic__title">Detalle otras inversiones</h1>
     <div class="row">
-      <div class="col-4">
+      <div class="col-6">
           <table class="table table-striped table-hover table-sm table-bordered table-success">
             <thead>
               <tr>
+                <th>Vencimiento</th>
                 <th>Empresa</th>
+                <th>Propietario</th>
                 <th>Capital</th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let item of dataEnterpriselist">
+              <tr *ngFor="let item of dataOtherinvestmentdetaillist">
+                  <td>{{ item.fechaExpiracion }}</td>
                   <td>{{ item.empresa }}</td>
+                  <td>{{ item.propietario }}</td>
                   <td align="right">{{ item.capital | number:'1.2-2' }}</td>
                 </tr>
             </tbody>
            </table>
       </div>
     </div>
+
+
 
 <BR>
   <BR>

@@ -1,6 +1,7 @@
 import { Component,Input,OnInit } from '@angular/core';
 import { InvestownerModel } from '@core/models/investowner.model';
-import { InvestenterpriseModel } from '@core/models/investenterprise.model';
+import { OtherinvestmentdetailModel } from '@core/models/otherinvestmentdetail.model';
+import { BonosModel } from '@core/models/bonos.model';
 
 
 @Component({
@@ -12,7 +13,8 @@ import { InvestenterpriseModel } from '@core/models/investenterprise.model';
 export class SectionSummaryComponent implements OnInit {
   @Input() title: string = ''
   @Input() dataOwnerlist: Array<InvestownerModel> = []
-  @Input() dataEnterpriselist: Array<InvestenterpriseModel> = []
+  @Input() dataOtherinvestmentdetaillist: Array<OtherinvestmentdetailModel> = []
+  @Input() dataBonoslist: Array<BonosModel> = []
 
   constructor() { }
 

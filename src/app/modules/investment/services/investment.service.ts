@@ -18,8 +18,12 @@ export class InvestmentService {
     }
 
 
-    getInvestByEnterprise$(): Observable<any>{
-      return this.httpClient.get(`${this.URL}investenterprise`);
+    getOtherinvestmentdetail$(): Observable<any>{
+      return this.httpClient.get(`${this.URL}otherinvestmentdetail`);
+    }
+
+    getBonos$(): Observable<any>{
+      return this.httpClient.get(`${this.URL}bonos`);
     }
 
 

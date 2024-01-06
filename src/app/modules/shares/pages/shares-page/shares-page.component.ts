@@ -670,8 +670,8 @@ export class SharesPageComponent implements OnInit {
   .subscribe(
     (respuesta: SharesModel[]) => {
      this.dataShareslist = respuesta;
-     console.log(anio);
-     console.log(respuesta);
+     //console.log(anio);
+     //console.log(respuesta);
      this.chartOptions2023 = {
       backgroundColor: "#EEFFEE",
       theme: "light2",
@@ -757,13 +757,13 @@ export class SharesPageComponent implements OnInit {
 
   ConstruirGraficoEmisorAnio2024(anio: string): void{
     const {cmbEmisor, cmbPrueba} = this.formAcciones.value
-    console.log(anio);
+    //console.log(anio);
     const observador2024$ = this.searchService.ObtenerAccionesCompaniaAnio$(cmbEmisor,anio)
   .subscribe(
     (respuesta: SharesModel[]) => {
      this.dataShareslist = respuesta;
-     console.log(anio);
-     console.log(respuesta);
+     //console.log(anio);
+     //console.log(respuesta);
      this.chartOptions2024 = {
       backgroundColor: "#E0FFE0",
       theme: "light2",
