@@ -18,7 +18,7 @@ export class PortfolioService {
     }
 
     getInvestOwner$(): Observable<any>{
-      return this.httpClient.get(`${this.URL}investowner`);
+      return this.httpClient.get(`${this.URL}investowner?total=NO`);
     }
 
     getTotalInvestOwner$(): Observable<any>{

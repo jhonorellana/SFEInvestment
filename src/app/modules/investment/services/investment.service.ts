@@ -14,7 +14,7 @@ export class InvestmentService {
 //    constructor(private httpClient: HttpClient) {}
 
     getInvestOwner$(): Observable<any>{
-          return this.httpClient.get(`${this.URL}investowner`);
+          return this.httpClient.get(`${this.URL}investowner?total=YES`);
     }
 
 
