@@ -35,15 +35,15 @@ export class BalancePageComponent implements OnInit{
 
     this.formBalance = new FormGroup({
       fechaInicio: new FormControl(`${this._fechaInicio}`,[
-        Validators.required,
-        Validators.minLength(10),
-        Validators.maxLength(10)
+        Validators.required
+        //Validators.minLength(10),
+        //Validators.maxLength(10)
       ]),
 
       fechaFin: new FormControl(`${this._fechaFin}`,[
-        Validators.required,
-        Validators.minLength(10),
-        Validators.maxLength(10)
+        Validators.required
+        //Validators.minLength(10),
+        //Validators.maxLength(10)
       ]),
      }
     )

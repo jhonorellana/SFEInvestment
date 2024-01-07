@@ -103,3 +103,11 @@ input.ng-invalid.ng-touched {
 input.ng-valid.ng-touched {
   border: solid 2px green !important
 }
+
+
+/* tu-componente.component.css */
+mat-form-field {
+  width: 100%;
+}
+
+/* Ajusta según sea necesario */

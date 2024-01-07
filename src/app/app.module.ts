@@ -7,6 +7,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
 
 import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 //import { NgChartsModule } from 'ng2-charts';
 
@@ -19,7 +20,8 @@ import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    CanvasJSAngularChartsModule
+    CanvasJSAngularChartsModule,
+    BrowserAnimationsModule
   ],
   providers: [
     DatePipe

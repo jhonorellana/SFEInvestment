@@ -6,6 +6,13 @@ import { BalanceRoutingModule } from './balance-routing.module';
 import { BalancePageComponent } from './pages/balance-page/balance-page.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+
+
+
 @NgModule({
   declarations: [
     BalancePageComponent
@@ -15,7 +22,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     BalanceRoutingModule,
     SharedModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatFormFieldModule,
+    MatInputModule,
   ]
 })
 export class BalanceModule { }
