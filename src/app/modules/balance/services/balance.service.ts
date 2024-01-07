@@ -15,7 +15,6 @@ export class BalanceService {
 
   BalanceCompute$(fechaInicio: string, fechaFin: string): Observable<any>{
     return this.http.get(`${this.URL}balance?initialDate=${fechaInicio}&finalDate=${fechaFin}`);
-
   }
 
   TradingResultCompute$(fechaInicio: string, fechaFin: string): Observable<any>{

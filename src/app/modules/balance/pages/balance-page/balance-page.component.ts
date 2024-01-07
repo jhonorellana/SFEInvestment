@@ -38,7 +38,9 @@ export class BalancePageComponent implements OnInit{
         Validators.required
         //Validators.minLength(10),
         //Validators.maxLength(10)
-      ]),
+      ],
+
+      ),
 
       fechaFin: new FormControl(`${this._fechaFin}`,[
         Validators.required

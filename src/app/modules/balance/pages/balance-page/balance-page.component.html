@@ -2,29 +2,14 @@
   <div class="balance-wrapper">
       <form (ngSubmit)="enviarConsulta()" [formGroup] = formBalance class="balance-form">
           <div class="form-group">
-
-              <mat-form-field>
-                <input matInput [matDatepicker]="picker1" placeholder="Fecha inicio" formControlName="fechaInicio">
-                <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-                <mat-datepicker #picker1></mat-datepicker>
-                <mat-hint>YYYY-mm-dd</mat-hint>
-              </mat-form-field>
-
-
+              <label for="fechaInicio">Fecha Inicio: </label>
+              <input formControlName="fechaInicio" type="date" placeholder="Fecha Inicio" class="form-input">
           </div>
           <div class="form-group">
-
-
-            <mat-form-field>
-              <input matInput [matDatepicker]="picker2" placeholder="Fecha fin" formControlName="fechaFin">
-              <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-              <mat-datepicker #picker2></mat-datepicker>
-              <mat-hint>YYYY-mm-dd</mat-hint>
-            </mat-form-field>
-
-
-
+              <label for="fechaFin">Fecha Fin: </label>
+              <input formControlName="fechaFin" type="date" placeholder="Fecha Fin" class="form-input">
           </div>
+
           <div class="form-action">
             <button [disabled]="formBalance.invalid" class="login social-btn">Buscar</button>
           </div>
