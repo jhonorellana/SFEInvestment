@@ -1,7 +1,7 @@
 .balance-page .social-btn {
   border: 0;
   padding: .5rem 2rem;
-  width: 25%;
+  width: 50%;
   font-size: var(--font-size-2);
   border-radius: var(--border-radius-2);
   box-shadow: var(--shadow-1);
@@ -19,10 +19,3 @@ input.ng-valid.ng-touched {
   border: solid 2px green !important
 }
 
-
-/* tu-componente.component.css */
-mat-form-field {
-  width: 25%;
-}
-
-/* Ajusta según sea necesario */
