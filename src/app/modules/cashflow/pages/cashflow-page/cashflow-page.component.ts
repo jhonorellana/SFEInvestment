@@ -15,6 +15,7 @@ export class CashflowPageComponent implements OnInit{
 
   formBusqueda: FormGroup = new FormGroup({})
 
+  DiaActual: string ="";
   MesActual: string ="";
   AnioActual: string ="";
   FechaActual = new Date();
@@ -30,11 +31,14 @@ export class CashflowPageComponent implements OnInit{
 
   ngOnInit(): void {
 
+    this.DiaActual = (this.FechaActual.getDate()).toString();
     this.MesActual = (this.FechaActual.getMonth() + 1).toString();
     this.AnioActual = (this.FechaActual.getFullYear()).toString();
 
-    this._fechaInicio = `${this.AnioActual}-${this.MesActual}-01`;
+    this._fechaInicio = `${this.AnioActual}-${this.MesActual}-${this.DiaActual}`;
     this._fechaFin=`${this.AnioActual}-${this.MesActual}-30`;
+
+    //console.log(`Fecha inicio: ${this._fechaInicio}`)
 
     this.formBusqueda = new FormGroup({
       fechaInicio: new FormControl(`${this._fechaInicio}`,[
