@@ -816,8 +816,8 @@ export class SharesPageComponent implements OnInit {
           ],
       },
       axisY: {
-        minimum: 1.40,
-        maximum: 2.40,
+       // minimum: 1.40,
+       // maximum: 2.40,
       },
       data: [{
         type: "line",
