@@ -14,8 +14,8 @@ export class BalancePageComponent implements OnInit{
 
   formBalance: FormGroup = new FormGroup({})
 
-  MesActual: string ="";
-  AnioActual: string ="";
+//  MesActual: string ="";
+//  AnioActual: string ="";
   FechaActual = new Date();
 
   _fechaInicio: string="";
@@ -27,11 +27,12 @@ export class BalancePageComponent implements OnInit{
 
   ngOnInit(): void {
 
-    this.MesActual = (this.FechaActual.getMonth() + 1).toString();
-    this.AnioActual = (this.FechaActual.getFullYear()).toString();
 
-    this._fechaInicio = `${this.AnioActual}-${this.MesActual}-01`;
-    this._fechaFin=`${this.AnioActual}-${this.MesActual}-30`;
+    const ultimoDia = new Date(this.FechaActual.getFullYear(), this.FechaActual.getMonth() + 1, 0);
+    this._fechaFin = ultimoDia.toISOString().slice(0, 10);   //ultimo dia del mes actual
+
+    this._fechaInicio = new Date().toISOString().slice(0, 10);
+
 
     this.formBalance = new FormGroup({
       fechaInicio: new FormControl(`${this._fechaInicio}`,[
