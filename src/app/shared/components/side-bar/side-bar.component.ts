@@ -74,6 +74,11 @@ export class SideBarComponent implements OnInit {
         icon: 'uil-plus-square',
       },
       {
+        name: 'Historial',
+        icon: 'uil-usd-square',
+        router: ['/', 'variationregister'],
+      },
+      {
         name: 'Estadísticas',
         icon: 'uil uil-analysis',
         router: ['/', 'statistics'],

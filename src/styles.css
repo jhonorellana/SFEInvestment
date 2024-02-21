@@ -1,3 +1,4 @@
+
 :root {
   --color-1: #1DB954;
   --color-2: #323232;
@@ -34,4 +35,9 @@ button {
 button:disabled {
   opacity: .5;
 }
+
+
+@import "primeicons/primeicons.css";
+@import "primeng/resources/themes/lara-light-blue/theme.css";
+@import "primeng/resources/primeng.css";
 

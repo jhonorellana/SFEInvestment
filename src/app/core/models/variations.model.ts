@@ -1,5 +1,6 @@
 export interface VariationsModel
 {
+  id: number;
   Fecha: Date;
   Jaime: number;
   Argentina: number;

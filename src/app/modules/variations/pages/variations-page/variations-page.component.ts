@@ -26,7 +26,8 @@ export class VariationsPageComponent implements OnInit {
     .subscribe(
       (respuesta: VariationsModel[]) => {
        this.dataVariationslist = respuesta;
-       console.log(this.dataVariationslist);
+       //console.log('dataVariationslist');
+       //console.log(this.dataVariationslist);
        this.chartOptions1 = {
         backgroundColor: "#EEFFEE",
         theme: "light1",

@@ -42,6 +42,10 @@ const routes: Routes = [
     loadChildren: () => import('@modules/history/history.module').then(m => m.HistoryModule)
   },
   {
+    path: 'variationregister',
+    loadChildren: () => import('@modules/variationregister/variationregister.module').then(m => m.VariationregisterModule)
+  },
+  {
     path: '**',//TODO 404 cuando no existe la ruta
     redirectTo: '/investment'
   }
