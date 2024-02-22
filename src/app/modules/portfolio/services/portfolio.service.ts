@@ -37,6 +37,9 @@ export class PortfolioService {
       return this.httpClient.get(`${this.URL}capitalbytypeinvestOwner?type=${tipo}`);
     }
 
+    getInvertidoRendimiento(tipo: string): Observable<any>{
+      return this.httpClient.get(`${this.URL}invertidorendimiento?type=${tipo}`);
+    }
 
 
 
