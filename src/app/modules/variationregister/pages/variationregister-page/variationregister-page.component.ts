@@ -76,10 +76,6 @@ export class VariationregisterPageComponent {
    }
 
 
-   eliminarRegistro( registro: VariationsModel): void {
-     console.log(registro)
-   }
-
 
  crearRegistro(): void {
    this.registroDialog=true;
@@ -107,13 +103,15 @@ export class VariationregisterPageComponent {
 
       this.variationregisterService.InsertarRegistrosVariaciones$(auxRegistro).subscribe(
         (datos) => {
-          console.log('DATOS DESDE HTTP', datos);
+          console.log('DATOS DESDE HTTP - Guardar', datos);
           //this.catalogoRegistros = datos;
         },
         (error) => {
           console.error('Error al cargar los datos:', error);
         }
        )
+
+
 
 
      this.messageService.add(
@@ -195,6 +193,79 @@ export class VariationregisterPageComponent {
        ngAfterViewInit(): void {
          this.formRegistro.valueChanges.subscribe(value => console.log('Valor actualizado:', value));
        }
+
+
+       actualizarRegistro(): void {
+        const auxRegistro: VariationsModel = {
+             id: this.formUpdateRegistro.controls['id'].value,
+             Fecha: this.formUpdateRegistro.controls['Fecha'].value,
+             Jaime: this.formUpdateRegistro.controls['Jaime'].value,
+             Argentina: this.formUpdateRegistro.controls['Argentina'].value,
+             Cristian: this.formUpdateRegistro.controls['Cristian'].value,
+             SaldoTotal: this.formUpdateRegistro.controls['SaldoTotal'].value,
+             SaldoPropio: this.formUpdateRegistro.controls['SaldoPropio'].value,
+             Importacion: this.formUpdateRegistro.controls['Importacion'].value,
+             TotalPropio: this.formUpdateRegistro.controls['TotalPropio'].value
+        }
+
+        //this.catalogoRegistros.push(auxRegistro);
+        //this.catalogoRegistros = [...this.catalogoRegistros];
+
+
+
+
+        this.variationregisterService.ActualizarRegistrosVariaciones$(auxRegistro).subscribe(
+          (datos) => {
+            console.log('DATOS DESDE HTTP - Actualizar', datos);
+            //this.catalogoRegistros = datos;
+
+            this.messageService.add(
+              {
+               severity: 'success',
+               summary: 'Creación',
+               detail: 'Se ha actualizado el registro exitosamente',
+               id: 1
+               });
+               this.registroDialog = false;
+
+
+          },
+          (error) => {
+            console.error('Error al cargar los datos:', error);
+          }
+         )
+        }
+
+
+        eliminarRegistro( registro: VariationsModel): void {
+          console.log(registro)
+
+          this.variationregisterService.EliminarRegistrosVariaciones$(registro).subscribe(
+           (datos) => {
+             console.log('DATOS DESDE HTTP - Eliminar', datos);
+             //this.catalogoRegistros = datos;
+
+
+             this.messageService.add(
+              {
+               severity: 'success',
+               summary: 'Creación',
+               detail: 'Se ha eliminado el registro exitosamente',
+               id: 1
+               });
+               this.registroDialog = false;
+
+
+
+           },
+           (error) => {
+             console.error('Error al cargar los datos:', error);
+           }
+          )
+
+
+        }
+
 
 
  }

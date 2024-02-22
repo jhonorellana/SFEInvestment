@@ -21,11 +21,27 @@ export class VariationregisterService {
     }
 
     InsertarRegistrosVariaciones$(variations: VariationsModel): Observable<any>{
-      console.log('--------');
-      console.log(variations);
-      console.log('--------');
+      //console.log('--------');
+      //console.log(variations);
+      //console.log('--------');
       return this.httpClient.post(`${this.URL}variation`, variations);
     }
+
+    ActualizarRegistrosVariaciones$(variations: VariationsModel): Observable<any>{
+      console.log('--------');
+      console.log(variations.id);
+      console.log('--------');
+      return this.httpClient.put(`${this.URL}variation/${variations.id}`, variations);
+    }
+
+
+    EliminarRegistrosVariaciones$(variations: VariationsModel): Observable<any>{
+      console.log('--------');
+      console.log(variations.id);
+      console.log('--------');
+      return this.httpClient.delete(`${this.URL}variation/${variations.id}`);
+    }
+
 
 
     public getErrors(control: AbstractControl, controlName: string): string[] {
