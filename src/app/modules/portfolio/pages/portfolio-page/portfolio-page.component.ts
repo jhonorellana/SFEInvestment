@@ -23,8 +23,8 @@ export class PortfolioPageComponent implements OnInit, AfterViewInit, OnDestroy 
   dataTypeinvestlist: TypeinvestModel[] = [];
   dataInvertidoRendimientoBonos: InvertidoRendimientoModel[] = [];
   dataInvertidoRendimientoInv: InvertidoRendimientoModel[] = [];
-  dataInvertidoVencimiento: InvertidoVencimientoModel[] = [];
-
+  dataInvertidoVencimientoBonos: InvertidoVencimientoModel[] = [];
+  dataInvertidoVencimientoInv: InvertidoVencimientoModel[] = [];
 
   chartOptions1: any = {}; // Puedes ajustar el tipo según la estructura de tu objeto.
   chartOptions2: any = {}; // Puedes ajustar el tipo según la estructura de tu objeto.
@@ -34,6 +34,8 @@ export class PortfolioPageComponent implements OnInit, AfterViewInit, OnDestroy 
   chartOptions6: any = {}; // Puedes ajustar el tipo según la estructura de tu objeto.
   chartOptions7: any = {}; // Invertido Rendimiento Bonos.
   chartOptions8: any = {}; // Invertido Rendimiento Inversiones.
+  chartOptions9: any = {}; // Invertido - tiempo en año Bonos.
+  chartOptions10: any = {}; // Invertido - tiempo en año Inversiones.
 
 
   constructor(
@@ -271,11 +273,64 @@ export class PortfolioPageComponent implements OnInit, AfterViewInit, OnDestroy 
       );
 
 
+      const observador9$ = this.portfolioService.getInvertidoVencimiento('BONO')
+      .subscribe(
+        (response: InvertidoVencimientoModel[]) => {
+          this.dataInvertidoVencimientoBonos = response;
+          this.chartOptions9 = {
+            animationEnabled: true,
+            title: {
+              text: "Vencimiento en bonos"
+            },
+            data: [{
+              type: "pie",
+              startAngle: -90,
+              indexLabel: "{name}: {y}",
+              yValueFormatString: "'$'#,###.##",
+              dataPoints: this.dataInvertidoVencimientoBonos.map(entry => ({
+                name: entry.anioVencimiento,
+                y: entry.invertido
+              }))
+            }]
+          };
+          this.cdr.detectChanges();
+        },
+        err => {
+          console.log('Error de conexión');
+        }
+      );
+
+
+      const observador10$ = this.portfolioService.getInvertidoVencimiento('INVERSIONES')
+      .subscribe(
+        (response: InvertidoVencimientoModel[]) => {
+          this.dataInvertidoVencimientoInv = response;
+          this.chartOptions10 = {
+            animationEnabled: true,
+            title: {
+              text: "Vencimiento en otras inversiones"
+            },
+            data: [{
+              type: "pie",
+              startAngle: -90,
+              indexLabel: "{name}: {y}",
+              yValueFormatString: "'$'#,###.##",
+              dataPoints: this.dataInvertidoVencimientoInv.map(entry => ({
+                name: entry.anioVencimiento,
+                y: entry.invertido
+              }))
+            }]
+          };
+          this.cdr.detectChanges();
+        },
+        err => {
+          console.log('Error de conexión');
+        }
+      );
 
 
 
-
-    this.listaObservadores$ = [observador1$, observador2$, observador3$, observador4$, observador6$, observador7$, observador8$];
+    this.listaObservadores$ = [observador1$, observador2$, observador3$, observador4$, observador6$, observador7$, observador8$, observador9$, observador10$  ];
   }
 
   ngAfterViewInit(): void {

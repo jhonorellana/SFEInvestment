@@ -1,5 +1,5 @@
 export interface InvertidoVencimientoModel
 {
-  rendimiento: number;
-  vencimiento: number;
+  anioVencimiento: string;
+  invertido: number;
 }

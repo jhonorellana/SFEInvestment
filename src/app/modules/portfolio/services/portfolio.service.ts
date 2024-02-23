@@ -41,6 +41,10 @@ export class PortfolioService {
       return this.httpClient.get(`${this.URL}invertidorendimiento?type=${tipo}`);
     }
 
+    getInvertidoVencimiento(tipo: string): Observable<any>{
+      return this.httpClient.get(`${this.URL}invertidovencimiento?type=${tipo}`);
+    }
+
 
 
 }
