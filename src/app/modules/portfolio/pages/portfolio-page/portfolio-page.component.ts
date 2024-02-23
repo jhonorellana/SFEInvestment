@@ -54,7 +54,7 @@ export class PortfolioPageComponent implements OnInit, AfterViewInit, OnDestroy 
               text: "Tipo de inversión por propietario"
             },
             data: [{
-              type: "pie",
+              type: "doughnut",
               startAngle: -90,
               indexLabel: "{name}: {y}",
               yValueFormatString: "'$'#,###.##",
@@ -82,7 +82,7 @@ export class PortfolioPageComponent implements OnInit, AfterViewInit, OnDestroy 
               text: "Capital consolidado por propietario"
             },
             data: [{
-              type: "pie",
+              type: "doughnut",
               startAngle: -90,
               indexLabel: "{name}: {y}",
               yValueFormatString: "'$'#,###.##",
@@ -111,7 +111,7 @@ export class PortfolioPageComponent implements OnInit, AfterViewInit, OnDestroy 
               text: "Capital invertido por Empresa"
             },
             data: [{
-              type: "pie",
+              type: "doughnut",
               startAngle: -90,
               indexLabel: "{name}: {y}",
               yValueFormatString: "'$'#,###.##",
@@ -140,7 +140,7 @@ export class PortfolioPageComponent implements OnInit, AfterViewInit, OnDestroy 
               text: "Bonos VS Inversiones"
             },
             data: [{
-              type: "pie",
+              type: "doughnut",
               startAngle: -90,
               indexLabel: "{name}: {y}",
               yValueFormatString: "'$'#,###.##",
@@ -159,7 +159,7 @@ export class PortfolioPageComponent implements OnInit, AfterViewInit, OnDestroy 
 
 
 
-
+/*
       const observador5$ = this.portfolioService.getCapitalByOwnerTypeInvest('BONO')
       .subscribe(
         (response: InvestownernewModel[]) => {
@@ -170,13 +170,13 @@ export class PortfolioPageComponent implements OnInit, AfterViewInit, OnDestroy 
               text: "Bonos por propietario"
             },
             data: [{
-              type: "pie",
+              type: "column",
               startAngle: -90,
-              indexLabel: "{name}: {y}",
+              indexLabel: "{y}",
               yValueFormatString: "'$'#,###.##",
               dataPoints: this.dataInvestownernewlist.map(entry => ({
-                name: entry.inversionpropietario,
-                y: entry.capital
+                label: entry.inversionpropietario,
+                y: parseFloat(entry.capital)
               }))
             }]
           };
@@ -198,7 +198,69 @@ export class PortfolioPageComponent implements OnInit, AfterViewInit, OnDestroy 
               text: "Otras Inversiones por propietario"
             },
             data: [{
-              type: "pie",
+              type: "column",
+              indexLabel: "{y}",
+              yValueFormatString: "'$'#,###.##",
+              dataPoints: this.dataInvestownernewlist2.map(entry => ({
+                label: entry.inversionpropietario,
+                y: parseFloat(entry.capital)
+              }))
+            }]
+          };
+          this.cdr.detectChanges();
+          console.log(this.chartOptions6);
+        },
+        err => {
+          console.log('Error de conexión');
+        }
+      );
+
+*/
+
+
+
+
+      const observador5$ = this.portfolioService.getCapitalByOwnerTypeInvest('BONO')
+      .subscribe(
+        (response: InvestownernewModel[]) => {
+          this.dataInvestownernewlist = response;
+          this.chartOptions5 = {
+            animationEnabled: true,
+            title: {
+              text: "Bonos por propietario"
+            },
+            data: [{
+              type: "doughnut",
+              startAngle: -90,
+              indexLabel: "{name}: {y}",
+              yValueFormatString: "'$'#,###.##",
+              dataPoints: this.dataInvestownernewlist.map(entry => ({
+                name: entry.inversionpropietario,
+                y: entry.capital
+              }))
+            }]
+          };
+          this.cdr.detectChanges();
+        },
+        err => {
+          console.log('Error de conexión');
+        }
+      );
+
+
+
+
+      const observador6$ = this.portfolioService.getCapitalByOwnerTypeInvest('INVERSIONES')
+      .subscribe(
+        (response: InvestownernewModel[]) => {
+          this.dataInvestownernewlist2 = response;
+          this.chartOptions6 = {
+            animationEnabled: true,
+            title: {
+              text: "Otras Inversiones por propietario"
+            },
+            data: [{
+              type: "doughnut",
               startAngle: -90,
               indexLabel: "{name}: {y}",
               yValueFormatString: "'$'#,###.##",
@@ -214,6 +276,7 @@ export class PortfolioPageComponent implements OnInit, AfterViewInit, OnDestroy 
           console.log('Error de conexión');
         }
       );
+
 
 
       const observador7$ = this.portfolioService.getInvertidoRendimiento('BONO')
