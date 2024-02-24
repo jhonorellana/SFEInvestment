@@ -52,15 +52,11 @@ export class SideBarComponent implements OnInit {
         router: ['/', 'balance'],
       },
       {
-        name: 'Comparaciones',
+        name: 'Crecimiento',
         icon: 'uil uil-comparison',
         router: ['/', 'variations'],
       },
       {
-        name: 'Bonos',
-        icon: 'uil uil-bill',
-        router: ['/', 'variations'],
-      },      {
         name: 'Indicadores',
         icon: 'uil uil-chart-pie',
         router: ['/', 'statistics'],
@@ -77,6 +73,11 @@ export class SideBarComponent implements OnInit {
         name: 'Historial',
         icon: 'uil-usd-square',
         router: ['/', 'variationregister'],
+      },
+      {
+        name: 'Otros Valores',
+        icon: 'uil uil-bill',
+        router: ['/', 'othervalue'],
       },
       {
         name: 'Estadísticas',

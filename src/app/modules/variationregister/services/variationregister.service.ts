@@ -28,17 +28,17 @@ export class VariationregisterService {
     }
 
     ActualizarRegistrosVariaciones$(variations: VariationsModel): Observable<any>{
-      console.log('--------');
-      console.log(variations.id);
-      console.log('--------');
+      //console.log('--------');
+      //console.log(variations.id);
+      //console.log('--------');
       return this.httpClient.put(`${this.URL}variation/${variations.id}`, variations);
     }
 
 
     EliminarRegistrosVariaciones$(variations: VariationsModel): Observable<any>{
-      console.log('--------');
-      console.log(variations.id);
-      console.log('--------');
+      //console.log('--------');
+      //console.log(variations.id);
+      //console.log('--------');
       return this.httpClient.delete(`${this.URL}variation/${variations.id}`);
     }
 

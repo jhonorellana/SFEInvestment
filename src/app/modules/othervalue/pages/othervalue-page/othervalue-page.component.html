@@ -1,0 +1,261 @@
+<p>othervalue-page works!</p>
+
+<p-toast></p-toast>
+
+
+<p-toolbar styleClass="mb-4 gap-2">
+  <ng-template pTemplate="left"></ng-template>
+  <ng-template pTemplate="right">
+      <button pButton pRipple label="Nuevo" icon="pi pi-plus" class="p-button-success mr-2" (click)="crearRegistro()"></button>
+  </ng-template>
+</p-toolbar>
+
+
+
+<p-table [value]="catalogoRegistros"
+         [tableStyle]="{ 'min-width': '50rem'}"
+         [paginator]="true"
+         [rows]="5"
+         [showCurrentPageReport]="true"
+         currentPageReportTemplate="Mostrando del {first} al {last} de un total de {totalRecords} registros"
+         [rowsPerPageOptions]="[5, 10, 20]"
+         >
+  <ng-template pTemplate="header">
+    <tr>
+      <th>id</th>
+      <th>Descripcion</th>
+      <th>Valor</th>
+      <th>Activo</th>
+      <th>Acción</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-registro>
+    <tr>
+      <td>{{ registro.id}}</td>
+      <td>{{ registro.Descripcion }}</td>
+      <td>{{ registro.Valor }}</td>
+      <td>{{ registro.Activo }}</td>
+<!--       <td>IMPLEMENTAR BOTONES</td> -->
+      <td>
+        <p-button icon="uil uil-edit-alt"
+                  [rounded]="true"
+                  [outlined]="true"
+                  severity="warning"
+                  [outlined]="false"
+                  pTooltip="Editar"
+                  tooltipPosition="bottom"
+                  (click)="modificarRegistro(registro)"
+                  >
+        </p-button>
+        &nbsp;
+        <p-button icon="uil uil-trash-alt"
+                  [rounded]="true"
+                  [outlined]="true"
+                  severity="danger"
+                  [outlined]="false"
+                  pTooltip="Eliminar"
+                  tooltipPosition="bottom"
+                  (click)="eliminarRegistro(registro)"
+                  >
+        </p-button>
+      </td>
+    </tr>
+  </ng-template>
+
+</p-table>
+
+
+<p-dialog
+  [(visible)]="registroDialog"
+  [style]="{ width: '750px' }"
+  header="Datos del juego (* campos obligatorios)"
+  [modal]="true">
+    <ng-template pTemplate="content">
+        <form [formGroup]="formRegistro">
+            <br/>
+            <div class="formgrid grid">
+                            <div class="field col-12 md:col-10 mt-2">
+                              <span class="p-float-label">
+                                  <input
+                                      pInputText
+                                      id="Descripcion"
+                                      type="text"
+                                      class="inputfield w-full"
+                                      formControlName="Descripcion"
+                                      required
+                                      autofocus
+                                  />
+                                  <label for="Descripcion">* Descripcion registro</label>
+                                  <small *ngIf="formRegistro.get('Descripcion')!.hasError('required')" class="p-error">
+                                      La Descripcion es obligatoria.
+                                  </small>
+                              </span>
+                          </div>
+                          <div class="field col-12 md:col-4 mt-2">
+                              <span class="p-float-label">
+                                  <input
+                                    pInputText
+                                    id="Valor"
+                                    type="text"
+                                    class="inputfield w-full"
+                                    formControlName="Valor"
+                                  />
+                                  <label for="Descripcion">Valor</label>
+                                  <small class="p-error">
+                                      {{ othervalueService.getErrors(formRegistro.controls['Valor'],"Valor")}}
+                                  </small>
+                                </span>
+                          </div>
+                          <div class="field col-12 md:col-4 mt-2">
+                              <span class="p-float-label">
+                                  <input
+                                    pInputText
+                                    id="Activo"
+                                    type="number"
+                                    class="inputfield w-full"
+                                    formControlName="Activo"
+                                  />
+                                  <label for="Activo">* Activo</label>
+                                  <small class="p-error">
+                                      {{ othervalueService.getErrors(formRegistro.controls['Activo'],"Activo")}}
+                                  </small>
+                              </span>
+                          </div>
+           </div>
+        </form>
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <button
+          pButton
+          pRipple
+          label="Guardar"
+          icon="pi pi-check"
+          class="p-button-text"
+          (click)="guardarRegistro()"
+          [disabled]="formRegistro.invalid"
+          >
+        </button>
+      </ng-template>
+</p-dialog>
+
+
+<!-- UPDATE -->
+<p-dialog
+  [(visible)]="registroDialogUpdate"
+  [style]="{ width: '750px' }"
+  header="Datos del juego (* campos obligatorios)"
+  [modal]="false">
+    <ng-template pTemplate="content">
+        <form [formGroup]="formUpdateRegistro">
+            <br/>
+            <div class="formgrid grid">
+                          <div class="field col-12 md:col-2 mt-2">
+                              <span class="p-float-label">
+                                  <input
+                                      pInputText
+                                      id="id"
+                                      type="text"
+                                      class="inputfield w-full"
+                                      formControlName="id"
+                                   />
+                                  <label for="id">Id registro</label>
+                              </span>
+                          </div>
+                          <div class="field col-12 md:col-10 mt-2">
+                              <span class="p-float-label">
+                                  <input
+                                      pInputText
+                                      id="Descripcion"
+                                      type="text"
+                                      class="inputfield w-full"
+                                      formControlName="Descripcion"
+                                      required
+                                      autofocus
+                                  />
+                                  <label for="Descripcion">* Descripcion registro</label>
+                                  <small *ngIf="formUpdateRegistro.get('Descripcion')!.hasError('required')" class="p-error">
+                                      La Descripcion es obligatoria.
+                                  </small>
+                              </span>
+                          </div>
+                          <div class="field col-12 md:col-4 mt-2">
+                              <span class="p-float-label">
+                                  <input
+                                    pInputText
+                                    id="Valor"
+                                    type="text"
+                                    class="inputfield w-full"
+                                    formControlName="Valor"
+                                  />
+                                  <label for="Descripcion">Valor</label>
+                                  <small class="p-error">
+                                      {{ othervalueService.getErrors(formUpdateRegistro.controls['Valor'],"Valor")}}
+                                  </small>
+                                </span>
+                          </div>
+                          <div class="field col-12 md:col-4 mt-2">
+                              <span class="p-float-label">
+                                  <input
+                                    pInputText
+                                    id="Activo"
+                                    type="number"
+                                    class="inputfield w-full"
+                                    formControlName="Activo"
+                                  />
+                                  <label for="Activo">* Activo</label>
+                                  <small class="p-error">
+                                      {{ othervalueService.getErrors(formUpdateRegistro.controls['Activo'],"Activo")}}
+                                  </small>
+                              </span>
+                          </div>
+          </div>
+        </form>
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <button
+          pButton
+          pRipple
+          label="Guardar"
+          icon="pi pi-check"
+          class="p-button-text"
+          (click)="actualizarRegistro()"
+          [disabled]="formUpdateRegistro.invalid">
+        </button>
+    </ng-template>
+</p-dialog>
+
+
+
+
+<!--p-dialog
+  [(visible)]="registroDialogUpdate"
+  [style]="{ width: '750px' }"
+  header="Datos del juego (* campos obligatorios)"
+  [modal]="true">
+    <ng-template pTemplate="content">
+        <form [FormGroup]="formUpdateRegistro">
+            <br/>
+            <div class="formgrid grid">
+                <div *ngFor="let controlName of formControlNames">
+                    <div class="field col-12 md:col-6 mt-2">
+                        <span class="p-float-label">
+                            <input pInputText [formControlName]="controlName" />
+                            <label>{{ controlName | titlecase }}</label>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <button
+          pButton
+          pRipple
+          label="Guardar"
+          icon="pi pi-check"
+          class="p-button-text"
+          (click)="guardarRegistro()"
+          [disabled]="formUpdateRegistro.invalid">
+        </button>
+    </ng-template>
+</p-dialog -->

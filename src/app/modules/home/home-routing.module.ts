@@ -46,6 +46,10 @@ const routes: Routes = [
     loadChildren: () => import('@modules/variationregister/variationregister.module').then(m => m.VariationregisterModule)
   },
   {
+    path: 'othervalue',
+    loadChildren: () => import('@modules/othervalue/othervalue.module').then(m => m.OthervalueModule)
+  },
+  {
     path: '**',//TODO 404 cuando no existe la ruta
     redirectTo: '/investment'
   }
