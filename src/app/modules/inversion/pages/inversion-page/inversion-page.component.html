@@ -1,0 +1,572 @@
+<p>inversion-page works!</p>
+
+<p-toast></p-toast>
+
+
+<p-toolbar styleClass="mb-4 gap-2">
+  <ng-template pTemplate="left"></ng-template>
+  <ng-template pTemplate="right">
+      <button pButton pRipple label="Nuevo" icon="pi pi-plus" class="p-button-success mr-2" (click)="crearRegistro()"></button>
+  </ng-template>
+</p-toolbar>
+
+
+
+<p-table [value]="catalogoRegistros"
+         [tableStyle]="{ 'min-width': '50rem'}"
+         [paginator]="true"
+         [rows]="5"
+         [showCurrentPageReport]="true"
+         currentPageReportTemplate="Mostrando del {first} al {last} de un total de {totalRecords} registros"
+         [rowsPerPageOptions]="[5, 10, 20]"
+         >
+  <ng-template pTemplate="header">
+    <tr>
+      <th>id</th>
+      <th>Tipo</th>
+      <th>FechaCompra</th>
+      <th>FechaVencimiento</th>
+      <th>Propietario</th>
+      <th>Empresa</th>
+      <th>TasaInteres</th>
+      <th>Rendimiento</th>
+      <th>Capital</th>
+      <th>Retencion</th>
+      <th>Vendido</th>
+      <th>Expirado</th>
+      <th>Activo</th>
+      <th>Acción</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-registro>
+    <tr>
+      <td>{{ registro.id}}</td>
+      <td>{{ registro.Tipo }}</td>
+      <td>{{ registro.FechaCompra }}</td>
+      <td>{{ registro.FechaVencimiento }}</td>
+      <td>{{ registro.Propietario }}</td>
+      <td>{{ registro.Empresa }}</td>
+      <td>{{ registro.TasaInteres }}</td>
+      <td>{{ registro.Rendimiento }}</td>
+      <td>{{ registro.Capital }}</td>
+      <td>{{ registro.Retencion }}</td>
+      <td>{{ registro.Vendido }}</td>
+      <td>{{ registro.Expirado }}</td>
+      <td>{{ registro.Activo }}</td>
+<!--       <td>IMPLEMENTAR BOTONES</td> -->
+      <td>
+        <p-button icon="uil uil-edit-alt"
+                  [rounded]="true"
+                  [outlined]="true"
+                  severity="warning"
+                  [outlined]="false"
+                  pTooltip="Editar"
+                  tooltipPosition="bottom"
+                  (click)="modificarRegistro(registro)"
+                  >
+        </p-button>
+        &nbsp;
+        <p-button icon="uil uil-trash-alt"
+                  [rounded]="true"
+                  [outlined]="true"
+                  severity="danger"
+                  [outlined]="false"
+                  pTooltip="Eliminar"
+                  tooltipPosition="bottom"
+                  (click)="eliminarRegistro(registro)"
+                  >
+        </p-button>
+      </td>
+    </tr>
+  </ng-template>
+
+</p-table>
+
+
+<p-dialog
+  [(visible)]="registroDialog"
+  [style]="{ width: '750px' }"
+  header="Datos del juego (* campos obligatorios)"
+  [modal]="true">
+    <ng-template pTemplate="content">
+        <form [formGroup]="formRegistro">
+            <br/>
+            <div class="formgrid grid">
+                  <div class="field col-12 md:col-10 mt-2">
+                    <span class="p-float-label">
+                        <input
+                            pInputText
+                            id="Tipo"
+                            type="text"
+                            class="inputfield w-full"
+                            formControlName="Tipo"
+                            required
+                            autofocus
+                        />
+                        <label for="Tipo">* Tipo</label>
+                        <small *ngIf="formRegistro.get('Tipo')!.hasError('required')" class="p-error">
+                            El tipo es obligatorio.
+                        </small>
+                    </span>
+                </div>
+                <div class="field col-12 md:col-10 mt-2">
+                              <span class="p-float-label">
+                                  <input
+                                      pInputText
+                                      id="FechaCompra"
+                                      type="text"
+                                      class="inputfield w-full"
+                                      formControlName="FechaCompra"
+                                      required
+                                      autofocus
+                                  />
+                                  <label for="FechaCompra">* FechaCompra registro</label>
+                                  <small *ngIf="formRegistro.get('FechaCompra')!.hasError('required')" class="p-error">
+                                      La FechaCompra es obligatoria.
+                                  </small>
+                              </span>
+                          </div>
+                        <div class="field col-12 md:col-4 mt-2">
+                              <span class="p-float-label">
+                                  <input
+                                    pInputText
+                                    id="FechaVencimiento"
+                                    type="text"
+                                    class="inputfield w-full"
+                                    formControlName="FechaVencimiento"
+                                  />
+                                  <label for="FechaCompra">FechaVencimiento</label>
+                                  <small class="p-error">
+                                      {{ inversionService.getErrors(formRegistro.controls['FechaVencimiento'],"FechaVencimiento")}}
+                                  </small>
+                                </span>
+                          </div>
+                          <div class="field col-12 md:col-4 mt-2">
+                              <span class="p-float-label">
+                                  <input
+                                    pInputText
+                                    id="Propietario"
+                                    type="text"
+                                    class="inputfield w-full"
+                                    formControlName="Propietario"
+                                  />
+                                  <label for="Propietario">* Propietario</label>
+                                  <small class="p-error">
+                                      {{ inversionService.getErrors(formRegistro.controls['Propietario'],"Propietario")}}
+                                  </small>
+                              </span>
+                          </div>
+                          <div class="field col-12 md:col-4 mt-2">
+                              <span class="p-float-label">
+                                  <input
+                                    pInputText
+                                    id="Empresa"
+                                    type="text"
+                                    class="inputfield w-full"
+                                    formControlName="Empresa"
+                                  />
+                                  <label for="Empresa">* Empresa</label>
+                                  <small class="p-error">
+                                      {{ inversionService.getErrors(formRegistro.controls['Empresa'],"Empresa")}}
+                                  </small>
+                              </span>
+                          </div>
+                          <div class="field col-12 md:col-4 mt-2">
+                              <span class="p-float-label">
+                                <input
+                                  pInputText
+                                  id="TasaInteres"
+                                  type="number"
+                                  class="inputfield w-full"
+                                  formControlName="TasaInteres"
+                                />
+                                <label for="TasaInteres">TasaInteres</label>
+                                <small class="p-error">
+                                  {{ inversionService.getErrors(formRegistro.controls['TasaInteres'],"TasaInteres")}}
+                                </small>
+                              </span>
+                          </div>
+                          <div class="field col-12 md:col-4 mt-2">
+                            <span class="p-float-label">
+                              <input
+                                pInputText
+                                id="Rendimiento"
+                                type="number"
+                                class="inputfield w-full"
+                                formControlName="Rendimiento"
+                              />
+                              <label for="Rendimiento">Rendimiento</label>
+                              <small class="p-error">
+                                {{ inversionService.getErrors(formRegistro.controls['Rendimiento'],"Rendimiento")}}
+                              </small>
+                            </span>
+                        </div>
+                        <div class="field col-12 md:col-4 mt-2">
+                          <span class="p-float-label">
+                            <input
+                              pInputText
+                              id="Capital"
+                              type="number"
+                              class="inputfield w-full"
+                              formControlName="Capital"
+                            />
+                            <label for="Capital">Capital</label>
+                            <small class="p-error">
+                              {{ inversionService.getErrors(formRegistro.controls['Capital'],"Capital")}}
+                            </small>
+                          </span>
+                      </div>
+                      <div class="field col-12 md:col-4 mt-2">
+                        <span class="p-float-label">
+                          <input
+                            pInputText
+                            id="Retencion"
+                            type="number"
+                            class="inputfield w-full"
+                            formControlName="Retencion"
+                          />
+                          <label for="Retencion">Retencion</label>
+                          <small class="p-error">
+                            {{ inversionService.getErrors(formRegistro.controls['Retencion'],"Retencion")}}
+                          </small>
+                        </span>
+                    </div>
+
+                    <div class="field col-12 md:col-4 mt-2">
+                      <span class="p-float-label">
+                        <input
+                          pInputText
+                          id="Vendido"
+                          type="number"
+                          class="inputfield w-full"
+                          formControlName="Vendido"
+                        />
+                        <label for="Vendido">Vendido</label>
+                        <small class="p-error">
+                          {{ inversionService.getErrors(formRegistro.controls['Vendido'],"Vendido")}}
+                        </small>
+                      </span>
+                  </div>
+
+                  <div class="field col-12 md:col-4 mt-2">
+                    <span class="p-float-label">
+                      <input
+                        pInputText
+                        id="Expirado"
+                        type="number"
+                        class="inputfield w-full"
+                        formControlName="Expirado"
+                      />
+                      <label for="Expirado">Expirado</label>
+                      <small class="p-error">
+                        {{ inversionService.getErrors(formRegistro.controls['Expirado'],"Expirado")}}
+                      </small>
+                    </span>
+                </div>
+
+                <div class="field col-12 md:col-4 mt-2">
+                  <span class="p-float-label">
+                    <input
+                      pInputText
+                      id="Activo"
+                      type="number"
+                      class="inputfield w-full"
+                      formControlName="Activo"
+                    />
+                    <label for="Activo">Activo</label>
+                    <small class="p-error">
+                      {{ inversionService.getErrors(formRegistro.controls['Activo'],"Activo")}}
+                    </small>
+                  </span>
+              </div>
+
+
+           </div>
+        </form>
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <button
+          pButton
+          pRipple
+          label="Guardar"
+          icon="pi pi-check"
+          class="p-button-text"
+          (click)="guardarRegistro()"
+          [disabled]="formRegistro.invalid"
+          >
+        </button>
+      </ng-template>
+</p-dialog>
+
+
+<!-- UPDATE -->
+<p-dialog
+  [(visible)]="registroDialogUpdate"
+  [style]="{ width: '750px' }"
+  header="Datos del juego (* campos obligatorios)"
+  [modal]="false">
+    <ng-template pTemplate="content">
+        <form [formGroup]="formUpdateRegistro">
+            <br/>
+            <div class="formgrid grid">
+                          <div class="field col-12 md:col-2 mt-2">
+                              <span class="p-float-label">
+                                  <input
+                                      pInputText
+                                      id="id"
+                                      type="text"
+                                      class="inputfield w-full"
+                                      formControlName="id"
+                                   />
+                                  <label for="id">Id registro</label>
+                              </span>
+                          </div>
+
+                          <div class="field col-12 md:col-10 mt-2">
+                            <span class="p-float-label">
+                                <input
+                                    pInputText
+                                    id="Tipo"
+                                    type="text"
+                                    class="inputfield w-full"
+                                    formControlName="Tipo"
+                                    required
+                                    autofocus
+                                />
+                                <label for="Tipo">* Tipo registro</label>
+                                <small *ngIf="formUpdateRegistro.get('Tipo')!.hasError('required')" class="p-error">
+                                    La Tipo es obligatoria.
+                                </small>
+                            </span>
+                        </div>
+
+                          <div class="field col-12 md:col-10 mt-2">
+                              <span class="p-float-label">
+                                  <input
+                                      pInputText
+                                      id="FechaCompra"
+                                      type="text"
+                                      class="inputfield w-full"
+                                      formControlName="FechaCompra"
+                                      required
+                                      autofocus
+                                  />
+                                  <label for="FechaCompra">* FechaCompra registro</label>
+                                  <small *ngIf="formUpdateRegistro.get('FechaCompra')!.hasError('required')" class="p-error">
+                                      La FechaCompra es obligatoria.
+                                  </small>
+                              </span>
+                          </div>
+
+                          <div class="field col-12 md:col-4 mt-2">
+                              <span class="p-float-label">
+                                  <input
+                                    pInputText
+                                    id="FechaVencimiento"
+                                    type="text"
+                                    class="inputfield w-full"
+                                    formControlName="FechaVencimiento"
+                                  />
+                                  <label for="FechaCompra">FechaVencimiento</label>
+                                  <small class="p-error">
+                                      {{ inversionService.getErrors(formUpdateRegistro.controls['FechaVencimiento'],"FechaVencimiento")}}
+                                  </small>
+                                </span>
+                          </div>
+                          <div class="field col-12 md:col-4 mt-2">
+                              <span class="p-float-label">
+                                  <input
+                                    pInputText
+                                    id="Propietario"
+                                    type="text"
+                                    class="inputfield w-full"
+                                    formControlName="Propietario"
+                                  />
+                                  <label for="Propietario">* Propietario</label>
+                                  <small class="p-error">
+                                      {{ inversionService.getErrors(formUpdateRegistro.controls['Propietario'],"Propietario")}}
+                                  </small>
+                              </span>
+                          </div>
+                          <div class="field col-12 md:col-4 mt-2">
+                              <span class="p-float-label">
+                                  <input
+                                    pInputText
+                                    id="Empresa"
+                                    type="text"
+                                    class="inputfield w-full"
+                                    formControlName="Empresa"
+                                  />
+                                  <label for="Empresa">* Empresa</label>
+                                  <small class="p-error">
+                                      {{ inversionService.getErrors(formUpdateRegistro.controls['Empresa'],"Empresa")}}
+                                  </small>
+                              </span>
+                          </div>
+                          <div class="field col-12 md:col-4 mt-2">
+                              <span class="p-float-label">
+                                <input
+                                  pInputText
+                                  id="TasaInteres"
+                                  type="number"
+                                  class="inputfield w-full"
+                                  formControlName="TasaInteres"
+                                />
+                                <label for="TasaInteres">TasaInteres</label>
+                                <small class="p-error">
+                                  {{ inversionService.getErrors(formUpdateRegistro.controls['TasaInteres'],"TasaInteres")}}
+                                </small>
+                              </span>
+                          </div>
+                          <div class="field col-12 md:col-4 mt-2">
+                            <span class="p-float-label">
+                              <input
+                                pInputText
+                                id="Rendimiento"
+                                type="text"
+                                class="inputfield w-full"
+                                formControlName="Rendimiento"
+                              />
+                              <label for="Rendimiento">Rendimiento</label>
+                              <small class="p-error">
+                                {{ inversionService.getErrors(formUpdateRegistro.controls['Rendimiento'],"Rendimiento")}}
+                              </small>
+                            </span>
+                        </div>
+                        <div class="field col-12 md:col-4 mt-2">
+                          <span class="p-float-label">
+                            <input
+                              pInputText
+                              id="Capital"
+                              type="text"
+                              class="inputfield w-full"
+                              formControlName="Capital"
+                            />
+                            <label for="Capital">Capital</label>
+                            <small class="p-error">
+                              {{ inversionService.getErrors(formUpdateRegistro.controls['Capital'],"Capital")}}
+                            </small>
+                          </span>
+                      </div>
+                      <div class="field col-12 md:col-4 mt-2">
+                        <span class="p-float-label">
+                          <input
+                            pInputText
+                            id="Retencion"
+                            type="text"
+                            class="inputfield w-full"
+                            formControlName="Retencion"
+                          />
+                          <label for="Retencion">Retencion</label>
+                          <small class="p-error">
+                            {{ inversionService.getErrors(formUpdateRegistro.controls['Retencion'],"Retencion")}}
+                          </small>
+                        </span>
+                    </div>
+
+                    <div class="field col-12 md:col-10 mt-2">
+                      <span class="p-float-label">
+                          <input
+                              pInputText
+                              id="Vendido"
+                              type="text"
+                              class="inputfield w-full"
+                              formControlName="Vendido"
+                              required
+                              autofocus
+                          />
+                          <label for="Vendido">* Vendido registro</label>
+                          <small *ngIf="formUpdateRegistro.get('Vendido')!.hasError('required')" class="p-error">
+                              La Vendido es obligatoria.
+                          </small>
+                      </span>
+                  </div>
+
+                  <div class="field col-12 md:col-10 mt-2">
+                    <span class="p-float-label">
+                        <input
+                            pInputText
+                            id="Expirado"
+                            type="text"
+                            class="inputfield w-full"
+                            formControlName="Expirado"
+                            required
+                            autofocus
+                        />
+                        <label for="Expirado">* Expirado registro</label>
+                        <small *ngIf="formUpdateRegistro.get('Expirado')!.hasError('required')" class="p-error">
+                            La Expirado es obligatoria.
+                        </small>
+                    </span>
+                </div>
+
+                <div class="field col-12 md:col-10 mt-2">
+                  <span class="p-float-label">
+                      <input
+                          pInputText
+                          id="Activo"
+                          type="text"
+                          class="inputfield w-full"
+                          formControlName="Activo"
+                          required
+                          autofocus
+                      />
+                      <label for="Activo">* Activo registro</label>
+                      <small *ngIf="formUpdateRegistro.get('Activo')!.hasError('required')" class="p-error">
+                          La Activo es obligatoria.
+                      </small>
+                  </span>
+              </div>
+
+
+          </div>
+        </form>
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <button
+          pButton
+          pRipple
+          label="Guardar"
+          icon="pi pi-check"
+          class="p-button-text"
+          (click)="actualizarRegistro()"
+          [disabled]="formUpdateRegistro.invalid">
+        </button>
+    </ng-template>
+</p-dialog>
+
+
+
+
+<!--p-dialog
+  [(visible)]="registroDialogUpdate"
+  [style]="{ width: '750px' }"
+  header="Datos del juego (* campos obligatorios)"
+  [modal]="true">
+    <ng-template pTemplate="content">
+        <form [FormGroup]="formUpdateRegistro">
+            <br/>
+            <div class="formgrid grid">
+                <div *ngFor="let controlName of formControlNames">
+                    <div class="field col-12 md:col-6 mt-2">
+                        <span class="p-float-label">
+                            <input pInputText [formControlName]="controlName" />
+                            <label>{{ controlName | titlecase }}</label>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <button
+          pButton
+          pRipple
+          label="Guardar"
+          icon="pi pi-check"
+          class="p-button-text"
+          (click)="guardarRegistro()"
+          [disabled]="formUpdateRegistro.invalid">
+        </button>
+    </ng-template>
+</p-dialog -->

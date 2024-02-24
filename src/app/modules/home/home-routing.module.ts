@@ -50,6 +50,10 @@ const routes: Routes = [
     loadChildren: () => import('@modules/othervalue/othervalue.module').then(m => m.OthervalueModule)
   },
   {
+    path: 'inversion',
+    loadChildren: () => import('@modules/inversion/inversion.module').then(m => m.InversionModule)
+  },
+  {
     path: '**',//TODO 404 cuando no existe la ruta
     redirectTo: '/investment'
   }

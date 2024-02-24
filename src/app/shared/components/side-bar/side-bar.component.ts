@@ -66,8 +66,9 @@ export class SideBarComponent implements OnInit {
 
     this.mainMenu.accessLink = [
       {
-        name: 'Actualizar capital',
+        name: 'Inversión',
         icon: 'uil-plus-square',
+        router: ['/', 'inversion'],
       },
       {
         name: 'Historial',
