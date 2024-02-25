@@ -12,26 +12,28 @@
 
 
 
-<p-table [value]="catalogoRegistros"
+<!--p-table [styleClass]="{ 'p-datatable-sm' 'p-datatable-gridlines" } -->
+<p-table [styleClass]="'p-datatable-sm'"
+         [value]="catalogoRegistros"
          [tableStyle]="{ 'min-width': '50rem'}"
          [paginator]="true"
-         [rows]="5"
+         [rows]="20"
          [showCurrentPageReport]="true"
          currentPageReportTemplate="Mostrando del {first} al {last} de un total de {totalRecords} registros"
-         [rowsPerPageOptions]="[5, 10, 20]"
+         [rowsPerPageOptions]="[5, 10, 20, 30]"
          >
   <ng-template pTemplate="header">
     <tr>
-      <th>id</th>
+      <!--th>id</th-->
       <th>Tipo</th>
-      <th>FechaCompra</th>
-      <th>FechaVencimiento</th>
-      <th>Propietario</th>
-      <th>Empresa</th>
-      <th>TasaInteres</th>
-      <th>Rendimiento</th>
-      <th>Capital</th>
-      <th>Retencion</th>
+      <th pSortableColumn="FechaCompra">Compra <p-sortIcon field="FechaCompra"></p-sortIcon></th>
+      <th pSortableColumn="FechaVencimiento">Vencimiento<p-sortIcon field="FechaVencimiento"></p-sortIcon></th>
+      <th pSortableColumn="Propietario">Propietario<p-sortIcon field="Propietario"></p-sortIcon></th>
+      <th pSortableColumn="Empresa">Empresa<p-sortIcon field="Empresa"></p-sortIcon></th>
+      <th pSortableColumn="TasaInteres">Interes<p-sortIcon field="TasaInteres"></p-sortIcon></th>
+      <th pSortableColumn="Rendimiento">Rendimiento<p-sortIcon field="Rendimiento"></p-sortIcon></th>
+      <th pSortableColumn="Capital">Capital<p-sortIcon field="Capital"></p-sortIcon></th>
+      <!--th>Retencion</th-->
       <th>Vendido</th>
       <th>Expirado</th>
       <th>Activo</th>
@@ -40,17 +42,17 @@
   </ng-template>
   <ng-template pTemplate="body" let-registro>
     <tr>
-      <td>{{ registro.id}}</td>
+      <!--td>{{ registro.id}}</td -->
       <td>{{ registro.Tipo }}</td>
       <td>{{ registro.FechaCompra }}</td>
       <td>{{ registro.FechaVencimiento }}</td>
       <td>{{ registro.Propietario }}</td>
       <td>{{ registro.Empresa }}</td>
-      <td>{{ registro.TasaInteres }}</td>
-      <td>{{ registro.Rendimiento }}</td>
-      <td>{{ registro.Capital }}</td>
-      <td>{{ registro.Retencion }}</td>
-      <td>{{ registro.Vendido }}</td>
+      <td style="text-align: right;">{{ registro.TasaInteres/100 | percent:'1.2-2' }}</td>
+      <td style="text-align: right;">{{ registro.Rendimiento/100  | percent:'1.2-2' }}</td>
+      <td style="text-align: right;">{{ registro.Capital | currency:'USD':'symbol':'1.2-2'}}</td>
+      <!--td style="text-align: right;">{{ registro.Retencion | currency:'USD':'symbol':'1.2-2'}}</td-->
+      <td >{{ registro.Vendido }}</td>
       <td>{{ registro.Expirado }}</td>
       <td>{{ registro.Activo }}</td>
 <!--       <td>IMPLEMENTAR BOTONES</td> -->
@@ -86,30 +88,32 @@
 <p-dialog
   [(visible)]="registroDialog"
   [style]="{ width: '750px' }"
-  header="Datos del juego (* campos obligatorios)"
+  header="Datos de la nueva inversión (* campos obligatorios)"
   [modal]="true">
     <ng-template pTemplate="content">
         <form [formGroup]="formRegistro">
             <br/>
             <div class="formgrid grid">
-                  <div class="field col-12 md:col-10 mt-2">
-                    <span class="p-float-label">
-                        <input
-                            pInputText
-                            id="Tipo"
-                            type="text"
-                            class="inputfield w-full"
-                            formControlName="Tipo"
-                            required
-                            autofocus
-                        />
-                        <label for="Tipo">* Tipo</label>
-                        <small *ngIf="formRegistro.get('Tipo')!.hasError('required')" class="p-error">
-                            El tipo es obligatorio.
-                        </small>
-                    </span>
-                </div>
-                <div class="field col-12 md:col-10 mt-2">
+
+                          <div class="field col-12 md:col-12 mt-2">
+                            <span class="p-float-label">
+                                <input
+                                  pInputText
+                                  id="Empresa"
+                                  type="text"
+                                  class="inputfield w-full"
+                                  formControlName="Empresa"
+                                  required
+                                  autofocus
+                                />
+                                <label for="Empresa">* Empresa</label>
+                                <small *ngIf="formRegistro.get('Empresa')!.hasError('required')" class="p-error">
+                                     La Empresa es obligatoria.
+                                </small>
+                            </span>
+                        </div>
+
+                        <div class="field col-12 md:col-4 mt-2">
                               <span class="p-float-label">
                                   <input
                                       pInputText
@@ -118,9 +122,8 @@
                                       class="inputfield w-full"
                                       formControlName="FechaCompra"
                                       required
-                                      autofocus
                                   />
-                                  <label for="FechaCompra">* FechaCompra registro</label>
+                                  <label for="FechaCompra">* FechaCompra</label>
                                   <small *ngIf="formRegistro.get('FechaCompra')!.hasError('required')" class="p-error">
                                       La FechaCompra es obligatoria.
                                   </small>
@@ -135,7 +138,7 @@
                                     class="inputfield w-full"
                                     formControlName="FechaVencimiento"
                                   />
-                                  <label for="FechaCompra">FechaVencimiento</label>
+                                  <label for="FechaCompra">* FechaVencimiento</label>
                                   <small class="p-error">
                                       {{ inversionService.getErrors(formRegistro.controls['FechaVencimiento'],"FechaVencimiento")}}
                                   </small>
@@ -157,20 +160,21 @@
                               </span>
                           </div>
                           <div class="field col-12 md:col-4 mt-2">
-                              <span class="p-float-label">
-                                  <input
+                            <span class="p-float-label">
+                                <input
                                     pInputText
-                                    id="Empresa"
+                                    id="Tipo"
                                     type="text"
                                     class="inputfield w-full"
-                                    formControlName="Empresa"
-                                  />
-                                  <label for="Empresa">* Empresa</label>
-                                  <small class="p-error">
-                                      {{ inversionService.getErrors(formRegistro.controls['Empresa'],"Empresa")}}
-                                  </small>
-                              </span>
-                          </div>
+                                    formControlName="Tipo"
+                                    required
+                                />
+                                <label for="Tipo">* Tipo</label>
+                                <small *ngIf="formRegistro.get('Tipo')!.hasError('required')" class="p-error">
+                                    El tipo es obligatorio.
+                                </small>
+                            </span>
+                        </div>
                           <div class="field col-12 md:col-4 mt-2">
                               <span class="p-float-label">
                                 <input
@@ -180,7 +184,7 @@
                                   class="inputfield w-full"
                                   formControlName="TasaInteres"
                                 />
-                                <label for="TasaInteres">TasaInteres</label>
+                                <label for="TasaInteres">* TasaInteres</label>
                                 <small class="p-error">
                                   {{ inversionService.getErrors(formRegistro.controls['TasaInteres'],"TasaInteres")}}
                                 </small>
@@ -195,7 +199,7 @@
                                 class="inputfield w-full"
                                 formControlName="Rendimiento"
                               />
-                              <label for="Rendimiento">Rendimiento</label>
+                              <label for="Rendimiento">* Rendimiento</label>
                               <small class="p-error">
                                 {{ inversionService.getErrors(formRegistro.controls['Rendimiento'],"Rendimiento")}}
                               </small>
@@ -210,7 +214,7 @@
                               class="inputfield w-full"
                               formControlName="Capital"
                             />
-                            <label for="Capital">Capital</label>
+                            <label for="Capital">* Capital</label>
                             <small class="p-error">
                               {{ inversionService.getErrors(formRegistro.controls['Capital'],"Capital")}}
                             </small>
@@ -225,7 +229,7 @@
                             class="inputfield w-full"
                             formControlName="Retencion"
                           />
-                          <label for="Retencion">Retencion</label>
+                          <label for="Retencion">* Retencion</label>
                           <small class="p-error">
                             {{ inversionService.getErrors(formRegistro.controls['Retencion'],"Retencion")}}
                           </small>
@@ -241,7 +245,7 @@
                           class="inputfield w-full"
                           formControlName="Vendido"
                         />
-                        <label for="Vendido">Vendido</label>
+                        <label for="Vendido">* Vendido</label>
                         <small class="p-error">
                           {{ inversionService.getErrors(formRegistro.controls['Vendido'],"Vendido")}}
                         </small>
@@ -257,7 +261,7 @@
                         class="inputfield w-full"
                         formControlName="Expirado"
                       />
-                      <label for="Expirado">Expirado</label>
+                      <label for="Expirado">* Expirado</label>
                       <small class="p-error">
                         {{ inversionService.getErrors(formRegistro.controls['Expirado'],"Expirado")}}
                       </small>
@@ -273,7 +277,7 @@
                       class="inputfield w-full"
                       formControlName="Activo"
                     />
-                    <label for="Activo">Activo</label>
+                    <label for="Activo">* Activo</label>
                     <small class="p-error">
                       {{ inversionService.getErrors(formRegistro.controls['Activo'],"Activo")}}
                     </small>
@@ -303,26 +307,44 @@
 <p-dialog
   [(visible)]="registroDialogUpdate"
   [style]="{ width: '750px' }"
-  header="Datos del juego (* campos obligatorios)"
+  header="Actualización de la inversión (* campos obligatorios)"
   [modal]="false">
     <ng-template pTemplate="content">
         <form [formGroup]="formUpdateRegistro">
             <br/>
             <div class="formgrid grid">
-                          <div class="field col-12 md:col-2 mt-2">
+                            <div class="field col-12 md:col-2 mt-2">
+                                <span class="p-float-label">
+                                    <input
+                                        pInputText
+                                        id="id"
+                                        type="text"
+                                        class="inputfield w-full"
+                                        formControlName="id"
+                                    />
+                                    <label for="id">Id registro</label>
+                                </span>
+                            </div>
+
+                            <div class="field col-12 md:col-10 mt-2">
                               <span class="p-float-label">
                                   <input
-                                      pInputText
-                                      id="id"
-                                      type="text"
-                                      class="inputfield w-full"
-                                      formControlName="id"
-                                   />
-                                  <label for="id">Id registro</label>
+                                    pInputText
+                                    id="Empresa"
+                                    type="text"
+                                    class="inputfield w-full"
+                                    formControlName="Empresa"
+                                    required
+                                    autofocus
+                                  />
+                                  <label for="Empresa">* Empresa</label>
+                                  <small class="p-error">
+                                      {{ inversionService.getErrors(formUpdateRegistro.controls['Empresa'],"Empresa")}}
+                                  </small>
                               </span>
                           </div>
 
-                          <div class="field col-12 md:col-10 mt-2">
+                          <div class="field col-12 md:col-4 mt-2">
                             <span class="p-float-label">
                                 <input
                                     pInputText
@@ -331,16 +353,15 @@
                                     class="inputfield w-full"
                                     formControlName="Tipo"
                                     required
-                                    autofocus
                                 />
-                                <label for="Tipo">* Tipo registro</label>
+                                <label for="Tipo">* Tipo</label>
                                 <small *ngIf="formUpdateRegistro.get('Tipo')!.hasError('required')" class="p-error">
                                     La Tipo es obligatoria.
                                 </small>
                             </span>
                         </div>
 
-                          <div class="field col-12 md:col-10 mt-2">
+                          <div class="field col-12 md:col-4 mt-2">
                               <span class="p-float-label">
                                   <input
                                       pInputText
@@ -349,9 +370,8 @@
                                       class="inputfield w-full"
                                       formControlName="FechaCompra"
                                       required
-                                      autofocus
                                   />
-                                  <label for="FechaCompra">* FechaCompra registro</label>
+                                  <label for="FechaCompra">* FechaCompra</label>
                                   <small *ngIf="formUpdateRegistro.get('FechaCompra')!.hasError('required')" class="p-error">
                                       La FechaCompra es obligatoria.
                                   </small>
@@ -385,21 +405,6 @@
                                   <label for="Propietario">* Propietario</label>
                                   <small class="p-error">
                                       {{ inversionService.getErrors(formUpdateRegistro.controls['Propietario'],"Propietario")}}
-                                  </small>
-                              </span>
-                          </div>
-                          <div class="field col-12 md:col-4 mt-2">
-                              <span class="p-float-label">
-                                  <input
-                                    pInputText
-                                    id="Empresa"
-                                    type="text"
-                                    class="inputfield w-full"
-                                    formControlName="Empresa"
-                                  />
-                                  <label for="Empresa">* Empresa</label>
-                                  <small class="p-error">
-                                      {{ inversionService.getErrors(formUpdateRegistro.controls['Empresa'],"Empresa")}}
                                   </small>
                               </span>
                           </div>
@@ -464,7 +469,7 @@
                         </span>
                     </div>
 
-                    <div class="field col-12 md:col-10 mt-2">
+                    <div class="field col-12 md:col-4 mt-2">
                       <span class="p-float-label">
                           <input
                               pInputText
@@ -473,16 +478,15 @@
                               class="inputfield w-full"
                               formControlName="Vendido"
                               required
-                              autofocus
                           />
-                          <label for="Vendido">* Vendido registro</label>
+                          <label for="Vendido">* Vendido</label>
                           <small *ngIf="formUpdateRegistro.get('Vendido')!.hasError('required')" class="p-error">
                               La Vendido es obligatoria.
                           </small>
                       </span>
                   </div>
 
-                  <div class="field col-12 md:col-10 mt-2">
+                  <div class="field col-12 md:col-4 mt-2">
                     <span class="p-float-label">
                         <input
                             pInputText
@@ -491,16 +495,15 @@
                             class="inputfield w-full"
                             formControlName="Expirado"
                             required
-                            autofocus
                         />
-                        <label for="Expirado">* Expirado registro</label>
+                        <label for="Expirado">* Expirado</label>
                         <small *ngIf="formUpdateRegistro.get('Expirado')!.hasError('required')" class="p-error">
                             La Expirado es obligatoria.
                         </small>
                     </span>
                 </div>
 
-                <div class="field col-12 md:col-10 mt-2">
+                <div class="field col-12 md:col-4 mt-2">
                   <span class="p-float-label">
                       <input
                           pInputText
@@ -509,9 +512,8 @@
                           class="inputfield w-full"
                           formControlName="Activo"
                           required
-                          autofocus
                       />
-                      <label for="Activo">* Activo registro</label>
+                      <label for="Activo">* Activo</label>
                       <small *ngIf="formUpdateRegistro.get('Activo')!.hasError('required')" class="p-error">
                           La Activo es obligatoria.
                       </small>
