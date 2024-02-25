@@ -24,28 +24,29 @@
   <ng-template pTemplate="header">
     <tr>
       <th>id</th>
-      <th>Fecha</th>
-      <th>Jaime</th>
-      <th>Argentina</th>
-      <th>Cristian</th>
-      <th>SaldoTotal</th>
-      <th>SaldoPropio</th>
-      <th>Importacion</th>
-      <th>TotalPropio</th>
-      <th>Acción</th>
+      <th class="small-font" style="text-align: center;">Fecha</th>
+      <th class="small-font" style="text-align: right;">Jaime</th>
+      <th class="small-font" style="text-align: right;">Argentina</th>
+      <th class="small-font" style="text-align: right;">Cristian</th>
+      <th class="small-font" style="text-align: right;">SaldoTotal</th>
+      <th class="small-font" style="text-align: right;">SaldoPropio</th>
+      <th class="small-font" style="text-align: right;">Importacion</th>
+      <th class="small-font" style="text-align: right;">TotalPropio</th>
+      <th class="small-font" style="text-align: center;">Acción</th>
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-registro>
     <tr>
       <td>{{ registro.id}}</td>
-      <td>{{ registro.Fecha | date: 'mediumDate' }}</td>
-      <td>{{ registro.Jaime }}</td>
-      <td>{{ registro.Argentina }}</td>
-      <td>{{ registro.Cristian }}</td>
-      <td>{{ registro.SaldoTotal }}</td>
-      <td>{{ registro.SaldoPropio }}</td>
-      <td>{{ registro.Importacion }}</td>
-      <td>{{ registro.TotalPropio }}</td>
+      <!--td>{{ registro.Fecha | date: 'mediumDate' }}</td-->
+      <td>{{ registro.Fecha}}</td>
+      <td class="small-font" style="text-align: right;">{{ registro.Jaime | currency:'USD':'symbol':'1.2-2'}}</td>
+      <td class="small-font" style="text-align: right;">{{ registro.Argentina | currency:'USD':'symbol':'1.2-2'}}</td>
+      <td class="small-font" style="text-align: right;">{{ registro.Cristian | currency:'USD':'symbol':'1.2-2'}}</td>
+      <td class="small-font" style="text-align: right;">{{ registro.SaldoTotal | currency:'USD':'symbol':'1.2-2'}}</td>
+      <td class="small-font" style="text-align: right;">{{ registro.SaldoPropio | currency:'USD':'symbol':'1.2-2'}}</td>
+      <td class="small-font" style="text-align: right;">{{ registro.Importacion | currency:'USD':'symbol':'1.2-2'}}</td>
+      <td class="small-font" style="text-align: right;">{{ registro.TotalPropio | currency:'USD':'symbol':'1.2-2'}}</td>
 <!--       <td>IMPLEMENTAR BOTONES</td> -->
       <td>
         <p-button icon="uil uil-edit-alt"
@@ -269,7 +270,7 @@
                                   <input
                                     pInputText
                                     id="Jaime"
-                                    type="text"
+                                    type="number"
                                     class="inputfield w-full"
                                     formControlName="Jaime"
                                   />
@@ -329,7 +330,7 @@
                               <input
                                 pInputText
                                 id="SaldoPropio"
-                                type="text"
+                                type="number"
                                 class="inputfield w-full"
                                 formControlName="SaldoPropio"
                               />
@@ -344,7 +345,7 @@
                             <input
                               pInputText
                               id="Importacion"
-                              type="text"
+                              type="number"
                               class="inputfield w-full"
                               formControlName="Importacion"
                             />
@@ -359,7 +360,7 @@
                           <input
                             pInputText
                             id="TotalPropio"
-                            type="text"
+                            type="number"
                             class="inputfield w-full"
                             formControlName="TotalPropio"
                           />

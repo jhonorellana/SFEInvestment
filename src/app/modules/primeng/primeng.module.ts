@@ -19,6 +19,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { FieldsetModule } from 'primeng/fieldset';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { CalendarModule } from 'primeng/calendar';
 
 
 
@@ -48,7 +49,8 @@ import { MultiSelectModule } from 'primeng/multiselect';
     CheckboxModule,
     FieldsetModule,
     InputTextareaModule,
-    MultiSelectModule
+    MultiSelectModule,
+    CalendarModule
 
   ],
   exports:[
@@ -68,7 +70,8 @@ import { MultiSelectModule } from 'primeng/multiselect';
     CheckboxModule,
     FieldsetModule,
     InputTextareaModule,
-    MultiSelectModule
+    MultiSelectModule,
+    CalendarModule
   ]
 })
 export class PrimengModule { }

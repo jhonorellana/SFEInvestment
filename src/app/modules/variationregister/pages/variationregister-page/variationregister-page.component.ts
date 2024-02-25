@@ -35,6 +35,7 @@ export class VariationregisterPageComponent {
     'TotalPropio': [Validators.required],
   };
 
+
   constructor ( public variationregisterService: VariationregisterService,
     private messageService: MessageService,
     private formUpdateBuilder: FormBuilder) {}
