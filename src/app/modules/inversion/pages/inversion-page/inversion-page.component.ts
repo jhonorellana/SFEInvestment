@@ -3,6 +3,8 @@ import { MessageService } from 'primeng/api';
 import { FormGroup, FormControl, Validators, FormBuilder,ReactiveFormsModule } from '@angular/forms';
 import { InversionModel } from '@core/models/inversion.model';
 import { InversionService } from '@modules/inversion/services/inversion.service';
+import { Table } from 'primeng/table';
+import { ViewChild } from '@angular/core';
 
 
 
@@ -14,7 +16,12 @@ import { InversionService } from '@modules/inversion/services/inversion.service'
 })
 export class InversionPageComponent {
 
-  catalogoRegistros: InversionModel[] = [];
+  @ViewChild('dt2')
+  dt2!: Table;
+
+
+    loading: boolean = true;
+    catalogoRegistros: InversionModel[] = [];
 
   formRegistro!: FormGroup;
   formUpdateRegistro!: FormGroup;
@@ -49,8 +56,16 @@ export class InversionPageComponent {
       this.obtenerRegistrosRest();
       this.buildFormVariacion();
       this.buildformUpdateRegistro();
+
+      this.loading = false;
    }
 
+     onFilter(event: any): void {
+      if (event.target instanceof HTMLInputElement) {
+        const keyword = event.target.value;
+        this.dt2.filterGlobal(keyword, 'contains');
+      }
+    }
 
    buildFormVariacion(): void {
       this.formRegistro = new FormGroup({

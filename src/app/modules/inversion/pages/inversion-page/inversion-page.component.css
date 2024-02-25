@@ -1,0 +1,11 @@
+.small-font {
+  font-size: smaller;
+}
+
+.custom-column-filter {
+  font-size: 12px;
+  color: #3b09f0;
+  border: 1px solid #cccccc;
+  border-radius: 10px;
+  padding: 4px 8px;
+}

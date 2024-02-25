@@ -18,6 +18,8 @@ import { DialogModule} from 'primeng/dialog';
 import { CheckboxModule } from 'primeng/checkbox';
 import { FieldsetModule } from 'primeng/fieldset';
 import { InputTextareaModule } from 'primeng/inputtextarea';
+import { MultiSelectModule } from 'primeng/multiselect';
+
 
 
 
@@ -45,7 +47,8 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
     DialogModule,
     CheckboxModule,
     FieldsetModule,
-    InputTextareaModule
+    InputTextareaModule,
+    MultiSelectModule
 
   ],
   exports:[
@@ -64,7 +67,8 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
     DialogModule,
     CheckboxModule,
     FieldsetModule,
-    InputTextareaModule
+    InputTextareaModule,
+    MultiSelectModule
   ]
 })
 export class PrimengModule { }

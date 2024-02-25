@@ -4,7 +4,14 @@
 
 
 <p-toolbar styleClass="mb-4 gap-2">
-  <ng-template pTemplate="left"></ng-template>
+  <ng-template pTemplate="left">
+      <div class="flex">
+        <span class="p-input-icon-left ml-auto">
+          <i class="pi pi-search"></i>
+          <input pInputText type="text" (input)="onFilter($event)" placeholder="Palabra de busqueda" />
+        </span>
+      </div>
+  </ng-template>
   <ng-template pTemplate="right">
       <button pButton pRipple label="Nuevo" icon="pi pi-plus" class="p-button-success mr-2" (click)="crearRegistro()"></button>
   </ng-template>
@@ -13,44 +20,88 @@
 
 
 <!--p-table [styleClass]="{ 'p-datatable-sm' 'p-datatable-gridlines" } -->
-<p-table [styleClass]="'p-datatable-sm'"
+<p-table
+         #dt2
+         [styleClass]="'p-datatable-sm'"
          [value]="catalogoRegistros"
          [tableStyle]="{ 'min-width': '50rem'}"
          [paginator]="true"
-         [rows]="20"
+         [rows]="100"
          [showCurrentPageReport]="true"
          currentPageReportTemplate="Mostrando del {first} al {last} de un total de {totalRecords} registros"
-         [rowsPerPageOptions]="[5, 10, 20, 30]"
+         [rowsPerPageOptions]="[5, 10, 20, 30, 100]"
+         dataKey="id"
+         [loading]="loading"
+         [globalFilterFields]="['FechaCompra','FechaVencimiento','Propietario', 'Empresa']"
          >
   <ng-template pTemplate="header">
     <tr>
       <!--th>id</th-->
-      <th>Tipo</th>
-      <th pSortableColumn="FechaCompra">Compra <p-sortIcon field="FechaCompra"></p-sortIcon></th>
-      <th pSortableColumn="FechaVencimiento">Vencimiento<p-sortIcon field="FechaVencimiento"></p-sortIcon></th>
-      <th pSortableColumn="Propietario">Propietario<p-sortIcon field="Propietario"></p-sortIcon></th>
-      <th pSortableColumn="Empresa">Empresa<p-sortIcon field="Empresa"></p-sortIcon></th>
-      <th pSortableColumn="TasaInteres">Interes<p-sortIcon field="TasaInteres"></p-sortIcon></th>
-      <th pSortableColumn="Rendimiento">Rendimiento<p-sortIcon field="Rendimiento"></p-sortIcon></th>
-      <th pSortableColumn="Capital">Capital<p-sortIcon field="Capital"></p-sortIcon></th>
-      <!--th>Retencion</th-->
-      <th>Vendido</th>
-      <th>Expirado</th>
-      <th>Activo</th>
-      <th>Acción</th>
+      <th class="small-font">Tipo</th>
+      <th class="small-font" pSortableColumn="FechaCompra">Compra <p-sortIcon field="FechaCompra"></p-sortIcon></th>
+      <th class="small-font" pSortableColumn="FechaVencimiento">Vencimiento<p-sortIcon field="FechaVencimiento"></p-sortIcon></th>
+      <th class="small-font" pSortableColumn="Propietario">Propietario<p-sortIcon field="Propietario"></p-sortIcon></th>
+      <th class="small-font" pSortableColumn="Empresa">Empresa<p-sortIcon field="Empresa"></p-sortIcon></th>
+      <th class="small-font" >Interes</th>
+      <th class="small-font" >Rend.</th>
+      <th class="small-font" >Capital</th>
+      <th class="small-font" >Ven.</th>
+      <th class="small-font" >Exp.</th>
+      <th class="small-font" >Act.</th>
+      <th class="small-font" >Acción</th>
     </tr>
+    <tr>
+      <th class="small-font">
+        <!--tipo -->
+      </th>
+      <th class="small-font">
+        <p-columnFilter type="text" field="FechaCompra"></p-columnFilter>
+      </th>
+      <th class="small-font">
+        <p-columnFilter type="text" field="FechaVencimiento"></p-columnFilter>
+      </th>
+      <th class="small-font">
+        <p-columnFilter type="text" field="Propietario"></p-columnFilter>
+      </th>
+      <th class="small-font">
+        <p-columnFilter type="text" field="Empresa"></p-columnFilter>
+      </th>
+      <th>
+        <!--p-columnFilter type="numeric" field="Interes"></p-columnFilter-->
+      </th>
+      <th>
+        <!--rendim -->
+      </th>
+      <th>
+        <!--capital -->
+      </th>
+      <th>
+        <!--vendido -->
+      </th>
+      <th>
+        <!--expirado -->
+      </th>
+      <th>
+        <p-columnFilter type="boolean" field="Activo"></p-columnFilter>
+      </th>
+      <th>
+        accion
+      </th>
+
+    </tr>
+
   </ng-template>
   <ng-template pTemplate="body" let-registro>
     <tr>
       <!--td>{{ registro.id}}</td -->
-      <td>{{ registro.Tipo }}</td>
-      <td>{{ registro.FechaCompra }}</td>
-      <td>{{ registro.FechaVencimiento }}</td>
-      <td>{{ registro.Propietario }}</td>
-      <td>{{ registro.Empresa }}</td>
-      <td style="text-align: right;">{{ registro.TasaInteres/100 | percent:'1.2-2' }}</td>
-      <td style="text-align: right;">{{ registro.Rendimiento/100  | percent:'1.2-2' }}</td>
-      <td style="text-align: right;">{{ registro.Capital | currency:'USD':'symbol':'1.2-2'}}</td>
+      <td class="small-font">{{ registro.Tipo }}</td>
+      <td class="small-font">{{ registro.FechaCompra }}</td>
+      <td class="small-font">{{ registro.FechaVencimiento }}</td>
+      <td class="small-font">{{ registro.Propietario }}</td>
+      <td class="small-font">{{ registro.Empresa }}</td>
+      <td class="small-font" style="text-align: right;">{{ registro.TasaInteres/100 | percent:'1.2-2'}}</td>
+      <td class="small-font" style="text-align: right;">{{ registro.Rendimiento/100 | percent:'1.2-2' }}</td>
+      <td class="small-font" style="text-align: right;">{{ registro.Capital | currency:'USD':'symbol':'1.2-2'}}</td>
       <!--td style="text-align: right;">{{ registro.Retencion | currency:'USD':'symbol':'1.2-2'}}</td-->
       <td >{{ registro.Vendido }}</td>
       <td>{{ registro.Expirado }}</td>
@@ -81,7 +132,11 @@
       </td>
     </tr>
   </ng-template>
-
+  <ng-template pTemplate="emptymessage">
+    <tr>
+        <td colspan="5">No se encontraron inversiones.</td>
+    </tr>
+  </ng-template>
 </p-table>
 
 
