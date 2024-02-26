@@ -3,6 +3,9 @@ import { MessageService } from 'primeng/api';
 import { FormGroup, FormControl, Validators, FormBuilder,ReactiveFormsModule } from '@angular/forms';
 import { OthervalueModel } from '@core/models/othervalue.model';
 import { OthervalueService } from '@modules/othervalue/services/othervalue.service';
+import { Table } from 'primeng/table';
+import { ViewChild } from '@angular/core';
+
 
 
 @Component({
@@ -13,6 +16,11 @@ import { OthervalueService } from '@modules/othervalue/services/othervalue.servi
 })
 export class OthervaluePageComponent {
 
+  @ViewChild('dt2')
+  dt2!: Table;
+
+
+  loading: boolean = true;
   catalogoRegistros: OthervalueModel[] = [];
 
   formRegistro!: FormGroup;
@@ -39,9 +47,16 @@ export class OthervaluePageComponent {
       this.obtenerRegistrosRest();
       this.buildFormRegistro();
       this.buildformUpdateRegistro();
+
+      this.loading = false;
    }
 
-
+   onFilter(event: any): void {
+    if (event.target instanceof HTMLInputElement) {
+      const keyword = event.target.value;
+      this.dt2.filterGlobal(keyword, 'contains');
+    }
+  }
    buildFormRegistro(): void {
       this.formRegistro = new FormGroup({
         id: new FormControl(0),

@@ -4,7 +4,14 @@
 
 
 <p-toolbar styleClass="mb-4 gap-2">
-  <ng-template pTemplate="left"></ng-template>
+  <ng-template pTemplate="left">
+    <div class="flex">
+      <span class="p-input-icon-left ml-auto">
+        <i class="pi pi-search"></i>
+        <input pInputText type="text" (input)="onFilter($event)" placeholder="Palabra de busqueda" />
+      </span>
+    </div>
+  </ng-template>
   <ng-template pTemplate="right">
       <button pButton pRipple label="Nuevo" icon="pi pi-plus" class="p-button-success mr-2" (click)="crearRegistro()"></button>
   </ng-template>
@@ -12,28 +19,51 @@
 
 
 
-<p-table [value]="catalogoRegistros"
+<p-table
+         #dt2
+         [styleClass]="'p-datatable-sm'"
+         [value]="catalogoRegistros"
          [tableStyle]="{ 'min-width': '50rem'}"
          [paginator]="true"
          [rows]="5"
          [showCurrentPageReport]="true"
          currentPageReportTemplate="Mostrando del {first} al {last} de un total de {totalRecords} registros"
          [rowsPerPageOptions]="[5, 10, 20]"
+         dataKey="id"
+         [loading]="loading"
+         [globalFilterFields]="['Descripcion']"
          >
   <ng-template pTemplate="header">
     <tr>
       <th>id</th>
-      <th>Descripcion</th>
-      <th>Valor</th>
+      <th class="small-font" pSortableColumn="Descripcion">Descripcion<p-sortIcon field="Descripcion"></p-sortIcon></th>
+      <th style="text-align: right;">Valor</th>
       <th>Activo</th>
       <th>Acción</th>
+    </tr>
+    <tr>
+      <th class="small-font">
+        <!--tipo -->
+      </th>
+      <th class="small-font">
+        <p-columnFilter type="text" field="Descripcion"></p-columnFilter>
+      </th>
+      <th class="small-font">
+        <p-columnFilter type="numeric" field="Valor"></p-columnFilter>
+      </th>
+      <th>
+        <p-columnFilter type="boolean" field="Activo"></p-columnFilter>
+      </th>
+      <th>
+        <!-- accion -->
+      </th>
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-registro>
     <tr>
       <td>{{ registro.id}}</td>
       <td>{{ registro.Descripcion }}</td>
-      <td>{{ registro.Valor }}</td>
+      <td class="small-font" style="text-align: right;">{{ registro.Valor | currency:'USD':'symbol':'1.2-2'}}</td>
       <td>{{ registro.Activo }}</td>
 <!--       <td>IMPLEMENTAR BOTONES</td> -->
       <td>
@@ -68,7 +98,7 @@
 <p-dialog
   [(visible)]="registroDialog"
   [style]="{ width: '750px' }"
-  header="Datos del juego (* campos obligatorios)"
+  header="Datos del nuevo valor (* campos obligatorios)"
   [modal]="true">
     <ng-template pTemplate="content">
         <form [formGroup]="formRegistro">
@@ -96,7 +126,7 @@
                                   <input
                                     pInputText
                                     id="Valor"
-                                    type="text"
+                                    type="number"
                                     class="inputfield w-full"
                                     formControlName="Valor"
                                   />
@@ -143,7 +173,7 @@
 <p-dialog
   [(visible)]="registroDialogUpdate"
   [style]="{ width: '750px' }"
-  header="Datos del juego (* campos obligatorios)"
+  header="Actualizacion del valor (* campos obligatorios)"
   [modal]="false">
     <ng-template pTemplate="content">
         <form [formGroup]="formUpdateRegistro">
@@ -154,7 +184,7 @@
                                   <input
                                       pInputText
                                       id="id"
-                                      type="text"
+                                      type="number"
                                       class="inputfield w-full"
                                       formControlName="id"
                                    />
@@ -183,7 +213,7 @@
                                   <input
                                     pInputText
                                     id="Valor"
-                                    type="text"
+                                    type="number"
                                     class="inputfield w-full"
                                     formControlName="Valor"
                                   />
