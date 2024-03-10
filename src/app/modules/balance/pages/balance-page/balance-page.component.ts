@@ -28,7 +28,7 @@ export class BalancePageComponent implements OnInit{
   ngOnInit(): void {
 
 
-    const ultimoDia = new Date(this.FechaActual.getFullYear(), this.FechaActual.getMonth() + 1, 0);
+    const ultimoDia = new Date(this.FechaActual.getFullYear() + 1, this.FechaActual.getMonth() , 0);
     this._fechaFin = ultimoDia.toISOString().slice(0, 10);   //ultimo dia del mes actual
 
     this._fechaInicio = new Date().toISOString().slice(0, 10);

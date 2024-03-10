@@ -14,7 +14,7 @@ export class PortfolioService {
   constructor(private httpClient: HttpClient, private datePipe: DatePipe) {}
 
     getInvestOwnernew$(): Observable<any>{
-          return this.httpClient.get(`${this.URL}investownernew`);
+          return this.httpClient.get(`${this.URL}investownernew`);    // Tipo de inversion por propietario
     }
 
     getInvestOwner$(): Observable<any>{

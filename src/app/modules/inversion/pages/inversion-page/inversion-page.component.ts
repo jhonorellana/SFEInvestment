@@ -29,7 +29,7 @@ export class InversionPageComponent {
   registroDialogUpdate: boolean = false;
   tipoCrud: string = '';
 
-  formControlNames: string[] = ['id', 'Tipo', 'FechaCompra','FechaVencimiento','Propietario','Empresa','TasaInteres','Rendimiento','Capital','Retencion', 'Vendido', 'Expirado','Activo'];
+  formControlNames: string[] = ['id', 'Tipo', 'FechaCompra','FechaVencimiento','Propietario','Empresa','TasaInteres','Rendimiento','Capital','Retencion', 'Pagado', 'Expirado','Activo'];
   ControlValidadores: { [key: string]: any[] } = {
     'id': [Validators.required],
     'Tipo': [Validators.required],
@@ -41,7 +41,7 @@ export class InversionPageComponent {
     'Rendimiento': [Validators.required],
     'Capital': [Validators.required],
     'Retencion': [Validators.required],
-    'Vendido': [Validators.required],
+    'Pagado': [Validators.required],
     'Expirado': [Validators.required],
     'Activo': [Validators.required],
   };
@@ -79,7 +79,7 @@ export class InversionPageComponent {
         Rendimiento: new FormControl('', [Validators.required]),
         Capital: new FormControl('', [Validators.required]),
         Retencion: new FormControl('', [Validators.required]),
-        Vendido: new FormControl('', [Validators.required]),
+        Pagado: new FormControl('', [Validators.required]),
         Expirado: new FormControl('', [Validators.required]),
         Activo: new FormControl('', [Validators.required]),
        });
@@ -119,7 +119,7 @@ export class InversionPageComponent {
            Rendimiento: this.formRegistro.controls['Rendimiento'].value,
            Capital: this.formRegistro.controls['Capital'].value,
            Retencion: this.formRegistro.controls['Retencion'].value,
-           Vendido: this.formRegistro.controls['Vendido'].value,
+           Pagado: this.formRegistro.controls['Pagado'].value,
            Expirado: this.formRegistro.controls['Expirado'].value,
            Activo: this.formRegistro.controls['Activo'].value
       }
@@ -186,7 +186,7 @@ export class InversionPageComponent {
          this.formUpdateRegistro.controls['Rendimiento'].setValue(registro.Rendimiento);
          this.formUpdateRegistro.controls['Capital'].setValue(registro.Capital);
          this.formUpdateRegistro.controls['Retencion'].setValue(registro.Retencion);
-         this.formUpdateRegistro.controls['Vendido'].setValue(registro.Vendido);
+         this.formUpdateRegistro.controls['Pagado'].setValue(registro.Pagado);
          this.formUpdateRegistro.controls['Expirado'].setValue(registro.Expirado);
          this.formUpdateRegistro.controls['Activo'].setValue(registro.Activo);
        }
@@ -238,7 +238,7 @@ export class InversionPageComponent {
              Rendimiento: this.formUpdateRegistro.controls['Rendimiento'].value,
              Capital: this.formUpdateRegistro.controls['Capital'].value,
              Retencion: this.formUpdateRegistro.controls['Retencion'].value,
-             Vendido: this.formUpdateRegistro.controls['Vendido'].value,
+             Pagado: this.formUpdateRegistro.controls['Pagado'].value,
              Expirado: this.formUpdateRegistro.controls['Expirado'].value,
              Activo: this.formUpdateRegistro.controls['Activo'].value
         }

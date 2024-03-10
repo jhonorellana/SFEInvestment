@@ -10,7 +10,7 @@ export interface InversionModel
   Rendimiento: number;
   Capital: number;
   Retencion: number;
-  Vendido: number;
+  Pagado: number;
   Expirado: number;
   Activo: number;
 }

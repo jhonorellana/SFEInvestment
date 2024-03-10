@@ -26,12 +26,12 @@ export class PortfolioPageComponent implements OnInit, AfterViewInit, OnDestroy 
   dataInvertidoVencimientoBonos: InvertidoVencimientoModel[] = [];
   dataInvertidoVencimientoInv: InvertidoVencimientoModel[] = [];
 
-  chartOptions1: any = {}; // Puedes ajustar el tipo según la estructura de tu objeto.
-  chartOptions2: any = {}; // Puedes ajustar el tipo según la estructura de tu objeto.
-  chartOptions3: any = {}; // Puedes ajustar el tipo según la estructura de tu objeto.
-  chartOptions4: any = {}; // Puedes ajustar el tipo según la estructura de tu objeto.
-  chartOptions5: any = {}; // Puedes ajustar el tipo según la estructura de tu objeto.
-  chartOptions6: any = {}; // Puedes ajustar el tipo según la estructura de tu objeto.
+  chartOptions1: any = {}; // Tipo de inversión por propietario
+  chartOptions2: any = {}; // Capital consolidado por propietario
+  chartOptions3: any = {}; // Capital invertido por Empresa
+  chartOptions4: any = {}; // Bonos VS Inversiones.
+  chartOptions5: any = {}; // Bonos por propietario.
+  chartOptions6: any = {}; // Otras Inversiones por propietario.
   chartOptions7: any = {}; // Invertido Rendimiento Bonos.
   chartOptions8: any = {}; // Invertido Rendimiento Inversiones.
   chartOptions9: any = {}; // Invertido - tiempo en año Bonos.

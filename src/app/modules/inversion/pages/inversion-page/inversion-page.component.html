@@ -76,7 +76,7 @@
         <!--capital -->
       </th>
       <th>
-        <!--vendido -->
+        <!--Pagado -->
       </th>
       <th>
         <!--expirado -->
@@ -103,7 +103,7 @@
       <td class="small-font" style="text-align: right;">{{ registro.Rendimiento/100 | percent:'1.2-2' }}</td>
       <td class="small-font" style="text-align: right;">{{ registro.Capital | currency:'USD':'symbol':'1.2-2'}}</td>
       <!--td style="text-align: right;">{{ registro.Retencion | currency:'USD':'symbol':'1.2-2'}}</td-->
-      <td >{{ registro.Vendido }}</td>
+      <td >{{ registro.Pagado }}</td>
       <td>{{ registro.Expirado }}</td>
       <td>{{ registro.Activo }}</td>
 <!--       <td>IMPLEMENTAR BOTONES</td> -->
@@ -295,14 +295,14 @@
                       <span class="p-float-label">
                         <input
                           pInputText
-                          id="Vendido"
+                          id="Pagado"
                           type="number"
                           class="inputfield w-full"
-                          formControlName="Vendido"
+                          formControlName="Pagado"
                         />
-                        <label for="Vendido">* Vendido</label>
+                        <label for="Pagado">* Pagado</label>
                         <small class="p-error">
-                          {{ inversionService.getErrors(formRegistro.controls['Vendido'],"Vendido")}}
+                          {{ inversionService.getErrors(formRegistro.controls['Pagado'],"Pagado")}}
                         </small>
                       </span>
                   </div>
@@ -528,15 +528,15 @@
                       <span class="p-float-label">
                           <input
                               pInputText
-                              id="Vendido"
+                              id="Pagado"
                               type="text"
                               class="inputfield w-full"
-                              formControlName="Vendido"
+                              formControlName="Pagado"
                               required
                           />
-                          <label for="Vendido">* Vendido</label>
-                          <small *ngIf="formUpdateRegistro.get('Vendido')!.hasError('required')" class="p-error">
-                              La Vendido es obligatoria.
+                          <label for="Pagado">* Pagado</label>
+                          <small *ngIf="formUpdateRegistro.get('Pagado')!.hasError('required')" class="p-error">
+                              La Pagado es obligatoria.
                           </small>
                       </span>
                   </div>

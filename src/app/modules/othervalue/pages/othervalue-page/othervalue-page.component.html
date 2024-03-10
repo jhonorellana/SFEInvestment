@@ -35,15 +35,15 @@
          >
   <ng-template pTemplate="header">
     <tr>
-      <th>id</th>
-      <th class="small-font" pSortableColumn="Descripcion">Descripcion<p-sortIcon field="Descripcion"></p-sortIcon></th>
-      <th style="text-align: right;">Valor</th>
-      <th>Activo</th>
-      <th>Acción</th>
+      <th width="5%" >id</th>
+      <th width="40%" class="small-font" pSortableColumn="Descripcion">Descripcion<p-sortIcon field="Descripcion"></p-sortIcon></th>
+      <th width="25%" style="text-align: right;">Valor</th>
+      <th width="20%" style="text-align: center;">Activo</th>
+      <th width="10%">Acción</th>
     </tr>
     <tr>
       <th class="small-font">
-        <!--tipo -->
+        <!--id -->
       </th>
       <th class="small-font">
         <p-columnFilter type="text" field="Descripcion"></p-columnFilter>
@@ -52,7 +52,7 @@
         <p-columnFilter type="numeric" field="Valor"></p-columnFilter>
       </th>
       <th>
-        <p-columnFilter type="boolean" field="Activo"></p-columnFilter>
+        <p-columnFilter style="text-align: center;" type="boolean" field="Activo"></p-columnFilter>
       </th>
       <th>
         <!-- accion -->
@@ -64,7 +64,7 @@
       <td>{{ registro.id}}</td>
       <td>{{ registro.Descripcion }}</td>
       <td class="small-font" style="text-align: right;">{{ registro.Valor | currency:'USD':'symbol':'1.2-2'}}</td>
-      <td>{{ registro.Activo }}</td>
+      <td style="text-align: center;">{{ registro.Activo }}</td>
 <!--       <td>IMPLEMENTAR BOTONES</td> -->
       <td>
         <p-button icon="uil uil-edit-alt"
