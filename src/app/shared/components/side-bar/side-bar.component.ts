@@ -57,9 +57,9 @@ export class SideBarComponent implements OnInit {
         router: ['/', 'variations'],
       },
       {
-        name: 'Indicadores',
-        icon: 'uil uil-chart-pie',
-        router: ['/', 'statistics'],
+        name: 'Resumen',
+        icon: 'uil uil-analysis',
+        router: ['/', 'dailyoverview'],
       }
 
     ]
@@ -82,7 +82,7 @@ export class SideBarComponent implements OnInit {
       },
       {
         name: 'Estadísticas',
-        icon: 'uil uil-analysis',
+        icon: 'uil uil-chart-pie',
         router: ['/', 'statistics'],
       }
     ]

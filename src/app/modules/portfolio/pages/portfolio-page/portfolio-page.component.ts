@@ -293,8 +293,9 @@ export class PortfolioPageComponent implements OnInit, AfterViewInit, OnDestroy 
               startAngle: -90,
               indexLabel: "{name}: {y}",
               yValueFormatString: "'$'#,###.##",
+              //indexLabelFontColor: "blue",
               dataPoints: this.dataInvertidoRendimientoBonos.map(entry => ({
-                name: entry.rendimiento,
+                name: entry.rendimiento + '% ',
                 y: entry.invertido
               }))
             }]
@@ -323,7 +324,7 @@ export class PortfolioPageComponent implements OnInit, AfterViewInit, OnDestroy 
               indexLabel: "{name}: {y}",
               yValueFormatString: "'$'#,###.##",
               dataPoints: this.dataInvertidoRendimientoInv.map(entry => ({
-                name: entry.rendimiento,
+                name: entry.rendimiento + '% ',
                 y: entry.invertido
               }))
             }]

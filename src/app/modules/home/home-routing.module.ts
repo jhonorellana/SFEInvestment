@@ -54,6 +54,10 @@ const routes: Routes = [
     loadChildren: () => import('@modules/inversion/inversion.module').then(m => m.InversionModule)
   },
   {
+    path: 'dailyoverview',
+    loadChildren: () => import('@modules/daylyoverview/daylyoverview.module').then(m => m.DaylyoverviewModule)
+  },
+  {
     path: '**',//TODO 404 cuando no existe la ruta
     redirectTo: '/investment'
   }
