@@ -58,7 +58,7 @@ export class SideBarComponent implements OnInit {
       },
       {
         name: 'Resumen',
-        icon: 'uil uil-analysis',
+        icon: 'uil uil-notes',
         router: ['/', 'dailyoverview'],
       }
 

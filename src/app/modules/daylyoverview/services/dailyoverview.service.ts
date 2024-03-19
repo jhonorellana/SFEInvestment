@@ -31,4 +31,13 @@ export class DailyoverviewService {
     return this.http.get(`${this.URL}historicopapeles`);
   }
 
+  ConsultarFacturasDelDia$(): Observable<any>{
+    return this.http.get(`${this.URL}historicofacturas`);
+  }
+
+  ConsultarGenericosDelDia$(): Observable<any>{
+    return this.http.get(`${this.URL}historicogenericos`);
+  }
+
+
 }

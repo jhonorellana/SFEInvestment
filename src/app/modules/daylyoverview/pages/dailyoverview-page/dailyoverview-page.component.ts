@@ -7,6 +7,8 @@ import { HistoricoaccionesModel } from '@core/models/historicoacciones.model';
 import { HistoricobonosModel } from '@core/models/historicobonos.model';
 import { HistoricoobligacionesModel } from '@core/models/historicoobligaciones.model';
 import { HistoricopapelesModel } from '@core/models/historicopapeles.model';
+import { HistoricofacturasModel } from '@core/models/historicofacturas.model';
+import { HistoricogenericosModel } from '@core/models/historicogenericos.model';
 
 @Component({
   selector: 'app-dailyoverview-page',
@@ -19,6 +21,8 @@ export class DailyoverviewPageComponent implements OnInit{
   dataBonosDelDia: Array<HistoricobonosModel> = []
   dataObligacionesDelDia: Array<HistoricoobligacionesModel> = []
   dataPapelesDelDia: Array<HistoricopapelesModel> = []
+  dataFacturasDelDia: Array<HistoricofacturasModel> = []
+  dataGenericosDelDia: Array<HistoricogenericosModel> = []
   dataUltimaFechaAcciones: Array<UltimafechaaccionModel> = []
   constructor(private dailyoverviewService: DailyoverviewService){}
 
@@ -51,6 +55,20 @@ export class DailyoverviewPageComponent implements OnInit{
                         this.dataPapelesDelDia = response
                       }, err => {console.log('Error de conexion');}
                     )
+
+    this.dailyoverviewService.ConsultarFacturasDelDia$()
+          .subscribe((response: HistoricofacturasModel[]) => {
+                        this.dataFacturasDelDia = response
+                      }, err => {console.log('Error de conexion');}
+                    )
+
+    this.dailyoverviewService.ConsultarGenericosDelDia$()
+    .subscribe((response: HistoricogenericosModel[]) => {
+                  this.dataGenericosDelDia = response
+                }, err => {console.log('Error de conexion');}
+              )
+
+
 
 
     this.dailyoverviewService.ConsultarUltimaFechaAcciones$()
