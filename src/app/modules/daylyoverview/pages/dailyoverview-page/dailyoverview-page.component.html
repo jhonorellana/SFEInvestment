@@ -1,6 +1,27 @@
+<div class="cashflow-page">
+    <div class="cashflow-wrapper">
+
+      <form (ngSubmit)="enviarConsulta()" [formGroup] = formBusqueda class="row g-3">
+        <div class="col-md-3">
+            <label for="fechaInicio" class="form-label">Fecha Inicio: </label>
+            <input formControlName="fechaInicio" type="date" placeholder="Fecha Inicio" class="form-control">
+        </div>
+        <div class="col-md-3">
+            <label for="fechaFin" class="form-label">Fecha Fin: </label>
+            <input formControlName="fechaFin" type="date" placeholder="Fecha Fin" class="form-control">
+        </div>
+
+        <div class="col-md-2">
+          <br>
+          <button [disabled]="formBusqueda.invalid" class="login social-btn">Buscar</button>
+        </div>
+      </form>
+    </div>
+</div>
+
 
 <div class="row">
-  <h2>Bonos vendidos en el último día</h2>
+  <h3>Bonos vendidos en las fechas escogidas</h3>
   <div class="col-10">
     <table class="table table-striped table-hover table-sm table-bordered table-success">
       <thead>
@@ -43,7 +64,7 @@
 
 
 <div class="row">
-  <h2>Obligaciones vendidas en el último día</h2>
+  <h3>Obligaciones vendidas en las fechas escogidas</h3>
   <div class="col-12">
     <table class="table table-striped table-hover table-sm table-bordered table-success">
       <thead>
@@ -86,7 +107,7 @@
 
 
 <div class="row">
-  <h2>Papeles comerciales vendidos en el último día</h2>
+  <h3>Papeles comerciales vendidos en las fechas escogidas</h3>
   <div class="col-12">
     <table class="table table-striped table-hover table-sm table-bordered table-success">
       <thead>
@@ -132,7 +153,7 @@
 
 
 <div class="row">
-  <h2>Facturas comerciales vendidas en el último día</h2>
+  <h3>Facturas comerciales vendidas en las fechas escogidas</h3>
   <div class="col-12">
     <table class="table table-striped table-hover table-sm table-bordered table-success">
       <thead>
@@ -140,12 +161,12 @@
           <th>Fecha</th>
           <th>Emisor</th>
           <th>% Precio</th>
-          <th>Rendimiento</th>
-          <th>V. Nominal</th>
-          <th>V. Efectivo</th>
+          <th>Rend.</th>
+          <th>V.Nominal</th>
+          <th>V.Efectivo</th>
           <th>Emision</th>
           <th>Vencim.</th>
-          <th>Procedencia</th>
+          <th>Proc.</th>
           <th>Observaciones</th>
         </tr>
       </thead>
@@ -160,7 +181,7 @@
           <td>{{ item.emision  | date: 'yyyy-MM-dd'}}</td>
           <td>{{ item.vencimiento  | date: 'yyyy-MM-dd'}}</td>
           <td style="text-align: right;">{{ item.procedencia}}</td>
-          <td style="text-align: right;">{{ item.observaciones}}</td>
+          <td>{{ item.observaciones}}</td>
         </tr>
       </tbody>
     </table>
@@ -169,7 +190,7 @@
 
 
 <div class="row">
-  <h2>Valores Genéricos vendidos en el último día</h2>
+  <h3>Valores Genéricos vendidos en las fechas escogidas</h3>
   <div class="col-12">
     <table class="table table-striped table-hover table-sm table-bordered table-success">
       <thead>
@@ -214,7 +235,7 @@
 
 
 <div class="row">
-  <h2>Acciones vendidas en el último día</h2>
+  <h3>Acciones vendidas en las fechas escogidas</h3>
   <div class="col-8">
     <table class="table table-striped table-hover table-sm table-bordered table-success">
       <thead>

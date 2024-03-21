@@ -22,6 +22,16 @@ export class SideBarComponent implements OnInit {
         router: ['/', 'auth'],
       },
       {
+        name: 'Resumen',
+        icon: 'uil uil-notes',
+        router: ['/', 'dailyoverview'],
+      },
+      {
+        name: 'Acciones',
+        icon: 'uil uil-chart-line',
+        router: ['/', 'shares'],
+      },
+      {
         name: 'Vencimientos',
         icon: 'uil uil-calendar-alt',
         router: ['/', 'history'],
@@ -37,11 +47,6 @@ export class SideBarComponent implements OnInit {
         router: ['/', 'portfolio'],
       },
       {
-        name: 'Acciones',
-        icon: 'uil uil-chart-line',
-        router: ['/', 'shares'],
-      },
-      {
         name: 'Inversiones',
         icon: 'uil uil-analytics',
         router: ['/', 'investment'],
@@ -55,13 +60,7 @@ export class SideBarComponent implements OnInit {
         name: 'Crecimiento',
         icon: 'uil uil-comparison',
         router: ['/', 'variations'],
-      },
-      {
-        name: 'Resumen',
-        icon: 'uil uil-notes',
-        router: ['/', 'dailyoverview'],
       }
-
     ]
 
     this.mainMenu.accessLink = [

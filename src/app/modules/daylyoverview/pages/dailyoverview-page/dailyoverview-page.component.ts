@@ -24,45 +24,70 @@ export class DailyoverviewPageComponent implements OnInit{
   dataFacturasDelDia: Array<HistoricofacturasModel> = []
   dataGenericosDelDia: Array<HistoricogenericosModel> = []
   dataUltimaFechaAcciones: Array<UltimafechaaccionModel> = []
+
+  formBusqueda: FormGroup = new FormGroup({})
+  FechaActual = new Date();
+
+  _fechaInicio: string="";
+  _fechaFin: string="";
+
   constructor(private dailyoverviewService: DailyoverviewService){}
 
   ngOnInit(): void {
 
 
+    this._fechaFin = new Date().toISOString().slice(0, 10);
+    this._fechaInicio = new Date().toISOString().slice(0, 10);
 
-    this.dailyoverviewService.ConsultarAccionesDelDia$()
+    this.formBusqueda = new FormGroup({
+      fechaInicio: new FormControl(`${this._fechaInicio}`,[
+        Validators.required
+        // Validators.minLength(10),
+        // Validators.maxLength(10)
+      ]),
+
+      fechaFin: new FormControl(`${this._fechaFin}`,[
+        Validators.required
+        //Validators.minLength(10),
+        //Validators.maxLength(10)
+      ]),
+     }
+    )
+
+
+    this.dailyoverviewService.ConsultarAccionesDelDia$(this._fechaInicio,this._fechaFin)
           .subscribe((response: HistoricoaccionesModel[]) => {
                         this.dataAccionesDelDia = response
                       }, err => {console.log('Error de conexion');}
                     )
 
 
-    this.dailyoverviewService.ConsultarBonosDelDia$()
+    this.dailyoverviewService.ConsultarBonosDelDia$(this._fechaInicio,this._fechaFin)
           .subscribe((response: HistoricobonosModel[]) => {
                         this.dataBonosDelDia = response
                       }, err => {console.log('Error de conexion');}
                     )
 
 
-    this.dailyoverviewService.ConsultarObligacionesDelDia$()
+    this.dailyoverviewService.ConsultarObligacionesDelDia$(this._fechaInicio,this._fechaFin)
           .subscribe((response: HistoricoobligacionesModel[]) => {
                         this.dataObligacionesDelDia = response
                       }, err => {console.log('Error de conexion');}
                     )
 
-    this.dailyoverviewService.ConsultarPapelesDelDia$()
+    this.dailyoverviewService.ConsultarPapelesDelDia$(this._fechaInicio,this._fechaFin)
           .subscribe((response: HistoricopapelesModel[]) => {
                         this.dataPapelesDelDia = response
                       }, err => {console.log('Error de conexion');}
                     )
 
-    this.dailyoverviewService.ConsultarFacturasDelDia$()
+    this.dailyoverviewService.ConsultarFacturasDelDia$(this._fechaInicio,this._fechaFin)
           .subscribe((response: HistoricofacturasModel[]) => {
                         this.dataFacturasDelDia = response
                       }, err => {console.log('Error de conexion');}
                     )
 
-    this.dailyoverviewService.ConsultarGenericosDelDia$()
+    this.dailyoverviewService.ConsultarGenericosDelDia$(this._fechaInicio,this._fechaFin)
     .subscribe((response: HistoricogenericosModel[]) => {
                   this.dataGenericosDelDia = response
                 }, err => {console.log('Error de conexion');}
@@ -76,6 +101,64 @@ export class DailyoverviewPageComponent implements OnInit{
                         this.dataUltimaFechaAcciones = response
                       }, err => {console.log('Error de conexion');}
                     )
+
+
+
+  }
+
+
+  enviarConsulta():void{
+
+    const { fechaInicio, fechaFin} = this.formBusqueda.value
+
+    this.dailyoverviewService.ConsultarAccionesDelDia$(fechaInicio,fechaFin)
+    .subscribe((response: HistoricoaccionesModel[]) => {
+                  this.dataAccionesDelDia = response
+                }, err => {console.log('Error de conexion');}
+              )
+
+
+    this.dailyoverviewService.ConsultarBonosDelDia$(fechaInicio,fechaFin)
+    .subscribe((response: HistoricobonosModel[]) => {
+                  this.dataBonosDelDia = response
+                }, err => {console.log('Error de conexion');}
+              )
+
+
+    this.dailyoverviewService.ConsultarObligacionesDelDia$(fechaInicio,fechaFin)
+    .subscribe((response: HistoricoobligacionesModel[]) => {
+                  this.dataObligacionesDelDia = response
+                }, err => {console.log('Error de conexion');}
+              )
+
+    this.dailyoverviewService.ConsultarPapelesDelDia$(fechaInicio,fechaFin)
+          .subscribe((response: HistoricopapelesModel[]) => {
+                        this.dataPapelesDelDia = response
+                      }, err => {console.log('Error de conexion');}
+                    )
+
+    this.dailyoverviewService.ConsultarFacturasDelDia$(fechaInicio,fechaFin)
+          .subscribe((response: HistoricofacturasModel[]) => {
+                        this.dataFacturasDelDia = response
+                      }, err => {console.log('Error de conexion');}
+                    )
+
+    this.dailyoverviewService.ConsultarGenericosDelDia$(fechaInicio,fechaFin)
+    .subscribe((response: HistoricogenericosModel[]) => {
+                  this.dataGenericosDelDia = response
+                }, err => {console.log('Error de conexion');}
+              )
+
+
+
+
+    this.dailyoverviewService.ConsultarUltimaFechaAcciones$()
+          .subscribe((response: UltimafechaaccionModel[]) => {
+                        this.dataUltimaFechaAcciones = response
+                      }, err => {console.log('Error de conexion');}
+                    )
+
+
 
 
 

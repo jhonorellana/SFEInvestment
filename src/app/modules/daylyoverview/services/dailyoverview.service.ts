@@ -15,28 +15,28 @@ export class DailyoverviewService {
     return this.http.get(`${this.URL}shareslastdate`);
   }
 
-  ConsultarBonosDelDia$(): Observable<any>{
-    return this.http.get(`${this.URL}historicobonos`);
+  ConsultarBonosDelDia$(fechaInicio: string, fechaFin: string): Observable<any>{
+    return this.http.get(`${this.URL}historicobonos?initialDate=${fechaInicio}&finalDate=${fechaFin}`);
   }
 
-  ConsultarAccionesDelDia$(): Observable<any>{
-    return this.http.get(`${this.URL}historicoacciones`);
+  ConsultarAccionesDelDia$(fechaInicio: string, fechaFin: string): Observable<any>{
+    return this.http.get(`${this.URL}historicoacciones?initialDate=${fechaInicio}&finalDate=${fechaFin}`);
   }
 
-  ConsultarObligacionesDelDia$(): Observable<any>{
-    return this.http.get(`${this.URL}historicoobligaciones`);
+  ConsultarObligacionesDelDia$(fechaInicio: string, fechaFin: string): Observable<any>{
+    return this.http.get(`${this.URL}historicoobligaciones?initialDate=${fechaInicio}&finalDate=${fechaFin}`);
   }
 
-  ConsultarPapelesDelDia$(): Observable<any>{
-    return this.http.get(`${this.URL}historicopapeles`);
+  ConsultarPapelesDelDia$(fechaInicio: string, fechaFin: string): Observable<any>{
+    return this.http.get(`${this.URL}historicopapeles?initialDate=${fechaInicio}&finalDate=${fechaFin}`);
   }
 
-  ConsultarFacturasDelDia$(): Observable<any>{
-    return this.http.get(`${this.URL}historicofacturas`);
+  ConsultarFacturasDelDia$(fechaInicio: string, fechaFin: string): Observable<any>{
+    return this.http.get(`${this.URL}historicofacturas?initialDate=${fechaInicio}&finalDate=${fechaFin}`);
   }
 
-  ConsultarGenericosDelDia$(): Observable<any>{
-    return this.http.get(`${this.URL}historicogenericos`);
+  ConsultarGenericosDelDia$(fechaInicio: string, fechaFin: string): Observable<any>{
+    return this.http.get(`${this.URL}historicogenericos?initialDate=${fechaInicio}&finalDate=${fechaFin}`);
   }
 
 
