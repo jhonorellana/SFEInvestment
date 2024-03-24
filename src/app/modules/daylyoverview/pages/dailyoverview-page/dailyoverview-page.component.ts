@@ -36,8 +36,10 @@ export class DailyoverviewPageComponent implements OnInit{
   ngOnInit(): void {
 
 
+    const unDiaAntes = new Date(this.FechaActual.getTime() - 24 * 60 * 60 * 1000); // Resta un día en milisegundos
+    this._fechaInicio = unDiaAntes.toISOString().slice(0, 10); // Formatea la fecha como string 'yyyy-mm-dd'
+
     this._fechaFin = new Date().toISOString().slice(0, 10);
-    this._fechaInicio = new Date().toISOString().slice(0, 10);
 
     this.formBusqueda = new FormGroup({
       fechaInicio: new FormControl(`${this._fechaInicio}`,[
