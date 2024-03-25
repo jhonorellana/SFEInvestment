@@ -124,7 +124,7 @@ export class BonoshisPageComponent implements OnInit{
        // UN ANIO
        //////////////////////////////////////////////
        this.chartOptions_1 = {
-        backgroundColor: "#EEFFEE",
+        backgroundColor: "#E0FFE0",
         theme: "light1",
         animationEnabled: true,
         zoomEnabled: true,
@@ -288,7 +288,7 @@ export class BonoshisPageComponent implements OnInit{
        // TRES AÑOS
        //////////////////////////////////////////////
        this.chartOptions_3 = {
-        backgroundColor: "#EEFFEE",
+        backgroundColor: "#E0FFE0",
         theme: "light1",
         animationEnabled: true,
         zoomEnabled: true,
@@ -455,7 +455,7 @@ export class BonoshisPageComponent implements OnInit{
        // CINCO AÑOS
        //////////////////////////////////////////////
        this.chartOptions_5 = {
-        backgroundColor: "#EEFFEE",
+        backgroundColor: "#E0FFE0",
         theme: "light1",
         animationEnabled: true,
         zoomEnabled: true,
@@ -620,100 +620,11 @@ export class BonoshisPageComponent implements OnInit{
 
 
 
-
-
-
        //////////////////////////////////////////////
        // SIETE AÑOS
        //////////////////////////////////////////////
        this.chartOptions_7 = {
-        backgroundColor: "#EEFFEE",
-        theme: "light1",
-        animationEnabled: true,
-        zoomEnabled: true,
-        title: {
-          text: "Siete años",
-          fontSize: 25,
-        },
-        axisY: {
-          labelFontSize: 12,
-          title: "Interés - Rendimiento",
-        },
-        axisX: {
-          labelFontSize: 12,
-          intervalType: "month",
-          interval: 1,
-          stripLines:[
-            {
-              value: new Date('2019-01-01')
-            },
-            {
-              value: new Date('2020-01-01')
-            },
-            {
-              value: new Date('2021-01-01')
-            },
-            {
-              value: new Date('2022-01-01')
-            },
-            {
-              value: new Date('2023-01-01')
-            },
-            {
-              value: new Date('2024-01-01')
-            }
-            ],
-        },
-        legend: {
-          fontSize: 20, // Tamaño de la fuente para las leyendas
-        },
-        data: [
-          {
-            type: "line",
-            name: "Rendimiento",
-            lineThickness: 1,
-            showInLegend: true,
-            xValueFormatString: "YYYY/MM/DD",
-            yValueFormatString: "###,###.##",
-            dataPoints: this.dataBonoshislist.map(entry => ({
-              x: new Date(entry.fecha),
-              y: Number(entry.rendimiento_7)
-            }))
-
-
-          }
-          ,
-          {
-          type: "line",
-          name: "Interés",
-          lineThickness: 1,
-          showInLegend: true,
-          xValueFormatString: "YYYY/MM/DD",
-          yValueFormatString: "###,###.##",
-          dataPoints: this.dataBonoshislist.map(entry => ({
-            x: new Date(entry.fecha),
-            y: Number(entry.tasa_7)
-          }))
-
-        }
-      ]
-
-
-    };
-
-
-
-
-
-
-
-
-
-       //////////////////////////////////////////////
-       // SIETE AÑOS
-       //////////////////////////////////////////////
-       this.chartOptions_7 = {
-        backgroundColor: "#EEFFEE",
+        backgroundColor: "#E0FFE0",
         theme: "light1",
         animationEnabled: true,
         zoomEnabled: true,
@@ -883,7 +794,7 @@ export class BonoshisPageComponent implements OnInit{
        // NUEVE AÑOS
        //////////////////////////////////////////////
        this.chartOptions_9 = {
-        backgroundColor: "#EEFFEE",
+        backgroundColor: "#E0FFE0",
         theme: "light1",
         animationEnabled: true,
         zoomEnabled: true,
@@ -966,7 +877,7 @@ export class BonoshisPageComponent implements OnInit{
        //////////////////////////////////////////////
        // DIEZ   AÑOS
        //////////////////////////////////////////////
-       this.chartOptions_9 = {
+       this.chartOptions_10 = {
         backgroundColor: "#EEFFEE",
         theme: "light1",
         animationEnabled: true,
