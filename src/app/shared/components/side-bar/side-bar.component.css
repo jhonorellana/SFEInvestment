@@ -6,7 +6,8 @@
   left: 0;
   padding: .5rem .5rem;
   /* background-color: rgb(180, 224, 180); */
-  background: linear-gradient(90deg, rgb(240, 255, 240) 44%, rgb(192, 236, 183) 100%);
+  /* background: linear-gradient(90deg, rgb(240, 255, 240) 44%, rgb(192, 236, 183) 100%); */
+  background: linear-gradient(90deg, rgb(192, 236, 183) 44%, rgb(240, 255, 240) 100%);
 }
 
 .side-bar__list {

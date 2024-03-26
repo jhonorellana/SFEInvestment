@@ -49,6 +49,7 @@ export class PortfolioPageComponent implements OnInit, AfterViewInit, OnDestroy 
         (response: InvestownernewModel[]) => {
           this.dataInvestownernewlist = response;
           this.chartOptions1 = {
+            backgroundColor: "#EEFFEE",
             animationEnabled: true,
             title: {
               text: "Tipo de inversión por propietario"
@@ -77,6 +78,7 @@ export class PortfolioPageComponent implements OnInit, AfterViewInit, OnDestroy 
         (response: InvestownerModel[]) => {
           this.dataInvestownerlist = response;
           this.chartOptions2 = {
+            backgroundColor: "#EEFFEE",
             animationEnabled: true,
             title: {
               text: "Capital consolidado por propietario"
@@ -106,6 +108,7 @@ export class PortfolioPageComponent implements OnInit, AfterViewInit, OnDestroy 
         (response: InvestenterpriseModel[]) => {
           this.dataInvestenterpriselist = response;
           this.chartOptions3 = {
+            backgroundColor: "#EEFFEE",
             animationEnabled: true,
             title: {
               text: "Capital invertido por Empresa"
@@ -135,6 +138,7 @@ export class PortfolioPageComponent implements OnInit, AfterViewInit, OnDestroy 
         (response: TypeinvestModel[]) => {
           this.dataTypeinvestlist = response;
           this.chartOptions4 = {
+            backgroundColor: "#EEFFEE",
             animationEnabled: true,
             title: {
               text: "Bonos VS Inversiones"
@@ -225,6 +229,7 @@ export class PortfolioPageComponent implements OnInit, AfterViewInit, OnDestroy 
         (response: InvestownernewModel[]) => {
           this.dataInvestownernewlist = response;
           this.chartOptions5 = {
+            backgroundColor: "#EEFFEE",
             animationEnabled: true,
             title: {
               text: "Bonos por propietario"
@@ -255,6 +260,7 @@ export class PortfolioPageComponent implements OnInit, AfterViewInit, OnDestroy 
         (response: InvestownernewModel[]) => {
           this.dataInvestownernewlist2 = response;
           this.chartOptions6 = {
+            backgroundColor: "#EEFFEE",
             animationEnabled: true,
             title: {
               text: "Otras Inversiones por propietario"
@@ -284,6 +290,7 @@ export class PortfolioPageComponent implements OnInit, AfterViewInit, OnDestroy 
         (response: InvertidoRendimientoModel[]) => {
           this.dataInvertidoRendimientoBonos = response;
           this.chartOptions7 = {
+            backgroundColor: "#EEFFEE",
             animationEnabled: true,
             title: {
               text: "Rendimiento en bonos"
@@ -314,6 +321,7 @@ export class PortfolioPageComponent implements OnInit, AfterViewInit, OnDestroy 
         (response: InvertidoRendimientoModel[]) => {
           this.dataInvertidoRendimientoInv = response;
           this.chartOptions8 = {
+            backgroundColor: "#EEFFEE",
             animationEnabled: true,
             title: {
               text: "Rendimiento en otras inversiones"
@@ -342,6 +350,7 @@ export class PortfolioPageComponent implements OnInit, AfterViewInit, OnDestroy 
         (response: InvertidoVencimientoModel[]) => {
           this.dataInvertidoVencimientoBonos = response;
           this.chartOptions9 = {
+            backgroundColor: "#EEFFEE",
             animationEnabled: true,
             title: {
               text: "Vencimiento en bonos"
@@ -370,6 +379,7 @@ export class PortfolioPageComponent implements OnInit, AfterViewInit, OnDestroy 
         (response: InvertidoVencimientoModel[]) => {
           this.dataInvertidoVencimientoInv = response;
           this.chartOptions10 = {
+            backgroundColor: "#EEFFEE",
             animationEnabled: true,
             title: {
               text: "Vencimiento en otras inversiones"
