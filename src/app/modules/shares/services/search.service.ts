@@ -17,12 +17,12 @@ export class SearchService {
     return this.httpClient.get(`${this.URL}shares?issuer=${emisor}`);
   }
 
-
-
   ObtenerAccionesCompaniaAnio$(emisor: string, anio: string): Observable<any>{
     return this.httpClient.get(`${this.URL}shares?issuer=${emisor}&year=${anio}`);
    }
 
-
+   ObtenerDividendos$(emisor: string): Observable<any>{
+    return this.httpClient.get(`${this.URL}dividendos?emisor=${emisor}`);
+   }
 
 }

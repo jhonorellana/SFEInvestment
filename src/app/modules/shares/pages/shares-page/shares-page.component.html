@@ -119,6 +119,83 @@
 </div>
 
 
-<br><br><br><br><br><br><br><br><br><br>
+<br><br>
+
+
+<div>
+  <h1>Dividendos</h1>
+  <!-- Utiliza *ngIf para condicionar la visualización de la tabla -->
+  <div class="row">
+    <div class="col-12">
+      <table class="table table-striped table-hover table-sm table-bordered table-success">
+        <thead>
+          <tr>
+            <!--th>emisor_id</th-->
+            <!--th>emisor</th-->
+            <th class="small-text">Resolución</th>
+            <th class="small-text">Último<br>derecho</th>
+            <th class="small-text">Fecha_Pago</th>
+            <th class="small-text">Valor<br>nominal</th>
+            <th class="small-text">Acciones<br>antes dividendos</th>
+            <th class="small-text">Último<br>precio</th>
+            <th class="small-text">Fecha últ.<br>precio</th>
+            <th class="small-text">Dividendo<br>efectivo</th>
+            <th class="small-text" style="color: red;">Dividendo ef. <br>por acción</th>
+            <th class="small-text">Precio Ajus.<br>div efectivo</th>
+            <th class="small-text">Aum. Dism<br>Capital</th>
+            <th class="small-text">Aum.<br>Suscr.</th>
+            <th class="small-text">Capital<br>Anterior</th>
+            <th class="small-text">Acciones<br>antiguas</th>
+            <th class="small-text">Capital<br>luego evento</th>
+            <th class="small-text">Acciones<br>totales</th>
+            <th class="small-text" style="color: red;">Aum. capital / <br>cap. anterior</th>
+            <th class="small-text">Factor<br>correccion</th>
+            <th class="small-text">Precio<br>ajustado</th>
+            <th class="small-text">Circular</th>
+            <!--th class="small-text">Utilidad neta año</th-->
+            <!--th class="small-text">Revisión</th-->
+            <th class="small-text">Actualiz.</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of dataDividendos">
+            <!--td>{{ item.emisor_id }}</td-->
+            <!--td>{{ item.emisor }}</td-->
+            <td class="small-text" style="text-align: right;">{{ item.fecha_resolucion | date: 'yyyy-MM-dd'}}</td>
+            <td class="small-text" style="text-align: right;">{{ item.fecha_ultimo_derecho }}</td>
+            <td class="small-text" style="text-align: right;">{{ item.fecha_pago | date: 'yyyy-MM-dd'}}</td>
+            <td class="small-text" style="text-align: right;">{{ item.valor_nominal | number:'1.2-2' }}</td>
+            <td class="small-text" style="text-align: right;">{{ item.acciones_antes_dividendos | number:'1.0-0'}}</td>
+            <td class="small-text" style="text-align: right;">{{ item.ultimo_precio | number:'1.2-2' }}</td>
+            <td class="small-text" style="text-align: right;">{{ item.fecha_ultimo_precio }}</td>
+            <td class="small-text" style="text-align: right;">{{ item.dividendo_efectivo | number:'1.0-0' }}</td>
+            <td class="small-text" style="text-align: right; color: red;">{{ item.dividendo_ef_por_accion | number:'1.5-5' }}</td>
+            <td class="small-text" style="text-align: right;">{{ item.precio_ajus_div_efectivo | number:'1.5-5' }}</td>
+            <td class="small-text" style="text-align: right;">{{ item.aum_dism_capital }}</td>
+            <td class="small-text" style="text-align: right;">{{ item.aumento_suscripcion | number:'1.2-2' }}</td>
+            <td class="small-text" style="text-align: right;">{{ item.capital_anterior | number:'1.0-0'}}</td>
+            <td class="small-text" style="text-align: right;">{{ item.acciones_antiguas | number:'1.0-0'}}</td>
+            <td class="small-text" style="text-align: right;">{{ item.capital_luego_evento | number:'1.0-0'}}</td>
+            <td class="small-text" style="text-align: right;">{{ item.acciones_totales | number:'1.0-0'}}</td>
+            <td class="small-text" style="text-align: right; color: red;">{{ item.aum_capital_capital_anterior | number:'1.5-5' }}</td>
+            <td class="small-text" style="text-align: right;">{{ item.factor_correccion | number:'1.5-5' }}</td>
+            <td class="small-text" style="text-align: right;">{{ item.precio_ajustado | number:'1.5-5' }}</td>
+            <td class="small-text" style="text-align: right;">{{ item.circular }}</td>
+            <!--td class="small-text" style="text-align: right;">{{ item.utilidad_neta_anio | number:'1.2-2' }}</td-->
+            <!--td class="small-text" style="text-align: right;">{{ item.revision | number:'1.2-2' }}</td-->
+            <td class="small-text" style="text-align: right;">{{ item.updated_at | date: 'yyyy-MM-dd'}}</td>
+
+
+
+            <!-- td>{{ item.total | number:'1.2-2' }}</td -->
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+<br><br><br><br><br><br><br><br>
 
 </div>

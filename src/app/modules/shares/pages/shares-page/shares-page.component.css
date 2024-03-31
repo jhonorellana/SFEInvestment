@@ -23,3 +23,7 @@
   background-color: var(--color-1);
   font-weight: 600;
 }
+
+.small-text {
+  font-size: 10px; /* Ajusta el tamaño de la fuente según tus necesidades */
+}

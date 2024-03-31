@@ -3,6 +3,7 @@ import { SearchService } from '../../services/search.service';
 import { SharesModel } from '@core/models/shares.model';
 import { Subscription } from 'rxjs';
 import { FormControl, FormGroup } from '@angular/forms';
+import { DividendosModel } from '@core/models/dividendos.model';
 
 @Component({
   selector: 'app-shares-page',
@@ -14,6 +15,7 @@ export class SharesPageComponent implements OnInit {
 
   listaObservadores$: Subscription[] = [];
   dataShareslist: SharesModel[] = [];
+  dataDividendos: DividendosModel[] = [];
 
   chartOptions1: any = {}; // Puedes ajustar el tipo según la estructura de tu objeto.
   chartOptions2017: any = {}; // Puedes ajustar el tipo según la estructura de tu objeto.
@@ -49,12 +51,23 @@ export class SharesPageComponent implements OnInit {
       this.ConstruirGraficoEmisorAnio2022('2022');
       this.ConstruirGraficoEmisorAnio2023('2023');
       this.ConstruirGraficoEmisorAnio2024('2024');
+      this.PresentarInformacionDividendos();
 
 
 
      // this.listaObservadores$ = [ observador2020$, observador2021$, observador2022$, observador2023$];
     }
 
+     PresentarInformacionDividendos():void{
+      const {cmbEmisor, cmbPrueba} = this.formAcciones.value
+
+      const observador11$ = this.searchService.ObtenerDividendos$(cmbEmisor)
+      .subscribe((response: DividendosModel[]) => {
+        this.dataDividendos = response
+      }, err => {console.log('Error de conexion');}
+    )
+
+    }
 
     ConstruirGraficoTotal():void{
             const {cmbEmisor, cmbPrueba} = this.formAcciones.value
@@ -980,6 +993,7 @@ export class SharesPageComponent implements OnInit {
       this.ConstruirGraficoEmisorAnio2022('2022');
       this.ConstruirGraficoEmisorAnio2023('2023');
       this.ConstruirGraficoEmisorAnio2024('2024');
+      this.PresentarInformacionDividendos();
 
 
     }
