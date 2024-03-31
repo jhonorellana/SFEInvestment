@@ -156,6 +156,7 @@
             <!--th class="small-text">Revisión</th-->
             <th class="small-text">Actualiz.</th>
           </tr>
+
         </thead>
         <tbody>
           <tr *ngFor="let item of dataDividendos">
@@ -196,6 +197,68 @@
 </div>
 
 
-<br><br><br><br><br><br><br><br>
 
-</div>
+
+<br><br>
+
+
+  <h1>Simulación de Rendimiento</h1>
+
+    <div class="shares-page">
+      <form [formGroup]="formSimulacion" (ngSubmit)="enviarSimulacion()">
+        <div class="col-8">
+            <label for="txtPrecio">Precio:</label>
+            &nbsp;
+            <input formControlName="txtPrecio" id="txtPrecio" type="text" placeholder="Precio" class="form-input">
+            &nbsp;&nbsp;&nbsp;
+            <label for="txtCapital">Capital:</label>
+            &nbsp;
+            <input formControlName="txtCapital" id="txtCapital" type="text" placeholder="Capital" class="form-input">
+            &nbsp;&nbsp;&nbsp;
+          <button [disabled]="formSimulacion.invalid" class="login social-btn">Simular</button>
+        </div>
+      </form>
+    </div>
+
+  <!-- Utiliza *ngIf para condicionar la visualización de la tabla -->
+  <div class="row">
+    <div class="col-6">
+      <table class="table table-striped table-hover table-sm table-bordered table-success">
+        <thead>
+          <tr>
+            <th class="small-text">Resolución</th>
+            <th class="small-text">Precio</th>
+            <th class="small-text">Nominal</th>
+            <th class="small-text">Cantidad Acciones</th>
+            <th class="small-text">Dividendo Efectivo</th>
+            <th class="small-text">Dividendo Acciones</th>
+            <th class="small-text">Efectivo Recibido</th>
+            <th class="small-text">Acciones Recibidas</th>
+            <th class="small-text">Acciones en Efectivo</th>
+            <th class="small-text">Efectivo total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of dataSimulacion">
+            <td class="small-text" style="text-align: right;">{{ item.resolucion| date: 'yyyy-MM-dd'}}</td>
+            <td class="small-text" style="text-align: right;">{{ item.precio | number:'1.2-2' }}</td>
+            <td class="small-text" style="text-align: right;">{{ item.valorNominal| number:'1.2-2'}}</td>
+            <td class="small-text" style="text-align: right;">{{ item.cantidadAcciones| number:'1.2-2' }}</td>
+            <td class="small-text" style="text-align: right;">{{ item.dividendoEfectivo| number:'1.5-5'}}</td>
+            <td class="small-text" style="text-align: right;">{{ item.dividendoAcciones| number:'1.5-5' }}</td>
+            <td class="small-text" style="text-align: right;">{{ item.efectivoRecibido | number:'1.5-5' }}</td>
+            <td class="small-text" style="text-align: right;">{{ item.accionesRecibidas| number:'1.2-2' }}</td>
+            <td class="small-text" style="text-align: right;">{{ item.accionesEnEfectivo| number:'1.5-5' }}</td>
+            <td class="small-text" style="text-align: right;">{{ item.efectivoTotal| number:'1.5-5' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+
+
+<br><br><br><br><br><br>
+
+

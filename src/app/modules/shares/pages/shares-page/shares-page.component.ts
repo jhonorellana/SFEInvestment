@@ -4,6 +4,7 @@ import { SharesModel } from '@core/models/shares.model';
 import { Subscription } from 'rxjs';
 import { FormControl, FormGroup } from '@angular/forms';
 import { DividendosModel } from '@core/models/dividendos.model';
+import { SimulacionModel } from '@core/models/simulacion.model';
 
 @Component({
   selector: 'app-shares-page',
@@ -12,10 +13,12 @@ import { DividendosModel } from '@core/models/dividendos.model';
 })
 export class SharesPageComponent implements OnInit {
   formAcciones: FormGroup = new FormGroup({});
+  formSimulacion: FormGroup = new FormGroup({});
 
   listaObservadores$: Subscription[] = [];
   dataShareslist: SharesModel[] = [];
   dataDividendos: DividendosModel[] = [];
+  dataSimulacion: SimulacionModel[] = [];
 
   chartOptions1: any = {}; // Puedes ajustar el tipo según la estructura de tu objeto.
   chartOptions2017: any = {}; // Puedes ajustar el tipo según la estructura de tu objeto.
@@ -42,6 +45,13 @@ export class SharesPageComponent implements OnInit {
         }
       )
 
+      this.formSimulacion = new FormGroup(
+        {
+          txtPrecio: new FormControl('1.5'),
+          txtCapital: new FormControl('1000')
+        }
+      )
+
       this.ConstruirGraficoTotal();
       this.ConstruirGraficoEmisorAnio2017('2017');
       this.ConstruirGraficoEmisorAnio2018('2018');
@@ -58,7 +68,20 @@ export class SharesPageComponent implements OnInit {
      // this.listaObservadores$ = [ observador2020$, observador2021$, observador2022$, observador2023$];
     }
 
-     PresentarInformacionDividendos():void{
+
+    PresentarSimulacion():void{
+      const {txtPrecio, txtCapital} = this.formSimulacion.value
+      const {cmbEmisor, cmbPrueba} = this.formAcciones.value
+
+      const observador12$ = this.searchService.ObtenerSimulacion$(cmbEmisor, txtPrecio, txtCapital)
+      .subscribe((response: SimulacionModel[]) => {
+        this.dataSimulacion = response
+      }, err => {console.log('Error de conexion');}
+     )
+
+    };
+
+    PresentarInformacionDividendos():void{
       const {cmbEmisor, cmbPrueba} = this.formAcciones.value
 
       const observador11$ = this.searchService.ObtenerDividendos$(cmbEmisor)
@@ -998,7 +1021,8 @@ export class SharesPageComponent implements OnInit {
 
     }
 
-
-
+    enviarSimulacion(): void {
+      this.PresentarSimulacion();
+    }
 
 }

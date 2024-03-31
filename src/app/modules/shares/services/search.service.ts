@@ -25,4 +25,10 @@ export class SearchService {
     return this.httpClient.get(`${this.URL}dividendos?emisor=${emisor}`);
    }
 
+   ObtenerSimulacion$(emisor: string, precio: string, capital: string): Observable<any>{
+    return this.httpClient.get(`${this.URL}simulacion?emisor=${emisor}&precio=${precio}&capital=${capital}`);
+//      return this.httpClient.get(`${this.URL}simulacion?emisor=${emisor}&precio=1.5&capital=1000`);
+   }
+
 }
+
