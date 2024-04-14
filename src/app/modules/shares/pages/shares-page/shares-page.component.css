@@ -15,7 +15,7 @@
 .shares-page .social-btn {
   border: 0;
   padding: .5rem 2rem;
-  width: 20%;
+  width: 50%;
   font-size: var(--font-size-2);
   border-radius: var(--border-radius-2);
   box-shadow: var(--shadow-1);

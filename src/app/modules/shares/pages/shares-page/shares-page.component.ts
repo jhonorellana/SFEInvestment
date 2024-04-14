@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { FormControl, FormGroup } from '@angular/forms';
 import { DividendosModel } from '@core/models/dividendos.model';
 import { SimulacionModel } from '@core/models/simulacion.model';
+import { CanvasJS } from '@canvasjs/angular-charts';
 
 @Component({
   selector: 'app-shares-page',
@@ -146,13 +147,29 @@ export class SharesPageComponent implements OnInit {
                 },
                 axisY: {
                 },
+                toolTip: {
+                  shared: true,
+                  contentFormatter: function (e: { entries: string | any[]; }) {
+                    let content = "";
+                    for (let i = 0; i < e.entries.length; i++) {
+                      let fecha = new Date(e.entries[i].dataPoint.x.getTime() + (e.entries[i].dataPoint.x.getTimezoneOffset() * 60000));
+                      content += `Fecha: ${CanvasJS.formatDate(fecha, "DD/MM/YYYY")}<br>`;
+                      content += `Precio: ${CanvasJS.formatNumber(e.entries[i].dataPoint.y, "$#,##0.00")}<br>`;
+                      content += `Transacciones: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.transacciones, "#,###.##")}<br>`;
+                      content += `Numero Acciones: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.cantidad, "#,###.##")}<br>`;
+                      content += `Valor Total: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.valor, "$#,##0.00")}<br>`;
+          }
+                    return content;
+                  }
+                },
                 data: [{
                   type: "line",
-                  xValueFormatString: "YYYY/MM",
+                  xValueFormatString: "YYYY/MM/DD",
                   yValueFormatString: "$#,###.##",
                   dataPoints: this.dataShareslist.map(entry => ({
                     x: new Date(entry.fecha),
-                    y: entry.precio
+                    y: entry.precio,
+                    data: { transacciones: entry.transacciones, cantidad: entry.cantidad, valor: entry.valor }
                   }))
 
 
@@ -236,13 +253,29 @@ export class SharesPageComponent implements OnInit {
                           },
                           axisY: {
                           },
+                          toolTip: {
+                            shared: true,
+                            contentFormatter: function (e: { entries: string | any[]; }) {
+                              let content = "";
+                              for (let i = 0; i < e.entries.length; i++) {
+                                let fecha = new Date(e.entries[i].dataPoint.x.getTime() + (e.entries[i].dataPoint.x.getTimezoneOffset() * 60000));
+                                content += `Fecha: ${CanvasJS.formatDate(fecha, "DD/MM/YYYY")}<br>`;
+                                content += `Precio: ${CanvasJS.formatNumber(e.entries[i].dataPoint.y, "$#,##0.00")}<br>`;
+                                content += `Transacciones: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.transacciones, "#,###.##")}<br>`;
+                                content += `Numero Acciones: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.cantidad, "#,###.##")}<br>`;
+                                content += `Valor Total: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.valor, "$#,##0.00")}<br>`;
+                              }
+                              return content;
+                            }
+                          },
                           data: [{
                             type: "line",
                             xValueFormatString: "YYYY/MM/DD",
                             yValueFormatString: "$#,###.##",
                             dataPoints: this.dataShareslist.map(entry => ({
                               x: new Date(entry.fecha),
-                              y: entry.precio
+                              y: entry.precio,
+                              data: { transacciones: entry.transacciones, cantidad: entry.cantidad, valor: entry.valor }
                             }))
 
 
@@ -338,19 +371,35 @@ export class SharesPageComponent implements OnInit {
                             },
                             axisY: {
                             },
+                            toolTip: {
+                              shared: true,
+                              contentFormatter: function (e: { entries: string | any[]; }) {
+                                let content = "";
+                                for (let i = 0; i < e.entries.length; i++) {
+                                  let fecha = new Date(e.entries[i].dataPoint.x.getTime() + (e.entries[i].dataPoint.x.getTimezoneOffset() * 60000));
+                                  content += `Fecha: ${CanvasJS.formatDate(fecha, "DD/MM/YYYY")}<br>`;
+                                  content += `Precio: ${CanvasJS.formatNumber(e.entries[i].dataPoint.y, "$#,##0.00")}<br>`;
+                                  content += `Transacciones: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.transacciones, "#,###.##")}<br>`;
+                                  content += `Numero Acciones: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.cantidad, "#,###.##")}<br>`;
+                                  content += `Valor Total: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.valor, "$#,##0.00")}<br>`;
+                                  }
+                                return content;
+                              }
+                            },
                             data: [{
                               type: "line",
                               xValueFormatString: "YYYY/MM/DD",
                               yValueFormatString: "$#,###.##",
                               dataPoints: this.dataShareslist.map(entry => ({
                                 x: new Date(entry.fecha),
-                                y: entry.precio
+                                y: entry.precio,
+                                data: { transacciones: entry.transacciones, cantidad: entry.cantidad, valor: entry.valor }
                               }))
 
 
                             }]
-            }
-      }
+                          }
+          }
       else{
         this.chartOptions2018 = {
           backgroundColor: "#E0FFE0",
@@ -439,19 +488,34 @@ export class SharesPageComponent implements OnInit {
                         },
                         axisY: {
                         },
+                        toolTip: {
+                          shared: true,
+                          contentFormatter: function (e: { entries: string | any[]; }) {
+                            let content = "";
+                            for (let i = 0; i < e.entries.length; i++) {
+                              let fecha = new Date(e.entries[i].dataPoint.x.getTime() + (e.entries[i].dataPoint.x.getTimezoneOffset() * 60000));
+                              content += `Fecha: ${CanvasJS.formatDate(fecha, "DD/MM/YYYY")}<br>`;
+                              content += `Precio: ${CanvasJS.formatNumber(e.entries[i].dataPoint.y, "$#,##0.00")}<br>`;
+                              content += `Transacciones: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.transacciones, "#,###.##")}<br>`;
+                              content += `Numero Acciones: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.cantidad, "#,###.##")}<br>`;
+                              content += `Valor Total: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.valor, "$#,##0.00")}<br>`;
+                          }
+                            return content;
+                          }
+                        },
                         data: [{
                           type: "line",
                           xValueFormatString: "YYYY/MM/DD",
                           yValueFormatString: "$#,###.##",
                           dataPoints: this.dataShareslist.map(entry => ({
                             x: new Date(entry.fecha),
-                            y: entry.precio
+                            y: entry.precio,
+                            data: { transacciones: entry.transacciones, cantidad: entry.cantidad, valor: entry.valor }
                           }))
 
 
-
-                       }]
-        }
+                        }]
+                      }
       }
        else{
         this.chartOptions2019 = {
@@ -542,19 +606,35 @@ export class SharesPageComponent implements OnInit {
                                 },
                                 axisY: {
                                 },
+                                toolTip: {
+                                  shared: true,
+                                  contentFormatter: function (e: { entries: string | any[]; }) {
+                                    let content = "";
+                                    for (let i = 0; i < e.entries.length; i++) {
+                                      let fecha = new Date(e.entries[i].dataPoint.x.getTime() + (e.entries[i].dataPoint.x.getTimezoneOffset() * 60000));
+                                      content += `Fecha: ${CanvasJS.formatDate(fecha, "DD/MM/YYYY")}<br>`;
+                                      content += `Precio: ${CanvasJS.formatNumber(e.entries[i].dataPoint.y, "$#,##0.00")}<br>`;
+                                      content += `Transacciones: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.transacciones, "#,###.##")}<br>`;
+                                      content += `Numero Acciones: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.cantidad, "#,###.##")}<br>`;
+                                      content += `Valor Total: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.valor, "$#,##0.00")}<br>`;
+                                          }
+                                    return content;
+                                  }
+                                },
                                 data: [{
                                   type: "line",
                                   xValueFormatString: "YYYY/MM/DD",
                                   yValueFormatString: "$#,###.##",
                                   dataPoints: this.dataShareslist.map(entry => ({
                                     x: new Date(entry.fecha),
-                                    y: entry.precio
+                                    y: entry.precio,
+                                    data: { transacciones: entry.transacciones, cantidad: entry.cantidad, valor: entry.valor }
                                   }))
 
 
                                 }]
                               }
-      }
+              }
        else{
         this.chartOptions2020 = {
           backgroundColor: "#E0FFE0",
@@ -645,19 +725,35 @@ export class SharesPageComponent implements OnInit {
                           },
                           axisY: {
                           },
+                          toolTip: {
+                            shared: true,
+                            contentFormatter: function (e: { entries: string | any[]; }) {
+                              let content = "";
+                              for (let i = 0; i < e.entries.length; i++) {
+                                let fecha = new Date(e.entries[i].dataPoint.x.getTime() + (e.entries[i].dataPoint.x.getTimezoneOffset() * 60000));
+                                content += `Fecha: ${CanvasJS.formatDate(fecha, "DD/MM/YYYY")}<br>`;
+                                content += `Precio: ${CanvasJS.formatNumber(e.entries[i].dataPoint.y, "$#,##0.00")}<br>`;
+                                content += `Transacciones: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.transacciones, "#,###.##")}<br>`;
+                                content += `Numero Acciones: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.cantidad, "#,###.##")}<br>`;
+                                content += `Valor Total: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.valor, "$#,##0.00")}<br>`;
+                              }
+                              return content;
+                            }
+                          },
                           data: [{
                             type: "line",
                             xValueFormatString: "YYYY/MM/DD",
                             yValueFormatString: "$#,###.##",
                             dataPoints: this.dataShareslist.map(entry => ({
                               x: new Date(entry.fecha),
-                              y: entry.precio
+                              y: entry.precio,
+                              data: { transacciones: entry.transacciones, cantidad: entry.cantidad, valor: entry.valor }
                             }))
 
 
                           }]
                         }
-      }
+        }
         else{
         this.chartOptions2021 = {
           backgroundColor: "#EEFFEE",
@@ -752,19 +848,36 @@ export class SharesPageComponent implements OnInit {
                               },
                               axisY: {
                               },
+                              toolTip: {
+                                shared: true,
+                                contentFormatter: function (e: { entries: string | any[]; }) {
+                                  let content = "";
+                                  for (let i = 0; i < e.entries.length; i++) {
+                                    let fecha = new Date(e.entries[i].dataPoint.x.getTime() + (e.entries[i].dataPoint.x.getTimezoneOffset() * 60000));
+                                    content += `Fecha: ${CanvasJS.formatDate(fecha, "DD/MM/YYYY")}<br>`;
+                                    content += `Precio: ${CanvasJS.formatNumber(e.entries[i].dataPoint.y, "$#,##0.00")}<br>`;
+                                    content += `Transacciones: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.transacciones, "#,###.##")}<br>`;
+                                    content += `Numero Acciones: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.cantidad, "#,###.##")}<br>`;
+                                    content += `Valor Total: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.valor, "$#,##0.00")}<br>`;
+                                      }
+                                  return content;
+                                }
+                              },
                               data: [{
                                 type: "line",
                                 xValueFormatString: "YYYY/MM/DD",
                                 yValueFormatString: "$#,###.##",
                                 dataPoints: this.dataShareslist.map(entry => ({
                                   x: new Date(entry.fecha),
-                                  y: entry.precio
+                                  y: entry.precio,
+                                  data: { transacciones: entry.transacciones, cantidad: entry.cantidad, valor: entry.valor }
                                 }))
 
 
                               }]
                             }
-    }else{
+            }
+            else{
       this.chartOptions2022 = {
         backgroundColor: "#E0FFE0",
         theme: "light2",
@@ -855,19 +968,35 @@ export class SharesPageComponent implements OnInit {
                             },
                             axisY: {
                             },
+                            toolTip: {
+                              shared: true,
+                              contentFormatter: function (e: { entries: string | any[]; }) {
+                                let content = "";
+                                for (let i = 0; i < e.entries.length; i++) {
+                                  let fecha = new Date(e.entries[i].dataPoint.x.getTime() + (e.entries[i].dataPoint.x.getTimezoneOffset() * 60000));
+                                  content += `Fecha: ${CanvasJS.formatDate(fecha, "DD/MM/YYYY")}<br>`;
+                                  content += `Precio: ${CanvasJS.formatNumber(e.entries[i].dataPoint.y, "$#,##0.00")}<br>`;
+                                  content += `Transacciones: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.transacciones, "#,###.##")}<br>`;
+                                  content += `Numero Acciones: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.cantidad, "#,###.##")}<br>`;
+                                  content += `Valor Total: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.valor, "$#,##0.00")}<br>`;
+                                  }
+                                return content;
+                              }
+                            },
                             data: [{
                               type: "line",
                               xValueFormatString: "YYYY/MM/DD",
                               yValueFormatString: "$#,###.##",
                               dataPoints: this.dataShareslist.map(entry => ({
                                 x: new Date(entry.fecha),
-                                y: entry.precio
+                                y: entry.precio,
+                                data: { transacciones: entry.transacciones, cantidad: entry.cantidad, valor: entry.valor }
                               }))
 
 
                             }]
                           }
-    }
+          }
     else{
       this.chartOptions2023 = {
         backgroundColor: "#EEFFEE",
@@ -958,8 +1087,21 @@ export class SharesPageComponent implements OnInit {
                             ],
                         },
                         axisY: {
-                        // minimum: 1.40,
-                        // maximum: 2.40,
+                        },
+                        toolTip: {
+                          shared: true,
+                          contentFormatter: function (e: { entries: string | any[]; }) {
+                            let content = "";
+                            for (let i = 0; i < e.entries.length; i++) {
+                              let fecha = new Date(e.entries[i].dataPoint.x.getTime() + (e.entries[i].dataPoint.x.getTimezoneOffset() * 60000));
+                              content += `Fecha: ${CanvasJS.formatDate(fecha, "DD/MM/YYYY")}<br>`;
+                              content += `Precio: ${CanvasJS.formatNumber(e.entries[i].dataPoint.y, "$#,##0.00")}<br>`;
+                              content += `Transacciones: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.transacciones, "#,###.##")}<br>`;
+                              content += `Numero Acciones: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.cantidad, "#,###.##")}<br>`;
+                              content += `Valor Total: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.valor, "$#,##0.00")}<br>`;
+                          }
+                            return content;
+                          }
                         },
                         data: [{
                           type: "line",
@@ -967,13 +1109,14 @@ export class SharesPageComponent implements OnInit {
                           yValueFormatString: "$#,###.##",
                           dataPoints: this.dataShareslist.map(entry => ({
                             x: new Date(entry.fecha),
-                            y: entry.precio
+                            y: entry.precio,
+                            data: { transacciones: entry.transacciones, cantidad: entry.cantidad, valor: entry.valor }
                           }))
 
 
                         }]
                       }
-    }else{
+      }else{
       this.chartOptions2024 = {
         backgroundColor: "#E0FFE0",
         theme: "light2",

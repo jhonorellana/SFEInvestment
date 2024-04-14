@@ -1,6 +1,6 @@
 <div class="shares-page">
   <form [formGroup]="formAcciones" (ngSubmit)="enviarConsulta()">
-    <div class="col-2">
+    <div class="col-3">
       <select formControlName="cmbEmisor" id="cmbEmisor" class="form-select mb-3" aria-label="Emisor">
         <option value=34>ALICOSTA BK HOLDING S A</option>
         <option value=64>ALIMENTOS ECUATORANOS ALIMEC S.A</option>
@@ -60,8 +60,7 @@
         <option value=51>UNACEM ECUADOR SA</option>
         <option value=39>VALLE GRANDE FORESTAL</option>
       </select>
-    </div>
-    <div class="form-action">
+
       <button [disabled]="formAcciones.invalid" class="login social-btn">Buscar</button>
     </div>
   </form>
@@ -215,7 +214,7 @@
             &nbsp;
             <input formControlName="txtCapital" id="txtCapital" type="text" placeholder="Capital" class="form-input">
             &nbsp;&nbsp;&nbsp;
-          <button [disabled]="formSimulacion.invalid" class="login social-btn">Simular</button>
+          <button [disabled]="formSimulacion.invalid" class="login social-btn" style="width: 25%;">Simular</button>
         </div>
       </form>
     </div>
