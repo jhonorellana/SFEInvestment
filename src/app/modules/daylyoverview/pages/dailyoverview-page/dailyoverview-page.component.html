@@ -45,7 +45,7 @@
         <tr *ngFor="let item of dataBonosDelDia">
           <td>{{ item.fecha | date: 'yyyy-MM-dd' }}</td>
           <td>{{ item.decreto }}</td>
-          <td style="text-align: right;">{{ item.precio_porc| number:'1.2-2' }}</td>
+          <td style="text-align: right;">{{ item.precio_porc| number:'1.6-6' }}</td>
           <td style="text-align: right;">{{ item.rendimiento| number:'1.2-2' }}</td>
           <td style="text-align: right;">{{ item.dias_por_vencer| number:'1.0-0' }}</td>
           <td style="text-align: right;">{{ item.anios_por_vencer| number:'1.2-2' }}</td>
@@ -88,7 +88,7 @@
         <tr *ngFor="let item of dataObligacionesDelDia">
           <td>{{ item.fecha | date: 'yyyy-MM-dd' }}</td>
           <td>{{ item.emisor }}</td>
-          <td style="text-align: right;">{{ item.precio_porc| number:'1.2-2' }}</td>
+          <td style="text-align: right;">{{ item.precio_porc| number:'1.6-6' }}</td>
           <td style="text-align: right;">{{ item.rendimiento| number:'1.2-2' }}</td>
           <td style="text-align: right;">{{ item.plazo_dias | number:'1.0-0' }}</td>
           <td style="text-align: right;">{{ item.plazo_anios| number:'1.2-2' }}</td>
@@ -132,7 +132,7 @@
         <tr *ngFor="let item of dataPapelesDelDia">
           <td>{{ item.fecha | date: 'yyyy-MM-dd' }}</td>
           <td>{{ item.emisor }}</td>
-          <td style="text-align: right;">{{ item.precio_porc| number:'1.2-2' }}</td>
+          <td style="text-align: right;">{{ item.precio_porc| number:'1.6-6' }}</td>
           <td style="text-align: right;">{{ item.rendimiento| number:'1.2-2' }}</td>
           <td style="text-align: right;">{{ item.plazo_dias | number:'1.0-0' }}</td>
           <td style="text-align: right;">{{ item.plazo_anios| number:'1.2-2' }}</td>
@@ -174,7 +174,7 @@
         <tr *ngFor="let item of dataFacturasDelDia">
           <td>{{ item.fecha | date: 'yyyy-MM-dd' }}</td>
           <td>{{ item.emisor }}</td>
-          <td style="text-align: right;">{{ item.precio_porc| number:'1.2-2' }}</td>
+          <td style="text-align: right;">{{ item.precio_porc| number:'1.6-6' }}</td>
           <td style="text-align: right;">{{ item.rendimiento| number:'1.2-2' }}</td>
           <td style="text-align: right;">{{ item.valornominal| number:'1.2-2' }}</td>
           <td style="text-align: right;">{{ item.valorefectivo| number:'1.2-2' }}</td>
@@ -215,7 +215,7 @@
         <tr *ngFor="let item of dataGenericosDelDia">
           <td>{{ item.fecha | date: 'yyyy-MM-dd' }}</td>
           <td>{{ item.emisor }}</td>
-          <td style="text-align: right;">{{ item.precio_porc| number:'1.2-2' }}</td>
+          <td style="text-align: right;">{{ item.precio_porc| number:'1.6-6' }}</td>
           <td style="text-align: right;">{{ item.rendimiento| number:'1.2-2' }}</td>
           <td style="text-align: right;">{{ item.plazo_dias | number:'1.0-0' }}</td>
           <td style="text-align: right;">{{ item.plazo_anios| number:'1.2-2' }}</td>
