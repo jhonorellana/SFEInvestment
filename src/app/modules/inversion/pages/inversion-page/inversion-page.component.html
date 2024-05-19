@@ -24,7 +24,7 @@
          #dt2
          [styleClass]="'p-datatable-sm'"
          [value]="catalogoRegistros"
-         [tableStyle]="{ 'min-width': '50rem'}"
+         [tableStyle]="{ 'min-width': '0.5rem'}"
          [paginator]="true"
          [rows]="100"
          [showCurrentPageReport]="true"
@@ -67,7 +67,7 @@
         <p-columnFilter type="text" field="Empresa"></p-columnFilter>
       </th>
       <th>
-        <!--p-columnFilter type="numeric" field="Interes"></p-columnFilter-->
+        <!--<p-columnFilter type="numeric" field="Interes"></p-columnFilter>-->
       </th>
       <th>
         <!--rendim -->
@@ -109,6 +109,7 @@
 <!--       <td>IMPLEMENTAR BOTONES</td> -->
       <td>
         <p-button icon="uil uil-edit-alt"
+                  styleClass="small-button p-button-raised mr-2"
                   [rounded]="true"
                   [outlined]="true"
                   severity="warning"
@@ -116,10 +117,11 @@
                   pTooltip="Editar"
                   tooltipPosition="bottom"
                   (click)="modificarRegistro(registro)"
+                  size="small"
                   >
         </p-button>
-        &nbsp;
         <p-button icon="uil uil-trash-alt"
+                  styleClass="small-button"
                   [rounded]="true"
                   [outlined]="true"
                   severity="danger"
@@ -127,6 +129,7 @@
                   pTooltip="Eliminar"
                   tooltipPosition="bottom"
                   (click)="eliminarRegistro(registro)"
+                  size="small"
                   >
         </p-button>
       </td>

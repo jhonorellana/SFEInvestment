@@ -1,5 +1,6 @@
 .small-font {
   font-size: smaller;
+  max-width: 150px;
 }
 
 .custom-column-filter {
@@ -8,4 +9,16 @@
   border: 1px solid #cccccc;
   border-radius: 10px;
   padding: 4px 8px;
+}
+
+:host ::ng-deep .small-button{
+  border-radius: 10px;
+  font-size: 12px;
+  height: 5px;
+}
+
+.p-button-danger{
+  border-radius: 10px;
+  font-size: 12px;
+  height: 5px;
 }
