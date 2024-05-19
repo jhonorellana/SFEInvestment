@@ -48,7 +48,7 @@ export class InversionPageComponent {
 
   constructor ( public inversionService: InversionService,
     private messageService: MessageService,
-    private formUpdateBuilder: FormBuilder) {}
+    private formUpdateBuilder: FormBuilder) {this.ngOnInit();}
 
 
 
@@ -124,13 +124,22 @@ export class InversionPageComponent {
            Activo: this.formRegistro.controls['Activo'].value
       }
 
-      this.catalogoRegistros.push(auxRegistro);
-      this.catalogoRegistros = [...this.catalogoRegistros];
+//      this.catalogoRegistros.push(auxRegistro);
+//      this.catalogoRegistros = [...this.catalogoRegistros];
 
 
       this.inversionService.InsertarRegistrosInversiones$(auxRegistro).subscribe(
         (datos) => {
           console.log('DATOS DESDE HTTP - Guardar', datos);
+          this.messageService.add(
+            {
+             severity: 'success',
+             summary: 'Creación',
+             detail: 'Se ha creado el registro exitosamente',
+             id: 1
+             });
+             this.registroDialog = false;
+          this.obtenerRegistrosRest();
           //this.catalogoRegistros = datos;
         },
         (error) => {
@@ -138,17 +147,6 @@ export class InversionPageComponent {
         }
        )
 
-
-
-
-     this.messageService.add(
-      {
-       severity: 'success',
-       summary: 'Creación',
-       detail: 'Se ha creado el registro exitosamente',
-       id: 1
-       });
-       this.registroDialog = false;
      }
 
 
@@ -253,7 +251,6 @@ export class InversionPageComponent {
           (datos) => {
             console.log('DATOS DESDE HTTP - Actualizar', datos);
             //this.catalogoRegistros = datos;
-
             this.messageService.add(
               {
                severity: 'success',
@@ -261,9 +258,8 @@ export class InversionPageComponent {
                detail: 'Se ha actualizado el registro exitosamente',
                id: 1
                });
+               this.obtenerRegistrosRest();
                this.registroDialog = false;
-
-
           },
           (error) => {
             console.error('Error al cargar los datos:', error);
@@ -288,6 +284,7 @@ export class InversionPageComponent {
                detail: 'Se ha eliminado el registro exitosamente',
                id: 1
                });
+               this.obtenerRegistrosRest();
                this.registroDialog = false;
 
 
