@@ -141,7 +141,7 @@ export class PortfolioPageComponent implements OnInit, AfterViewInit, OnDestroy 
             backgroundColor: "#EEFFEE",
             animationEnabled: true,
             title: {
-              text: "Bonos VS Inversiones"
+              text: "Bonos - Inversiones - Acciones"
             },
             data: [{
               type: "doughnut",
