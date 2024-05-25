@@ -1,0 +1,5 @@
+:host ::ng-deep .small-button{
+  border-radius: 10px;
+  font-size: 12px;
+  height: 5px;
+}

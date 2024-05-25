@@ -98,8 +98,8 @@ export class VariationregisterPageComponent {
            TotalPropio: this.formRegistro.controls['TotalPropio'].value
       }
 
-      this.catalogoRegistros.push(auxRegistro);
-      this.catalogoRegistros = [...this.catalogoRegistros];
+      //this.catalogoRegistros.push(auxRegistro);
+      //this.catalogoRegistros = [...this.catalogoRegistros];
 
 
       this.variationregisterService.InsertarRegistrosVariaciones$(auxRegistro).subscribe(
@@ -123,6 +123,7 @@ export class VariationregisterPageComponent {
        id: 1
        });
        this.registroDialog = false;
+       this.obtenerRegistrosRest();
      }
 
 
@@ -219,7 +220,6 @@ export class VariationregisterPageComponent {
           (datos) => {
             console.log('DATOS DESDE HTTP - Actualizar', datos);
             //this.catalogoRegistros = datos;
-
             this.messageService.add(
               {
                severity: 'success',
@@ -228,7 +228,7 @@ export class VariationregisterPageComponent {
                id: 1
                });
                this.registroDialog = false;
-
+               this.obtenerRegistrosRest();
 
           },
           (error) => {

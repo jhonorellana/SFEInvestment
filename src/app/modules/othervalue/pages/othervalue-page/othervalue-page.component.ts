@@ -96,14 +96,15 @@ export class OthervaluePageComponent {
            Activo: this.formRegistro.controls['Activo'].value
       }
 
-      this.catalogoRegistros.push(auxRegistro);
-      this.catalogoRegistros = [...this.catalogoRegistros];
+      //this.catalogoRegistros.push(auxRegistro);
+      //this.catalogoRegistros = [...this.catalogoRegistros];
 
 
       this.othervalueService.InsertarRegistrosOtrosvalores$(auxRegistro).subscribe(
         (datos) => {
           console.log('DATOS DESDE HTTP - Guardar', datos);
           //this.catalogoRegistros = datos;
+          this.obtenerRegistrosRest();
         },
         (error) => {
           console.error('Error al cargar los datos:', error);
@@ -216,7 +217,7 @@ export class OthervaluePageComponent {
                id: 1
                });
                this.registroDialog = false;
-
+               this.obtenerRegistrosRest();
 
           },
           (error) => {
