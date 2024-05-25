@@ -1,5 +1,3 @@
-<p>inversion-page works!</p>
-
 <p-toast></p-toast>
 
 
@@ -35,77 +33,77 @@
          [globalFilterFields]="['FechaCompra','FechaVencimiento','Propietario', 'Empresa']"
          >
   <ng-template pTemplate="header">
-    <tr>
+    <tr >
       <!--th>id</th-->
       <th class="small-font">Tipo</th>
       <th class="small-font" pSortableColumn="FechaCompra">Compra <p-sortIcon field="FechaCompra"></p-sortIcon></th>
       <th class="small-font" pSortableColumn="FechaVencimiento">Vencimiento<p-sortIcon field="FechaVencimiento"></p-sortIcon></th>
       <th class="small-font" pSortableColumn="Propietario">Propietario<p-sortIcon field="Propietario"></p-sortIcon></th>
       <th class="small-font" pSortableColumn="Empresa">Empresa<p-sortIcon field="Empresa"></p-sortIcon></th>
-      <th class="small-font" >Interes</th>
-      <th class="small-font" >Rend.</th>
-      <th class="small-font" >Capital</th>
-      <th class="small-font" >Ven.</th>
-      <th class="small-font" >Exp.</th>
-      <th class="small-font" >Act.</th>
-      <th class="small-font" >Acción</th>
+      <th class="small-font-number">Interes</th>
+      <th class="small-font-number">Rend.</th>
+      <th class="small-font-number">Capital</th>
+      <th class="small-font-number">Ven.</th>
+      <th class="small-font-number">Exp.</th>
+      <th class="small-font-number">Act.</th>
+      <th class="small-font">Acción</th>
     </tr>
     <tr>
-      <th class="small-font">
+      <th class="small-font" >
         <!--tipo -->
       </th>
-      <th class="small-font">
+      <th class="small-font" style="width:180px">
         <p-columnFilter type="text" field="FechaCompra"></p-columnFilter>
       </th>
-      <th class="small-font">
+      <th class="small-font" style="width:180px">
         <p-columnFilter type="text" field="FechaVencimiento"></p-columnFilter>
       </th>
-      <th class="small-font">
+      <th class="small-font" style="width:180px">
         <p-columnFilter type="text" field="Propietario"></p-columnFilter>
       </th>
       <th class="small-font">
         <p-columnFilter type="text" field="Empresa"></p-columnFilter>
       </th>
-      <th>
+      <th class="small-font-number">
         <!--<p-columnFilter type="numeric" field="Interes"></p-columnFilter>-->
       </th>
-      <th>
+      <th class="small-font-number">
         <!--rendim -->
       </th>
-      <th>
+      <th class="small-font-number">
         <!--capital -->
       </th>
-      <th>
-        <!--Pagado -->
+      <th class="small-font-number">
+        <!--Vencido -->
       </th>
-      <th>
+      <th class="small-font-number">
         <!--expirado -->
       </th>
-      <th>
+      <th class="small-font-number">
         <p-columnFilter type="boolean" field="Activo"></p-columnFilter>
       </th>
-      <th>
-        accion
+      <th class="small-font">
+        <!--accion -->
       </th>
 
     </tr>
 
   </ng-template>
   <ng-template pTemplate="body" let-registro>
-    <tr>
+    <tr class="fondoverde">
       <!--td>{{ registro.id}}</td -->
       <td class="small-font">{{ registro.Tipo }}</td>
       <td class="small-font">{{ registro.FechaCompra }}</td>
       <td class="small-font">{{ registro.FechaVencimiento }}</td>
       <td class="small-font">{{ registro.Propietario }}</td>
       <td class="small-font">{{ registro.Empresa }}</td>
-      <td class="small-font" style="text-align: right;">{{ registro.TasaInteres/100 | percent:'1.2-2'}}</td>
-      <td class="small-font" style="text-align: right;">{{ registro.Rendimiento/100 | percent:'1.2-2' }}</td>
-      <td class="small-font" style="text-align: right;">{{ registro.Capital | currency:'USD':'symbol':'1.2-2'}}</td>
+      <td class="small-font-number">{{ registro.TasaInteres/100 | percent:'1.2-2'}}</td>
+      <td class="small-font-number">{{ registro.Rendimiento/100 | percent:'1.2-2' }}</td>
+      <td class="small-font-number">{{ registro.Capital | currency:'USD':'symbol':'1.2-2'}}</td>
       <!--td style="text-align: right;">{{ registro.Retencion | currency:'USD':'symbol':'1.2-2'}}</td-->
-      <td >{{ registro.Pagado }}</td>
-      <td>{{ registro.Expirado }}</td>
-      <td>{{ registro.Activo }}</td>
+      <td class="small-font-number">{{ registro.Pagado }}</td>
+      <td class="small-font-number">{{ registro.Expirado }}</td>
+      <td class="small-font-number">{{ registro.Activo }}</td>
 <!--       <td>IMPLEMENTAR BOTONES</td> -->
       <td>
         <p-button icon="uil uil-edit-alt"
