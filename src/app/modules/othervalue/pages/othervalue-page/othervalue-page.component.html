@@ -3,10 +3,10 @@
 <p-toast></p-toast>
 
 
-<p-toolbar styleClass="mb-4 gap-2">
+<p-toolbar class="custom-toolbar mb-4 gap-2">
   <ng-template pTemplate="left">
     <div class="flex">
-      <span class="p-input-icon-left ml-auto">
+      <span class="p-input-icon-left ml-auto" >
         <i class="pi pi-search"></i>
         <input pInputText type="text" (input)="onFilter($event)" placeholder="Palabra de busqueda" />
       </span>
@@ -22,10 +22,10 @@
 <p-table
          #dt2
          [styleClass]="'p-datatable-sm'"
+         [tableStyle]="{ 'min-width': '50rem', 'width': '50%', 'margin' : '0 auto'}"
          [value]="catalogoRegistros"
-         [tableStyle]="{ 'min-width': '50rem'}"
          [paginator]="true"
-         [rows]="5"
+         [rows]="20"
          [showCurrentPageReport]="true"
          currentPageReportTemplate="Mostrando del {first} al {last} de un total de {totalRecords} registros"
          [rowsPerPageOptions]="[5, 10, 20]"
@@ -35,11 +35,11 @@
          >
   <ng-template pTemplate="header">
     <tr>
-      <th width="5%" >id</th>
-      <th width="40%" class="small-font" pSortableColumn="Descripcion">Descripcion<p-sortIcon field="Descripcion"></p-sortIcon></th>
-      <th width="25%" style="text-align: right;">Valor</th>
-      <th width="20%" style="text-align: center;">Activo</th>
-      <th width="10%">Acción</th>
+      <th width="5%" class="small-font">id</th>
+      <th width="30%" class="small-font" pSortableColumn="Descripcion">Descripcion<p-sortIcon field="Descripcion"></p-sortIcon></th>
+      <th width="25%" class="small-font-number">Valor</th>
+      <th width="20%" class="small-font" style="text-align: center;">Activo</th>
+      <th width="20%" class="small-font" >Acción</th>
     </tr>
     <tr>
       <th class="small-font">
@@ -51,22 +51,22 @@
       <th class="small-font">
         <p-columnFilter type="numeric" field="Valor"></p-columnFilter>
       </th>
-      <th>
+      <th class="small-font">
         <p-columnFilter style="text-align: center;" type="boolean" field="Activo"></p-columnFilter>
       </th>
-      <th>
+      <th class="small-font">
         <!-- accion -->
       </th>
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-registro>
     <tr>
-      <td>{{ registro.id}}</td>
-      <td>{{ registro.Descripcion }}</td>
-      <td class="small-font" style="text-align: right;">{{ registro.Valor | currency:'USD':'symbol':'1.2-2'}}</td>
-      <td style="text-align: center;">{{ registro.Activo }}</td>
+      <td class="small-font">{{ registro.id}}</td>
+      <td class="small-font">{{ registro.Descripcion }}</td>
+      <td class="small-font-number">{{ registro.Valor | currency:'USD':'symbol':'1.2-2'}}</td>
+      <td class="small-font" style="text-align: center;">{{ registro.Activo }}</td>
 <!--       <td>IMPLEMENTAR BOTONES</td> -->
-      <td>
+      <td class="small-font">
         <p-button icon="uil uil-edit-alt"
                   styleClass="small-button"
                   [rounded]="true"

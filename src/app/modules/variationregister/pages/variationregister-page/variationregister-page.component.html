@@ -4,7 +4,7 @@
 <p-toast></p-toast>
 
 
-<p-toolbar styleClass="mb-4 gap-2">
+<p-toolbar class="custom-toolbar mb-4 gap-2">
   <ng-template pTemplate="left"></ng-template>
   <ng-template pTemplate="right">
       <button pButton pRipple label="Nuevo" icon="pi pi-plus" class="p-button-success mr-2" (click)="crearRegistro()"></button>
@@ -14,41 +14,42 @@
 
 
 <p-table [value]="catalogoRegistros"
-         [tableStyle]="{ 'min-width': '50rem'}"
+         [styleClass]="'p-datatable-sm'"
+         [tableStyle]="{ 'min-width': '50rem', 'width': '60%', 'margin' : '0 auto'}"
          [paginator]="true"
-         [rows]="5"
+         [rows]="20"
          [showCurrentPageReport]="true"
          currentPageReportTemplate="Mostrando del {first} al {last} de un total de {totalRecords} registros"
          [rowsPerPageOptions]="[5, 10, 20]"
          >
   <ng-template pTemplate="header">
     <tr>
-      <th>id</th>
+      <th class="small-font">id</th>
       <th class="small-font" style="text-align: center;">Fecha</th>
-      <th class="small-font" style="text-align: right;">Jaime</th>
-      <th class="small-font" style="text-align: right;">Argentina</th>
-      <th class="small-font" style="text-align: right;">Cristian</th>
-      <th class="small-font" style="text-align: right;">SaldoTotal</th>
-      <th class="small-font" style="text-align: right;">SaldoPropio</th>
-      <th class="small-font" style="text-align: right;">Importacion</th>
-      <th class="small-font" style="text-align: right;">TotalPropio</th>
-      <th class="small-font" style="text-align: center;">Acción</th>
+      <th class="small-font-number">Jaime</th>
+      <th class="small-font-number">Argentina</th>
+      <th class="small-font-number">Cristian</th>
+      <th class="small-font-number">SaldoTotal</th>
+      <th class="small-font-number">SaldoPropio</th>
+      <th class="small-font-number">Importacion</th>
+      <th class="small-font-number">TotalPropio</th>
+      <th class="small-font-number" style="text-align: center;">Acción</th>
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-registro>
     <tr>
-      <td>{{ registro.id}}</td>
+      <td class="small-font" >{{ registro.id}}</td>
       <!--td>{{ registro.Fecha | date: 'mediumDate' }}</td-->
-      <td>{{ registro.Fecha}}</td>
-      <td class="small-font" style="text-align: right;">{{ registro.Jaime | currency:'USD':'symbol':'1.2-2'}}</td>
-      <td class="small-font" style="text-align: right;">{{ registro.Argentina | currency:'USD':'symbol':'1.2-2'}}</td>
-      <td class="small-font" style="text-align: right;">{{ registro.Cristian | currency:'USD':'symbol':'1.2-2'}}</td>
-      <td class="small-font" style="text-align: right;">{{ registro.SaldoTotal | currency:'USD':'symbol':'1.2-2'}}</td>
-      <td class="small-font" style="text-align: right;">{{ registro.SaldoPropio | currency:'USD':'symbol':'1.2-2'}}</td>
-      <td class="small-font" style="text-align: right;">{{ registro.Importacion | currency:'USD':'symbol':'1.2-2'}}</td>
-      <td class="small-font" style="text-align: right;">{{ registro.TotalPropio | currency:'USD':'symbol':'1.2-2'}}</td>
+      <td class="small-font" >{{ registro.Fecha}}</td>
+      <td class="small-font-number">{{ registro.Jaime | currency:'USD':'symbol':'1.2-2'}}</td>
+      <td class="small-font-number">{{ registro.Argentina | currency:'USD':'symbol':'1.2-2'}}</td>
+      <td class="small-font-number">{{ registro.Cristian | currency:'USD':'symbol':'1.2-2'}}</td>
+      <td class="small-font-number">{{ registro.SaldoTotal | currency:'USD':'symbol':'1.2-2'}}</td>
+      <td class="small-font-number">{{ registro.SaldoPropio | currency:'USD':'symbol':'1.2-2'}}</td>
+      <td class="small-font-number">{{ registro.Importacion | currency:'USD':'symbol':'1.2-2'}}</td>
+      <td class="small-font-number">{{ registro.TotalPropio | currency:'USD':'symbol':'1.2-2'}}</td>
 <!--       <td>IMPLEMENTAR BOTONES</td> -->
-      <td>
+      <td class="small-font" style="text-align: center;">
         <p-button icon="uil uil-edit-alt"
                   styleClass="small-button"
                   [rounded]="true"

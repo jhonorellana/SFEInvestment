@@ -2,6 +2,8 @@
   font-size: 10px;
   max-width: 150px;
   background-color: rgb(240, 255, 240);
+  border-bottom: 1px solid rgb(31, 248, 139);
+  padding: 2px 4px; /* Ajusta el padding para reducir la altura */
 }
 
 .small-font-number {
@@ -9,6 +11,8 @@
   max-width: 150px;
   background-color: rgb(240, 255, 240);
   text-align: right;
+  border-bottom: 1px solid rgb(31, 248, 139);
+  padding: 2px 4px; /* Ajusta el padding para reducir la altura */
 }
 
 
