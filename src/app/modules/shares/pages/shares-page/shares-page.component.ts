@@ -153,12 +153,13 @@ export class SharesPageComponent implements OnInit {
                     let content = "";
                     for (let i = 0; i < e.entries.length; i++) {
                       let fecha = new Date(e.entries[i].dataPoint.x.getTime() + (e.entries[i].dataPoint.x.getTimezoneOffset() * 60000));
+                      content += `Emisor: ${e.entries[i].dataPoint.data.emisor}<br>`;
                       content += `Fecha: ${CanvasJS.formatDate(fecha, "DD/MM/YYYY")}<br>`;
                       content += `Precio: ${CanvasJS.formatNumber(e.entries[i].dataPoint.y, "$#,##0.00")}<br>`;
                       content += `Transacciones: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.transacciones, "#,###.##")}<br>`;
                       content += `Numero Acciones: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.cantidad, "#,###.##")}<br>`;
                       content += `Valor Total: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.valor, "$#,##0.00")}<br>`;
-          }
+                       }
                     return content;
                   }
                 },
@@ -169,7 +170,7 @@ export class SharesPageComponent implements OnInit {
                   dataPoints: this.dataShareslist.map(entry => ({
                     x: new Date(entry.fecha),
                     y: entry.precio,
-                    data: { transacciones: entry.transacciones, cantidad: entry.cantidad, valor: entry.valor }
+                    data: { transacciones: entry.transacciones, cantidad: entry.cantidad, valor: entry.valor, emisor: entry.emisor }
                   }))
 
 
@@ -259,6 +260,7 @@ export class SharesPageComponent implements OnInit {
                               let content = "";
                               for (let i = 0; i < e.entries.length; i++) {
                                 let fecha = new Date(e.entries[i].dataPoint.x.getTime() + (e.entries[i].dataPoint.x.getTimezoneOffset() * 60000));
+                                content += `Emisor: ${e.entries[i].dataPoint.data.emisor}<br>`;
                                 content += `Fecha: ${CanvasJS.formatDate(fecha, "DD/MM/YYYY")}<br>`;
                                 content += `Precio: ${CanvasJS.formatNumber(e.entries[i].dataPoint.y, "$#,##0.00")}<br>`;
                                 content += `Transacciones: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.transacciones, "#,###.##")}<br>`;
@@ -275,7 +277,7 @@ export class SharesPageComponent implements OnInit {
                             dataPoints: this.dataShareslist.map(entry => ({
                               x: new Date(entry.fecha),
                               y: entry.precio,
-                              data: { transacciones: entry.transacciones, cantidad: entry.cantidad, valor: entry.valor }
+                              data: { transacciones: entry.transacciones, cantidad: entry.cantidad, valor: entry.valor, emisor: entry.emisor }
                             }))
 
 
@@ -377,6 +379,7 @@ export class SharesPageComponent implements OnInit {
                                 let content = "";
                                 for (let i = 0; i < e.entries.length; i++) {
                                   let fecha = new Date(e.entries[i].dataPoint.x.getTime() + (e.entries[i].dataPoint.x.getTimezoneOffset() * 60000));
+                                  content += `Emisor: ${e.entries[i].dataPoint.data.emisor}<br>`;
                                   content += `Fecha: ${CanvasJS.formatDate(fecha, "DD/MM/YYYY")}<br>`;
                                   content += `Precio: ${CanvasJS.formatNumber(e.entries[i].dataPoint.y, "$#,##0.00")}<br>`;
                                   content += `Transacciones: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.transacciones, "#,###.##")}<br>`;
@@ -393,7 +396,7 @@ export class SharesPageComponent implements OnInit {
                               dataPoints: this.dataShareslist.map(entry => ({
                                 x: new Date(entry.fecha),
                                 y: entry.precio,
-                                data: { transacciones: entry.transacciones, cantidad: entry.cantidad, valor: entry.valor }
+                                data: { transacciones: entry.transacciones, cantidad: entry.cantidad, valor: entry.valor, emisor: entry.emisor }
                               }))
 
 
@@ -494,6 +497,7 @@ export class SharesPageComponent implements OnInit {
                             let content = "";
                             for (let i = 0; i < e.entries.length; i++) {
                               let fecha = new Date(e.entries[i].dataPoint.x.getTime() + (e.entries[i].dataPoint.x.getTimezoneOffset() * 60000));
+                              content += `Emisor: ${e.entries[i].dataPoint.data.emisor}<br>`;
                               content += `Fecha: ${CanvasJS.formatDate(fecha, "DD/MM/YYYY")}<br>`;
                               content += `Precio: ${CanvasJS.formatNumber(e.entries[i].dataPoint.y, "$#,##0.00")}<br>`;
                               content += `Transacciones: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.transacciones, "#,###.##")}<br>`;
@@ -510,7 +514,7 @@ export class SharesPageComponent implements OnInit {
                           dataPoints: this.dataShareslist.map(entry => ({
                             x: new Date(entry.fecha),
                             y: entry.precio,
-                            data: { transacciones: entry.transacciones, cantidad: entry.cantidad, valor: entry.valor }
+                            data: { transacciones: entry.transacciones, cantidad: entry.cantidad, valor: entry.valor, emisor: entry.emisor }
                           }))
 
 
@@ -612,6 +616,7 @@ export class SharesPageComponent implements OnInit {
                                     let content = "";
                                     for (let i = 0; i < e.entries.length; i++) {
                                       let fecha = new Date(e.entries[i].dataPoint.x.getTime() + (e.entries[i].dataPoint.x.getTimezoneOffset() * 60000));
+                                      content += `Emisor: ${e.entries[i].dataPoint.data.emisor}<br>`;
                                       content += `Fecha: ${CanvasJS.formatDate(fecha, "DD/MM/YYYY")}<br>`;
                                       content += `Precio: ${CanvasJS.formatNumber(e.entries[i].dataPoint.y, "$#,##0.00")}<br>`;
                                       content += `Transacciones: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.transacciones, "#,###.##")}<br>`;
@@ -628,7 +633,7 @@ export class SharesPageComponent implements OnInit {
                                   dataPoints: this.dataShareslist.map(entry => ({
                                     x: new Date(entry.fecha),
                                     y: entry.precio,
-                                    data: { transacciones: entry.transacciones, cantidad: entry.cantidad, valor: entry.valor }
+                                    data: { transacciones: entry.transacciones, cantidad: entry.cantidad, valor: entry.valor, emisor: entry.emisor }
                                   }))
 
 
@@ -731,6 +736,7 @@ export class SharesPageComponent implements OnInit {
                               let content = "";
                               for (let i = 0; i < e.entries.length; i++) {
                                 let fecha = new Date(e.entries[i].dataPoint.x.getTime() + (e.entries[i].dataPoint.x.getTimezoneOffset() * 60000));
+                                content += `Emisor: ${e.entries[i].dataPoint.data.emisor}<br>`;
                                 content += `Fecha: ${CanvasJS.formatDate(fecha, "DD/MM/YYYY")}<br>`;
                                 content += `Precio: ${CanvasJS.formatNumber(e.entries[i].dataPoint.y, "$#,##0.00")}<br>`;
                                 content += `Transacciones: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.transacciones, "#,###.##")}<br>`;
@@ -747,7 +753,7 @@ export class SharesPageComponent implements OnInit {
                             dataPoints: this.dataShareslist.map(entry => ({
                               x: new Date(entry.fecha),
                               y: entry.precio,
-                              data: { transacciones: entry.transacciones, cantidad: entry.cantidad, valor: entry.valor }
+                              data: { transacciones: entry.transacciones, cantidad: entry.cantidad, valor: entry.valor, emisor: entry.emisor }
                             }))
 
 
@@ -854,6 +860,7 @@ export class SharesPageComponent implements OnInit {
                                   let content = "";
                                   for (let i = 0; i < e.entries.length; i++) {
                                     let fecha = new Date(e.entries[i].dataPoint.x.getTime() + (e.entries[i].dataPoint.x.getTimezoneOffset() * 60000));
+                                    content += `Emisor: ${e.entries[i].dataPoint.data.emisor}<br>`;
                                     content += `Fecha: ${CanvasJS.formatDate(fecha, "DD/MM/YYYY")}<br>`;
                                     content += `Precio: ${CanvasJS.formatNumber(e.entries[i].dataPoint.y, "$#,##0.00")}<br>`;
                                     content += `Transacciones: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.transacciones, "#,###.##")}<br>`;
@@ -870,7 +877,7 @@ export class SharesPageComponent implements OnInit {
                                 dataPoints: this.dataShareslist.map(entry => ({
                                   x: new Date(entry.fecha),
                                   y: entry.precio,
-                                  data: { transacciones: entry.transacciones, cantidad: entry.cantidad, valor: entry.valor }
+                                  data: { transacciones: entry.transacciones, cantidad: entry.cantidad, valor: entry.valor, emisor: entry.emisor }
                                 }))
 
 
@@ -974,6 +981,7 @@ export class SharesPageComponent implements OnInit {
                                 let content = "";
                                 for (let i = 0; i < e.entries.length; i++) {
                                   let fecha = new Date(e.entries[i].dataPoint.x.getTime() + (e.entries[i].dataPoint.x.getTimezoneOffset() * 60000));
+                                  content += `Emisor: ${e.entries[i].dataPoint.data.emisor}<br>`;
                                   content += `Fecha: ${CanvasJS.formatDate(fecha, "DD/MM/YYYY")}<br>`;
                                   content += `Precio: ${CanvasJS.formatNumber(e.entries[i].dataPoint.y, "$#,##0.00")}<br>`;
                                   content += `Transacciones: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.transacciones, "#,###.##")}<br>`;
@@ -990,7 +998,7 @@ export class SharesPageComponent implements OnInit {
                               dataPoints: this.dataShareslist.map(entry => ({
                                 x: new Date(entry.fecha),
                                 y: entry.precio,
-                                data: { transacciones: entry.transacciones, cantidad: entry.cantidad, valor: entry.valor }
+                                data: { transacciones: entry.transacciones, cantidad: entry.cantidad, valor: entry.valor, emisor: entry.emisor }
                               }))
 
 
@@ -1094,6 +1102,7 @@ export class SharesPageComponent implements OnInit {
                             let content = "";
                             for (let i = 0; i < e.entries.length; i++) {
                               let fecha = new Date(e.entries[i].dataPoint.x.getTime() + (e.entries[i].dataPoint.x.getTimezoneOffset() * 60000));
+                              content += `Emisor: ${e.entries[i].dataPoint.data.emisor}<br>`;
                               content += `Fecha: ${CanvasJS.formatDate(fecha, "DD/MM/YYYY")}<br>`;
                               content += `Precio: ${CanvasJS.formatNumber(e.entries[i].dataPoint.y, "$#,##0.00")}<br>`;
                               content += `Transacciones: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.transacciones, "#,###.##")}<br>`;
@@ -1110,7 +1119,7 @@ export class SharesPageComponent implements OnInit {
                           dataPoints: this.dataShareslist.map(entry => ({
                             x: new Date(entry.fecha),
                             y: entry.precio,
-                            data: { transacciones: entry.transacciones, cantidad: entry.cantidad, valor: entry.valor }
+                            data: { transacciones: entry.transacciones, cantidad: entry.cantidad, valor: entry.valor, emisor: entry.emisor }
                           }))
 
 
