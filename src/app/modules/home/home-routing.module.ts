@@ -62,6 +62,10 @@ const routes: Routes = [
     loadChildren: () => import('@modules/bonoshis/bonoshis.module').then(m => m.BonoshisModule)
   },
   {
+    path: 'bonds',
+    loadChildren: () => import('@modules/bonds/bonds.module').then(m => m.BondsModule)
+  },
+  {
     path: '**',//TODO 404 cuando no existe la ruta
     redirectTo: '/investment'
   }

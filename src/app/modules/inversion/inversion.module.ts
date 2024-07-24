@@ -6,6 +6,8 @@ import { InversionPageComponent } from './pages/inversion-page/inversion-page.co
 import { SharedModule } from '@shared/shared.module';
 import { PrimengModule } from '@modules/primeng/primeng.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { Table } from 'primeng/table';
+import { ViewChild } from '@angular/core';
 
 
 
@@ -21,4 +23,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     ReactiveFormsModule
   ]
 })
-export class InversionModule { }
+export class InversionModule {
+  @ViewChild('dt2')
+  dt2!: Table;
+}

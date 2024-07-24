@@ -10,7 +10,7 @@ import { IndicatorsBodyComponent } from './components/indicators-body/indicators
 import { RouterModule } from '@angular/router';
 import { SectionSummaryComponent } from './components/section-summary/section-summary.component';
 import { BalanceDetailComponent } from './components/balance-detail/balance-detail.component';
-
+import { PrimengModule } from '@modules/primeng/primeng.module';
 
 
 @NgModule({
@@ -26,10 +26,12 @@ import { BalanceDetailComponent } from './components/balance-detail/balance-deta
     BalanceDetailComponent
   ],
   imports: [
+    PrimengModule,
     CommonModule,
     RouterModule
   ],
   exports: [
+    PrimengModule,
     SideBarComponent,
     HeaderUserComponent,
     FooterComponent,
