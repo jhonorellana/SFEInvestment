@@ -10,6 +10,8 @@ const routes: Routes = [
   }
 ];
 
+import { BondsService } from './bonds.service';
+
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
