@@ -4,7 +4,7 @@
     [value]="dataBonoslist"
     [tableStyle]="{ 'min-width': '0.5rem'}"
     [paginator]="true"
-    [rows]="100"
+    [rows]="20"
     [showCurrentPageReport]="true"
     currentPageReportTemplate="Mostrando del {first} al {last} de un total de {totalRecords} registros"
     [rowsPerPageOptions]="[5, 10, 20, 30, 100]"
@@ -18,6 +18,19 @@
         <th class="small-font" pSortableColumn="propietario">Propietario<p-sortIcon field="propietario"></p-sortIcon></th>
         <th class="small-font" pSortableColumn="fechaCompra">Fecha Compra<p-sortIcon field="fechaCompra"></p-sortIcon></th>
         <th class="small-font" pSortableColumn="fechaEmision">Fecha Emisión<p-sortIcon field="fechaEmision"></p-sortIcon></th>
+        <th class="small-font" pSortableColumn="tasaMensual">Tasa Mensual<p-sortIcon field="tasaMensual"></p-sortIcon></th>
+        <th class="small-font" pSortableColumn="rendimiento">Rendimiento<p-sortIcon field="rendimiento"></p-sortIcon></th>
+        <th class="small-font" pSortableColumn="valorNominal">Nominal<p-sortIcon field="valorNominal"></p-sortIcon></th>
+        <th class="small-font">Tasa Real</th>
+        <th class="small-font">Mensual</th>
+        <th class="small-font">Pagado</th>
+        <th class="small-font">Con Comisión</th>
+        <th class="small-font">Sin Comisión</th>
+        <th class="small-font">Casa Valores</th>
+        <th class="small-font">Bolsa Valores</th>
+        <th class="small-font">Total Comisión</th>
+        <th class="small-font">Precio Compra</th>
+        <th class="small-font">P. Neto Compra</th>
       </tr>
        <tr>
         <th class="small-font" style="width:180px">
@@ -32,14 +45,66 @@
         <th class="small-font" style="width:180px">
           <p-columnFilter type="text" field="fechaEmision"></p-columnFilter>
         </th>
+        <th class="small-font" style="width:180px">
+          <p-columnFilter type="text" field="tasaMensual"></p-columnFilter>
+        </th>
+        <th class="small-font" style="width:180px">
+          <p-columnFilter type="text" field="rendimiento"></p-columnFilter>
+        </th>
+        <th class="small-font" style="width:180px">
+          <p-columnFilter type="text" field="valorNominal"></p-columnFilter>
+        </th>
+        <th class="small-font-number">
+          <!-- Tasa real -->
+        </th>
+        <th class="small-font-number">
+          <!-- Interes mensual -->
+        </th>
+        <th class="small-font-number">
+          <!-- Pagado -->
+        </th>
+        <th class="small-font-number">
+          <!-- Con comisión -->
+        </th>
+        <th class="small-font-number">
+          <!-- Sin  comisión -->
+        </th>
+        <th class="small-font-number">
+          <!-- Casa Valores -->
+        </th>
+        <th class="small-font-number">
+          <!-- Bolsa Valores -->
+        </th>
+        <th class="small-font-number">
+          <!-- Total Comisión -->
+        </th>
+        <th class="small-font-number">
+          <!-- Precio Compra -->
+        </th>
+        <th class="small-font-number">
+          <!-- P. Neto Compra -->
+        </th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-bono>
-      <tr>
+      <tr class="fondoverde">
         <td class="small-font">{{ bono.fechaVencimiento }}</td>
         <td class="small-font">{{ bono.propietario }}</td>
         <td class="small-font">{{ bono.fechaCompra }}</td>
         <td class="small-font">{{ bono.fechaEmision }}</td>
+        <td class="small-font">{{ bono.tasaMensual }}</td>
+        <td class="small-font">{{ bono.rendimiento }}</td>
+        <td class="small-font">{{ bono.valorNominal }}</td>
+        <td class="small-font">{{ bono.tasaMensualReal }}</td>
+        <td class="small-font">{{ bono.interesMensual }}</td>
+        <td class="small-font">{{ bono.pagado }}</td>
+        <td class="small-font">{{ bono.valorSinComision }}</td>
+        <td class="small-font">{{ bono.valorConComision }}</td>
+        <td class="small-font">{{ bono.comisionCasa }}</td>
+        <td class="small-font">{{ bono.comisionBolsa }}</td>
+        <td class="small-font">{{ bono.totalComisiones }}</td>
+        <td class="small-font">{{ bono.precioComprado }}</td>
+        <td class="small-font">{{ bono.precioNetoComprado }}</td>
       </tr>
     </ng-template>
     <ng-template pTemplate="emptymessage">

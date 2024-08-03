@@ -51,58 +51,6 @@
       </div>
     </div>
 
-<p-table
-    #dt2
-    styleClass="'p-datatable-sm'"
-    [value]="dataBonoslist"
-    [tableStyle]="{ 'min-width': '0.5rem'}"
-    [paginator]="true"
-    [rows]="100"
-    [showCurrentPageReport]="true"
-    currentPageReportTemplate="Mostrando del {first} al {last} de un total de {totalRecords} registros"
-    [rowsPerPageOptions]="[5, 10, 20, 30, 100]"
-    dataKey="id"
-    [globalFilterFields]="['fechaVencimiento','propietario','fechaCompra', 'fechaEmision']"
-    >
-
-    <ng-template pTemplate="header">
-      <tr >
-        <th class="small-font" pSortableColumn="fechaVencimiento">Fecha Vencim. <p-sortIcon field="fechaVencimiento"></p-sortIcon></th>
-        <th class="small-font" pSortableColumn="propietario">Propietario<p-sortIcon field="propietario"></p-sortIcon></th>
-        <th class="small-font" pSortableColumn="fechaCompra">Fecha Compra<p-sortIcon field="fechaCompra"></p-sortIcon></th>
-        <th class="small-font" pSortableColumn="fechaEmision">Fecha Emisión<p-sortIcon field="fechaEmision"></p-sortIcon></th>
-      </tr>
-       <tr>
-        <th class="small-font" style="width:180px">
-          <p-columnFilter type="text" field="fechaVencimiento"></p-columnFilter>
-        </th>
-        <th class="small-font" style="width:180px">
-          <p-columnFilter type="text" field="propietario"></p-columnFilter>
-        </th>
-        <th class="small-font" style="width:180px">
-          <p-columnFilter type="text" field="fechaCompra"></p-columnFilter>
-        </th>
-        <th class="small-font" style="width:180px">
-          <p-columnFilter type="text" field="fechaEmision"></p-columnFilter>
-        </th>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-bono>
-      <tr>
-        <td class="small-font">{{ bono.fechaVencimiento }}</td>
-        <td class="small-font">{{ bono.propietario }}</td>
-        <td class="small-font">{{ bono.fechaCompra }}</td>
-        <td class="small-font">{{ bono.fechaEmision }}</td>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="emptymessage">
-      <tr>
-          <td colspan="5">No se encontraron bonos.</td>
-      </tr>
-    </ng-template>
-</p-table>
-
-
   <h1 class="section--generic__title">Detalle Bonos</h1>
   <div class="row">
     <div class="col-12">
