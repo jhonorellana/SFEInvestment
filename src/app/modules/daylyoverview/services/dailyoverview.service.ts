@@ -39,5 +39,9 @@ export class DailyoverviewService {
     return this.http.get(`${this.URL}historicogenericos?initialDate=${fechaInicio}&finalDate=${fechaFin}`);
   }
 
+  ConsultarTitularizacionesDelDia$(fechaInicio: string, fechaFin: string): Observable<any>{
+    return this.http.get(`${this.URL}historicotitularizaciones?initialDate=${fechaInicio}&finalDate=${fechaFin}`);
+  }
+
 
 }

@@ -233,6 +233,49 @@
   </div>
 </div>
 
+<div class="row">
+  <h3>Titularizaciones vendidas en las fechas escogidas</h3>
+  <div class="col-12">
+    <table class="table table-striped table-hover table-sm table-bordered table-success">
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Emisor</th>
+          <th>% Precio</th>
+          <th>Rend.</th>
+          <th>Días</th>
+          <th>Años</th>
+          <th>Tasa</th>
+          <th>V.Nominal</th>
+          <th>V.Efectivo</th>
+          <th>Emision</th>
+          <th>Vencim.</th>
+          <th>Proced.</th>
+          <th>Mercado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of dataTitularizacionesDelDia">
+          <td>{{ item.fecha | date: 'yyyy-MM-dd' }}</td>
+          <td>{{ item.emisor }}</td>
+          <td style="text-align: right;">{{ item.precio_porc| number:'1.6-6' }}</td>
+          <td style="text-align: right;">{{ item.rendimiento| number:'1.2-2' }}</td>
+          <td style="text-align: right;">{{ item.plazo_dias | number:'1.0-0' }}</td>
+          <td style="text-align: right;">{{ item.plazo_anios| number:'1.2-2' }}</td>
+          <td style="text-align: right;">{{ item.interes| number:'1.2-2' }}</td>
+          <td style="text-align: right;">{{ item.valornominal| number:'1.2-2' }}</td>
+          <td style="text-align: right;">{{ item.valorefectivo| number:'1.2-2' }}</td>
+          <td>{{ item.emision  | date: 'yyyy-MM-dd'}}</td>
+          <td>{{ item.vencimiento  | date: 'yyyy-MM-dd'}}</td>
+          <td style="text-align: right;">{{ item.procedencia}}</td>
+          <td style="text-align: right;">{{ item.mercado}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
 
 <div class="row">
   <h3>Acciones vendidas en las fechas escogidas</h3>

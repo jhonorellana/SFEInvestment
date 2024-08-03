@@ -9,6 +9,7 @@ import { HistoricoobligacionesModel } from '@core/models/historicoobligaciones.m
 import { HistoricopapelesModel } from '@core/models/historicopapeles.model';
 import { HistoricofacturasModel } from '@core/models/historicofacturas.model';
 import { HistoricogenericosModel } from '@core/models/historicogenericos.model';
+import { HistoricotitularizacionesModel } from '@core/models/historicotitularizaciones.model';
 
 @Component({
   selector: 'app-dailyoverview-page',
@@ -23,6 +24,7 @@ export class DailyoverviewPageComponent implements OnInit{
   dataPapelesDelDia: Array<HistoricopapelesModel> = []
   dataFacturasDelDia: Array<HistoricofacturasModel> = []
   dataGenericosDelDia: Array<HistoricogenericosModel> = []
+  dataTitularizacionesDelDia: Array<HistoricotitularizacionesModel> = []
   dataUltimaFechaAcciones: Array<UltimafechaaccionModel> = []
 
   formBusqueda: FormGroup = new FormGroup({})
@@ -95,7 +97,11 @@ export class DailyoverviewPageComponent implements OnInit{
                 }, err => {console.log('Error de conexion');}
               )
 
-
+    this.dailyoverviewService.ConsultarTitularizacionesDelDia$(this._fechaInicio,this._fechaFin)
+    .subscribe((response: HistoricotitularizacionesModel[]) => {
+                  this.dataTitularizacionesDelDia = response
+                }, err => {console.log('Error de conexion');}
+              )
 
 
     this.dailyoverviewService.ConsultarUltimaFechaAcciones$()
@@ -151,6 +157,11 @@ export class DailyoverviewPageComponent implements OnInit{
                 }, err => {console.log('Error de conexion');}
               )
 
+    this.dailyoverviewService.ConsultarTitularizacionesDelDia$(fechaInicio,fechaFin)
+    .subscribe((response: HistoricotitularizacionesModel[]) => {
+                  this.dataTitularizacionesDelDia = response
+                }, err => {console.log('Error de conexion');}
+              )
 
 
 
