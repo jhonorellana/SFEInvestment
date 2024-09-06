@@ -58,7 +58,7 @@ export class PortfolioPageComponent implements OnInit, AfterViewInit, OnDestroy 
               type: "doughnut",
               startAngle: -90,
               indexLabel: "{name}: {y}",
-              yValueFormatString: "'$'#,###.##",
+              yValueFormatString: "'$'#,###.00",
               dataPoints: this.dataInvestownernewlist.map(entry => ({
                 name: entry.inversionpropietario,
                 y: entry.capital
@@ -87,7 +87,7 @@ export class PortfolioPageComponent implements OnInit, AfterViewInit, OnDestroy 
               type: "doughnut",
               startAngle: -90,
               indexLabel: "{name}: {y}",
-              yValueFormatString: "'$'#,###.##",
+              yValueFormatString: "'$'#,###.00",
               dataPoints: this.dataInvestownerlist.map(entry => ({
                 name: entry.propietario,
                 y: entry.capital
@@ -117,7 +117,7 @@ export class PortfolioPageComponent implements OnInit, AfterViewInit, OnDestroy 
               type: "doughnut",
               startAngle: -90,
               indexLabel: "{name}: {y}",
-              yValueFormatString: "'$'#,###.##",
+              yValueFormatString: "'$'#,###.00",
               dataPoints: this.dataInvestenterpriselist.map(entry => ({
                 name: entry.empresa,
                 y: entry.capital
@@ -147,7 +147,7 @@ export class PortfolioPageComponent implements OnInit, AfterViewInit, OnDestroy 
               type: "doughnut",
               startAngle: -90,
               indexLabel: "{name}: {y}",
-              yValueFormatString: "'$'#,###.##",
+              yValueFormatString: "'$'#,###.00",
               dataPoints: this.dataTypeinvestlist.map(entry => ({
                 name: entry.tipo,
                 y: entry.capital
@@ -238,7 +238,7 @@ export class PortfolioPageComponent implements OnInit, AfterViewInit, OnDestroy 
               type: "doughnut",
               startAngle: -90,
               indexLabel: "{name}: {y}",
-              yValueFormatString: "'$'#,###.##",
+              yValueFormatString: "'$'#,###.00",
               dataPoints: this.dataInvestownernewlist.map(entry => ({
                 name: entry.inversionpropietario,
                 y: entry.capital
@@ -269,7 +269,7 @@ export class PortfolioPageComponent implements OnInit, AfterViewInit, OnDestroy 
               type: "doughnut",
               startAngle: -90,
               indexLabel: "{name}: {y}",
-              yValueFormatString: "'$'#,###.##",
+              yValueFormatString: "'$'#,###.00",
               dataPoints: this.dataInvestownernewlist2.map(entry => ({
                 name: entry.inversionpropietario,
                 y: entry.capital
@@ -299,7 +299,7 @@ export class PortfolioPageComponent implements OnInit, AfterViewInit, OnDestroy 
               type: "pie",
               startAngle: -90,
               indexLabel: "{name}: {y}",
-              yValueFormatString: "'$'#,###.##",
+              yValueFormatString: "'$'#,###.00",
               //indexLabelFontColor: "blue",
               dataPoints: this.dataInvertidoRendimientoBonos.map(entry => ({
                 name: entry.rendimiento + '% ',
@@ -330,7 +330,7 @@ export class PortfolioPageComponent implements OnInit, AfterViewInit, OnDestroy 
               type: "pie",
               startAngle: -90,
               indexLabel: "{name}: {y}",
-              yValueFormatString: "'$'#,###.##",
+              yValueFormatString: "'$'#,###.00",
               dataPoints: this.dataInvertidoRendimientoInv.map(entry => ({
                 name: entry.rendimiento + '% ',
                 y: entry.invertido
@@ -359,7 +359,7 @@ export class PortfolioPageComponent implements OnInit, AfterViewInit, OnDestroy 
               type: "pie",
               startAngle: -90,
               indexLabel: "{name}: {y}",
-              yValueFormatString: "'$'#,###.##",
+              yValueFormatString: "'$'#,###.00",
               dataPoints: this.dataInvertidoVencimientoBonos.map(entry => ({
                 name: entry.anioVencimiento,
                 y: entry.invertido
@@ -388,7 +388,7 @@ export class PortfolioPageComponent implements OnInit, AfterViewInit, OnDestroy 
               type: "pie",
               startAngle: -90,
               indexLabel: "{name}: {y}",
-              yValueFormatString: "'$'#,###.##",
+              yValueFormatString: "'$'#,###.00",
               dataPoints: this.dataInvertidoVencimientoInv.map(entry => ({
                 name: entry.anioVencimiento,
                 y: entry.invertido
