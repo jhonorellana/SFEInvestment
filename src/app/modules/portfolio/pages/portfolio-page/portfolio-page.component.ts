@@ -7,6 +7,7 @@ import { TypeinvestModel } from '@core/models/typeinvest.model';
 import { Subscription } from 'rxjs';
 import { InvertidoRendimientoModel } from '@core/models/invertidorendimiento';
 import { InvertidoVencimientoModel } from '@core/models/invertidovencimiento';
+import { RecuperacionAnualModel } from '@core/models/recuperacionanual.model';
 
 @Component({
   selector: 'app-portfolio-page',
@@ -25,6 +26,7 @@ export class PortfolioPageComponent implements OnInit, AfterViewInit, OnDestroy 
   dataInvertidoRendimientoInv: InvertidoRendimientoModel[] = [];
   dataInvertidoVencimientoBonos: InvertidoVencimientoModel[] = [];
   dataInvertidoVencimientoInv: InvertidoVencimientoModel[] = [];
+  dataRecuperacionAnual: RecuperacionAnualModel[] = [];
 
   chartOptions1: any = {}; // Tipo de inversión por propietario
   chartOptions2: any = {}; // Capital consolidado por propietario
@@ -36,7 +38,8 @@ export class PortfolioPageComponent implements OnInit, AfterViewInit, OnDestroy 
   chartOptions8: any = {}; // Invertido Rendimiento Inversiones.
   chartOptions9: any = {}; // Invertido - tiempo en año Bonos.
   chartOptions10: any = {}; // Invertido - tiempo en año Inversiones.
-
+  chartOptions11: any = {}; // Recuperación de capital historico
+  chartOptions12: any = {}; // Recuperación de capital futuro.
 
   constructor(
     private portfolioService: PortfolioService,
@@ -402,9 +405,176 @@ export class PortfolioPageComponent implements OnInit, AfterViewInit, OnDestroy 
         }
       );
 
+      const observador11$ = this.portfolioService.getRecuperacionAnual('0')
+      .subscribe(
+        (response: RecuperacionAnualModel[]) => {
+          this.dataRecuperacionAnual = response;
+          //console.log(this.dataRecuperacionAnual); // Verificar los datos
+          this.chartOptions11 = {
+            backgroundColor: "#EEFFEE",
+            animationEnabled: true,
+            title: {
+              text: "Recuperación Anual"
+            },
+            axisX:{
+                labelAngle: 0 //-90
+            },
+            axisY:{
+              title: "Capital"
+            },
+            toolTip: {
+              shared: true
+            },
+            legend:{
+              cursor: "pointer",
+              itemclick: function(e: any){
+                if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+                  e.dataSeries.visible = false;
+                } else {
+                  e.dataSeries.visible = true;
+                }
+                e.chart.render();
+              }
+            },
+            data: [
+              {
+                type: "column",
+                indexLabel: "{y}",
+                name: "Total",
+                legendText: "Total",
+                //axisYType: "secondary",
+                showInLegend: true,
+                yValueFormatString: "'$'#,###.00",
+                dataPoints: this.dataRecuperacionAnual.map(entry => ({
+                  label: Number(entry.anio),
+                  y: Number(entry.total),
+                }))
+              },
+              {
+              type: "column",
+              //indexLabel: "{y}",
+              name: "Capital",
+              legendText: "Capital",
+              showInLegend: true,
+              // Elimina temporalmente el indexLabel si causa problemas
+              yValueFormatString: "'$'#,###.00",
+              dataPoints: this.dataRecuperacionAnual.map(entry => ({
+                label: Number(entry.anio),
+                y: Number(entry.capital),
+              }))
+            },
+            {
+              type: "column",
+              //indexLabel: "{y}",
+              name: "Interés",
+              legendText: "Interés",
+              //axisYType: "secondary",
+              showInLegend: true,
+              yValueFormatString: "'$'#,###.00",
+              dataPoints: this.dataRecuperacionAnual.map(entry => ({
+                label: Number(entry.anio),
+                y: Number(entry.interes),
+              }))
+            }
+            ]
+          };
+          this.cdr.detectChanges();
+
+        },
+        err => {
+          console.log('Error de conexión');
+        }
+      );
 
 
-    this.listaObservadores$ = [observador1$, observador2$, observador3$, observador4$, observador6$, observador7$, observador8$, observador9$, observador10$  ];
+
+
+
+      const observador12$ = this.portfolioService.getRecuperacionAnual('1')
+      .subscribe(
+        (response: RecuperacionAnualModel[]) => {
+          this.dataRecuperacionAnual = response;
+          //console.log(this.dataRecuperacionAnual); // Verificar los datos
+          this.chartOptions12 = {
+            backgroundColor: "#EEFFEE",
+            animationEnabled: true,
+            title: {
+              text: "Interés Anual"
+            },
+            axisX:{
+                labelAngle: 0 //-90
+            },
+            axisY:{
+              title: "Interés"
+            },
+            toolTip: {
+              shared: true
+            },
+            legend:{
+              cursor: "pointer",
+              itemclick: function(e: any){
+                if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+                  e.dataSeries.visible = false;
+                } else {
+                  e.dataSeries.visible = true;
+                }
+                e.chart.render();
+              }
+            },
+            data: [
+/*              {
+                type: "column",
+                indexLabel: "{y}",
+                name: "Total",
+                legendText: "Total",
+                //axisYType: "secondary",
+                showInLegend: true,
+                yValueFormatString: "'$'#,###.00",
+                dataPoints: this.dataRecuperacionAnual.map(entry => ({
+                  label: Number(entry.anio),
+                  y: Number(entry.total),
+                }))
+              },
+              {
+              type: "column",
+              //indexLabel: "{y}",
+              name: "Capital",
+              legendText: "Capital",
+              showInLegend: true,
+              // Elimina temporalmente el indexLabel si causa problemas
+              yValueFormatString: "'$'#,###.00",
+              dataPoints: this.dataRecuperacionAnual.map(entry => ({
+                label: Number(entry.anio),
+                y: Number(entry.capital),
+              }))
+            },
+  */
+            {
+              type: "column",
+              indexLabel: "{y}",
+              name: "Interés",
+              legendText: "Interés",
+              //axisYType: "secondary",
+              showInLegend: true,
+              yValueFormatString: "'$'#,###.00",
+              dataPoints: this.dataRecuperacionAnual.map(entry => ({
+                label: Number(entry.anio),
+                y: Number(entry.interes),
+              }))
+            }
+            ]
+          };
+          this.cdr.detectChanges();
+
+        },
+        err => {
+          console.log('Error de conexión');
+        }
+      );
+
+
+
+    this.listaObservadores$ = [observador1$, observador2$, observador3$, observador4$, observador6$, observador7$, observador8$, observador9$, observador10$, observador11$ , observador12$   ];
   }
 
   ngAfterViewInit(): void {

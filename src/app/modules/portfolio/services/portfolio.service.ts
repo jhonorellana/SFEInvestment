@@ -45,6 +45,10 @@ export class PortfolioService {
       return this.httpClient.get(`${this.URL}invertidovencimiento?type=${tipo}`);
     }
 
+    getRecuperacionAnual(historico: string): Observable<any>{
+      return this.httpClient.get(`${this.URL}recuperacionanual?historico=${historico}`);
+    }
+
 
 
 }
