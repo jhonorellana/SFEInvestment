@@ -30,6 +30,7 @@ export class SharesPageComponent implements OnInit {
   chartOptions2022: any = {}; // Puedes ajustar el tipo según la estructura de tu objeto.
   chartOptions2023: any = {}; // Puedes ajustar el tipo según la estructura de tu objeto.
   chartOptions2024: any = {}; // Puedes ajustar el tipo según la estructura de tu objeto.
+  chartOptions2025: any = {}; // Puedes ajustar el tipo según la estructura de tu objeto.
       chart: any;
 
   constructor(
@@ -62,6 +63,7 @@ export class SharesPageComponent implements OnInit {
       this.ConstruirGraficoEmisorAnio2022('2022');
       this.ConstruirGraficoEmisorAnio2023('2023');
       this.ConstruirGraficoEmisorAnio2024('2024');
+      this.ConstruirGraficoEmisorAnio2025('2025');
       this.PresentarInformacionDividendos();
 
 
@@ -107,14 +109,14 @@ export class SharesPageComponent implements OnInit {
                 animationEnabled: true,
                 zoomEnabled: true,
                 title: {
-                  text: "Acciones por día desde 2017 hasta 2024"
+                  text: "Acciones por día desde 2017 hasta 2025"
                 },
                 axisX: {
                   labelFontSize: 12,
                   intervalType: "year",
                   interval: 1,
                   minimum: new Date('2017-01-01'),
-                  maximum: new Date('2025-01-01'),
+                  maximum: new Date('2026-01-01'),
                   stripLines:[
                     {
                       value: new Date('2017-01-01')
@@ -142,6 +144,12 @@ export class SharesPageComponent implements OnInit {
                     },
                     {
                       value: new Date('2024-12-31')
+                    },
+                    {
+                      value: new Date('2025-01-01')
+                    },
+                    {
+                      value: new Date('2025-12-31')
                     }
                     ],
                 },
@@ -1147,11 +1155,133 @@ export class SharesPageComponent implements OnInit {
   );
 
 
+  }
 
 
+  ConstruirGraficoEmisorAnio2025(anio: string): void{
+    const {cmbEmisor, cmbPrueba} = this.formAcciones.value
+    const observador2025$ = this.searchService.ObtenerAccionesCompaniaAnio$(cmbEmisor,anio)
+  .subscribe(
+    (respuesta: SharesModel[]) => {
+      if (respuesta && respuesta.length >= 2) {
+        this.dataShareslist = respuesta;
 
+                      this.chartOptions2025 = {
+                        backgroundColor: "#EEFFEE",
+                        theme: "light2",
+                        animationEnabled: true,
+                        zoomEnabled: true,
+                        title: {
+                          text: `Precios año ${anio}`
+                        },
+                        axisX: {
+                          labelFontSize: 12,
+                          intervalType: "month",
+                          interval: 1,
+                          minimum: new Date('2025-01-01'),
+                          maximum: new Date('2026-01-01'),
+                          stripLines:[
+                            {
+                              value: new Date('2025-01-01')
+                            },
+                            {
+                              value: new Date('2025-02-01')
+                            },
+                            {
+                              value: new Date('2025-03-01')
+                            },
+                            {
+                              value: new Date('2025-04-01')
+                            },
+                            {
+                              value: new Date('2025-05-01')
+                            },
+                            {
+                              value: new Date('2025-06-01')
+                            },
+                            {
+                              value: new Date('2025-07-01')
+                            },
+                            {
+                              value: new Date('2025-08-01')
+                            },
+                            {
+                              value: new Date('2025-09-01')
+                            },
+                            {
+                              value: new Date('2025-10-01')
+                            },
+                            {
+                              value: new Date('2025-11-01')
+                            },
+                            {
+                              value: new Date('2025-12-01')
+                            },
+                            {
+                              value: new Date('2025-12-31')
+                            }
+                            ],
+                        },
+                        axisY: {
+                        },
+                        toolTip: {
+                          shared: true,
+                          contentFormatter: function (e: { entries: string | any[]; }) {
+                            let content = "";
+                            for (let i = 0; i < e.entries.length; i++) {
+                              let fecha = new Date(e.entries[i].dataPoint.x.getTime() + (e.entries[i].dataPoint.x.getTimezoneOffset() * 60000));
+                              content += `Emisor: ${e.entries[i].dataPoint.data.emisor}<br>`;
+                              content += `Fecha: ${CanvasJS.formatDate(fecha, "DD/MM/YYYY")}<br>`;
+                              content += `Precio: ${CanvasJS.formatNumber(e.entries[i].dataPoint.y, "$#,##0.00")}<br>`;
+                              content += `Transacciones: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.transacciones, "#,###.##")}<br>`;
+                              content += `Numero Acciones: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.cantidad, "#,###.##")}<br>`;
+                              content += `Valor Total: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.valor, "$#,##0.00")}<br>`;
+                          }
+                            return content;
+                          }
+                        },
+                        data: [{
+                          type: "line",
+                          xValueFormatString: "YYYY/MM/DD",
+                          yValueFormatString: "$#,###.##",
+                          dataPoints: this.dataShareslist.map(entry => ({
+                            x: new Date(entry.fecha),
+                            y: entry.precio,
+                            data: { transacciones: entry.transacciones, cantidad: entry.cantidad, valor: entry.valor, emisor: entry.emisor }
+                          }))
+
+
+                        }]
+                      }
+      }else{
+      this.chartOptions2025 = {
+        backgroundColor: "#EEFFEE",
+        theme: "light2",
+        animationEnabled: true,
+        zoomEnabled: true,
+        title: {
+          text: `Precios año ${anio}`
+        },
+        data: []
+      };
+    };
+
+
+    this.cdr.detectChanges();
+    },
+    err => {
+      console.log('Error de conexion');
+    }
+  );
 
   }
+
+
+
+
+
+
+
 
     ngOnDestroy(): void {
       this.listaObservadores$.forEach(u => u.unsubscribe());
@@ -1168,6 +1298,7 @@ export class SharesPageComponent implements OnInit {
       this.ConstruirGraficoEmisorAnio2022('2022');
       this.ConstruirGraficoEmisorAnio2023('2023');
       this.ConstruirGraficoEmisorAnio2024('2024');
+      this.ConstruirGraficoEmisorAnio2025('2025');
       this.PresentarInformacionDividendos();
 
 
