@@ -444,36 +444,38 @@ export class PortfolioPageComponent implements OnInit, AfterViewInit, OnDestroy 
                 legendText: "Total",
                 //axisYType: "secondary",
                 showInLegend: true,
-                yValueFormatString: "'$'#,###.00",
+                //yValueFormatString: "'$'#,###.00",
+                yValueFormatString: "#,###",
                 dataPoints: this.dataRecuperacionAnual.map(entry => ({
                   label: Number(entry.anio),
-                  y: Number(entry.total),
+                  //y: Number(entry.total),
+                  y: Math.round(Number(entry.total)), // Redondea a entero
                 }))
               },
               {
               type: "column",
-              //indexLabel: "{y}",
+              indexLabel: "{y}",
               name: "Capital",
               legendText: "Capital",
               showInLegend: true,
               // Elimina temporalmente el indexLabel si causa problemas
-              yValueFormatString: "'$'#,###.00",
+              yValueFormatString: "#,###",
               dataPoints: this.dataRecuperacionAnual.map(entry => ({
                 label: Number(entry.anio),
-                y: Number(entry.capital),
+                //y: Number(entry.capital),
+                y: Math.round(Number(entry.capital)), // Redondea a entero
               }))
             },
             {
               type: "column",
-              //indexLabel: "{y}",
+              indexLabel: "{y}",
               name: "Interés",
               legendText: "Interés",
-              //axisYType: "secondary",
               showInLegend: true,
-              yValueFormatString: "'$'#,###.00",
+              yValueFormatString: "#,###",
               dataPoints: this.dataRecuperacionAnual.map(entry => ({
                 label: Number(entry.anio),
-                y: Number(entry.interes),
+                y: Math.round(Number(entry.interes)), // Redondea a entero
               }))
             }
             ]
