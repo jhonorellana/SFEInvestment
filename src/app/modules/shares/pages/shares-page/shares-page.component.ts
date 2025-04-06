@@ -143,9 +143,6 @@ export class SharesPageComponent implements OnInit {
                       value: new Date('2024-01-01')
                     },
                     {
-                      value: new Date('2024-12-31')
-                    },
-                    {
                       value: new Date('2025-01-01')
                     },
                     {
