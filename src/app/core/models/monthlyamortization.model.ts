@@ -4,6 +4,8 @@ export interface MonthlyamortizationModel
     mes: string;
     capital: string;
     interes: string;
+    capital_moroso: string;
+    interes_moroso: string;
     total: string;
   }
 

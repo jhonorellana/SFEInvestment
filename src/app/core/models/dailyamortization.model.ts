@@ -8,6 +8,8 @@ export interface DailyamortizationModel
     rendimiento: string;
     interes: string;
     capital: string;
+    interes_moroso: string;
+    capital_moroso: string;
     total: string;
   }
 
