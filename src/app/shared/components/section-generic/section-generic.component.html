@@ -10,8 +10,10 @@
             <th>Mes</th>
             <th>Interés</th>
             <th>Capital</th>
-            <th>Interés moroso</th>
-            <th>Capital moroso</th>
+            <th>Premio</th>
+            <th>Interés en riesgo</th>
+            <th>Capital en riesgo</th>
+            <th>Premio en riesgo</th>
             <th>Total</th>
           </tr>
         </thead>
@@ -21,8 +23,10 @@
             <td>{{ item.mes }}</td>
             <td>{{ item.interes | number:'1.2-2' }}</td>
             <td>{{ item.capital | number:'1.2-2' }}</td>
+            <td>{{ item.descuento | number:'1.2-2' }}</td>
             <td>{{ item.interes_moroso | number:'1.2-2' }}</td>
             <td>{{ item.capital_moroso | number:'1.2-2' }}</td>
+            <td>{{ item.descuento_moroso | number:'1.2-2' }}</td>
             <td>{{ item.total | number:'1.2-2' }}</td>
           </tr>
         </tbody>
@@ -40,8 +44,10 @@
                 <th>Empresa</th>
                 <th>Interés</th>
                 <th>Capital</th>
-                <th>Interés moroso</th>
-                <th>Capital moroso</th>
+                <th>Premio</th>
+                <th>Interés en riesgo</th>
+                <th>Capital en riesgo</th>
+                <th>Premio en riesgo</th>
                 <th>Total</th>
               </tr>
             </thead>
@@ -52,8 +58,10 @@
                   <td>{{ item.empresa}}</td>
                   <td>{{ item.interes | number:'1.2-2' }}</td>
                   <td>{{ item.capital | number:'1.2-2' }}</td>
+                  <td>{{ item.descuento | number:'1.2-2' }}</td>
                   <td>{{ item.interes_moroso | number:'1.2-2' }}</td>
                   <td>{{ item.capital_moroso | number:'1.2-2' }}</td>
+                  <td>{{ item.descuento_moroso | number:'1.2-2' }}</td>
                   <td>{{ item.total | number:'1.2-2' }}</td>
                 </tr>
             </tbody>
@@ -76,8 +84,10 @@
               <th>Rendimiento</th>
               <th>Interés</th>
               <th>Capital</th>
-              <th>Interés moroso</th>
-              <th>Capital moroso</th>
+              <th>Premio</th>
+              <th>Interés en riesgo</th>
+              <th>Capital en riesgo</th>
+              <th>Premio en riesgo</th>
               <th>Total</th>
             </tr>
           </thead>
@@ -91,8 +101,10 @@
                 <td>{{ item.rendimiento | number:'1.2-2' }}</td>
                 <td>{{ item.interes  | number:'1.2-2' }}</td>
                 <td>{{ item.capital  | number:'1.2-2' }}</td>
+                <td>{{ item.descuento  | number:'1.2-2' }}</td>
                 <td>{{ item.interes_moroso  | number:'1.2-2' }}</td>
                 <td>{{ item.capital_moroso  | number:'1.2-2' }}</td>
+                <td>{{ item.descuento_moroso  | number:'1.2-2' }}</td>
                 <td>{{ item.total  | number:'1.2-2' }}</td>
               </tr>
           </tbody>
