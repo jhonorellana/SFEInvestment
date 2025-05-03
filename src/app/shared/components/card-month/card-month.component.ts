@@ -8,7 +8,7 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class CardMonthComponent implements OnInit{
   @Input() mode: 'small' | 'big' = 'small'
-  @Input() amortization: MonthlyamortizationModel = { anio: '2000', mes: '', capital: '', interes: '', capital_moroso: '', interes_moroso: '', total: '' };
+  @Input() amortization: MonthlyamortizationModel = { anio: '2000', mes: '', capital: '', interes: '', descuento: '', capital_moroso: '', interes_moroso: '', descuento_moroso:'', total: '' };
 
   ngOnInit(): void {
   }
