@@ -19,6 +19,11 @@ export class OthervaluePageComponent {
   @ViewChild('dt2')
   dt2!: Table;
 
+  // Opciones para el dropdown de estado
+  estados = [
+    { label: 'Activo', value: 1 },
+    { label: 'Inactivo', value: 0 }
+  ];
 
   loading: boolean = true;
   catalogoRegistros: OthervalueModel[] = [];
@@ -139,22 +144,35 @@ export class OthervaluePageComponent {
 
 
        buildformUpdateRegistro(): void {
-         this.formUpdateRegistro = this.formUpdateBuilder.group({})
+         this.formUpdateRegistro = this.formUpdateBuilder.group({
+           id: [''],
+           Descripcion: ['', [Validators.required]],
+           Valor: ['', [Validators.required]],
+           Activo: [1, [Validators.required]]  // Valor por defecto: 1 (Activo)
+         });
        }
 
 
-       modificarRegistro( registro: OthervalueModel ): void {
-         this.crearFormularioUpdate();
-
+       modificarRegistro(registro: any) {
+         this.formUpdateRegistro.patchValue({
+           id: registro.id,
+           Descripcion: registro.Descripcion,
+           Valor: registro.Valor,
+           Activo: registro.Activo  // Esto debería ser 0 o 1
+         });
          this.registroDialogUpdate = true;
          this.tipoCrud = 'U';
-
-         this.formUpdateRegistro.controls['id'].setValue(registro.id);
-         this.formUpdateRegistro.controls['Descripcion'].setValue(registro.Descripcion);
-         this.formUpdateRegistro.controls['Valor'].setValue(registro.Valor);
-         this.formUpdateRegistro.controls['Activo'].setValue(registro.Activo);
        }
 
+  // Método para manejar cambios en el checkbox de Activo
+  onCheckboxChange(event: Event) {
+    const target = event.target as HTMLInputElement;
+    const isChecked = target.checked;
+    // Asegurarse de que el valor sea 1 (true) o 0 (false)
+    this.formUpdateRegistro.patchValue({
+      Activo: isChecked ? 1 : 0
+    });
+  }
 
        crearFormularioUpdate(): void {
 

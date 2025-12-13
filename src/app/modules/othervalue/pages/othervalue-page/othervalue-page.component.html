@@ -52,7 +52,14 @@
         <p-columnFilter type="numeric" field="Valor"></p-columnFilter>
       </th>
       <th class="small-font">
-        <p-columnFilter style="text-align: center;" type="boolean" field="Activo"></p-columnFilter>
+        <p-columnFilter type="dropdown" field="Activo" [showMatchModes]="false" [showOperator]="false" [showAddButton]="false">
+          <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+            <p-dropdown [options]="estados" optionLabel="label" optionValue="value"
+                       [placeholder]="'Todos'" [showClear]="true"
+                       (onChange)="filter($event.value)" [style]="{'min-width':'100%'}">
+            </p-dropdown>
+          </ng-template>
+        </p-columnFilter>
       </th>
       <th class="small-font">
         <!-- accion -->
@@ -64,7 +71,7 @@
       <td class="small-font">{{ registro.id}}</td>
       <td class="small-font">{{ registro.Descripcion }}</td>
       <td class="small-font-number">{{ registro.Valor | currency:'USD':'symbol':'1.2-2'}}</td>
-      <td class="small-font" style="text-align: center;">{{ registro.Activo }}</td>
+      <td class="small-font" style="text-align: center;">{{ registro.Activo === 1 ? 'Activo' : 'Inactivo' }}</td>
 <!--       <td>IMPLEMENTAR BOTONES</td> -->
       <td class="small-font">
         <p-button icon="uil uil-edit-alt"
@@ -210,35 +217,52 @@
                                   </small>
                               </span>
                           </div>
-                          <div class="field col-12 md:col-4 mt-2">
-                              <span class="p-float-label">
-                                  <input
-                                    pInputText
-                                    id="Valor"
-                                    type="number"
-                                    class="inputfield w-full"
-                                    formControlName="Valor"
-                                  />
-                                  <label for="Descripcion">Valor</label>
-                                  <small class="p-error">
-                                      {{ othervalueService.getErrors(formUpdateRegistro.controls['Valor'],"Valor")}}
-                                  </small>
-                                </span>
-                          </div>
-                          <div class="field col-12 md:col-4 mt-2">
-                              <span class="p-float-label">
-                                  <input
-                                    pInputText
-                                    id="Activo"
-                                    type="number"
-                                    class="inputfield w-full"
-                                    formControlName="Activo"
-                                  />
-                                  <label for="Activo">* Activo</label>
-                                  <small class="p-error">
-                                      {{ othervalueService.getErrors(formUpdateRegistro.controls['Activo'],"Activo")}}
-                                  </small>
-                              </span>
+                          <!-- Fila para Valor y Estado -->
+                          <div class="col-12 md:col-12 p-fluid">
+                              <div class="grid">
+                                  <!-- Campo Valor -->
+                                  <div class="col-12 md:col-6">
+                                      <div class="field">
+                                          <label for="Valor" class="block mb-2">Valor</label>
+                                          <input
+                                              pInputText
+                                              id="Valor"
+                                              type="number"
+                                              class="w-full"
+                                              formControlName="Valor"
+                                          />
+                                          <small class="p-error block">
+                                              {{ othervalueService.getErrors(formUpdateRegistro.controls['Valor'],"Valor")}}
+                                          </small>
+                                      </div>
+                                  </div>
+                                  <!-- Checkbox nativo para Estado -->
+                                  <div class="col-12 md:col-6">
+                                      <div class="field">
+                                          <label class="block mb-2">* Estado</label>
+                                          <div class="flex align-items-center">
+                                              <div class="flex align-items-center">
+                                                  <div class="p-checkbox">
+                                                      <input
+                                                          type="checkbox"
+                                                          id="activo"
+                                                          [checked]="formUpdateRegistro.get('Activo')?.value === 1"
+                                                          (change)="onCheckboxChange($event)"
+                                                          class="p-checkbox-input">
+                                                      <label for="activo" class="p-checkbox-label"></label>
+                                                  </div>
+                                                  <span class="ml-2">
+                                                      {{ formUpdateRegistro.get('Activo')?.value === 1 ? 'Activo' : 'Inactivo' }}
+                                                  </span>
+                                              </div>
+                                          </div>
+                                          <small *ngIf="formUpdateRegistro.get('Activo')?.invalid && formUpdateRegistro.get('Activo')?.touched"
+                                                class="p-error block">
+                                              El estado es requerido
+                                          </small>
+                                      </div>
+                                  </div>
+                              </div>
                           </div>
           </div>
         </form>
