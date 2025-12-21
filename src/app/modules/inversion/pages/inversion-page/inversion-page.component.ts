@@ -1,304 +1,273 @@
-import { Component } from '@angular/core';
-import { MessageService } from 'primeng/api';
-import { FormGroup, FormControl, Validators, FormBuilder,ReactiveFormsModule } from '@angular/forms';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MessageService, ConfirmationService } from 'primeng/api';
+import { Table } from 'primeng/table';
 import { InversionModel } from '@core/models/inversion.model';
 import { InversionService } from '@modules/inversion/services/inversion.service';
-import { Table } from 'primeng/table';
-import { ViewChild } from '@angular/core';
-
-
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-inversion-page',
   templateUrl: './inversion-page.component.html',
   styleUrls: ['./inversion-page.component.css'],
-  providers: [MessageService]
+  providers: [MessageService, ConfirmationService]
 })
-export class InversionPageComponent {
+export class InversionPageComponent implements OnInit, OnDestroy {
+  @ViewChild('dt2') dt2!: Table;
 
-  @ViewChild('dt2')
-  dt2!: Table;
+  // Datos
+  inversiones: InversionModel[] = [];
+  inversionSeleccionada: InversionModel | null = null;
 
+  // Estados
+  cargando = false;
+  mostrarDialogo = false;
+  esNuevoRegistro = false;
 
-    loading: boolean = true;
-    catalogoRegistros: InversionModel[] = [];
+  // Formulario
+  formInversion: FormGroup;
 
-  formRegistro!: FormGroup;
-  formUpdateRegistro!: FormGroup;
-  registroDialog: boolean = false;
-  registroDialogUpdate: boolean = false;
-  tipoCrud: string = '';
+  // Opciones para selects
+  tiposInversion = [
+    { label: 'Certificado de Inversión', value: 1 },
+    { label: 'Factura Comercial', value: 2 },
+    { label: 'Papel Comercial', value: 3 },
+    { label: 'Bono del Estado', value: 4 },
+    { label: 'Obligación', value: 5 },
+    { label: 'Acciones', value: 73 },
+    { label: 'Genérico', value: 74 },
+    { label: 'Titularizacion', value: 75 }
+  ];
 
-  formControlNames: string[] = ['id', 'Tipo', 'FechaCompra','FechaVencimiento','Propietario','Empresa','TasaInteres','Rendimiento','Capital','Retencion', 'Pagado', 'Expirado','Activo'];
-  ControlValidadores: { [key: string]: any[] } = {
-    'id': [Validators.required],
-    'Tipo': [Validators.required],
-    'FechaCompra': [Validators.required],
-    'FechaVencimiento': [Validators.required],
-    'Propietario': [Validators.required],
-    'Empresa': [Validators.required],
-    'TasaInteres': [Validators.required],
-    'Rendimiento': [Validators.required],
-    'Capital': [Validators.required],
-    'Retencion': [Validators.required],
-    'Pagado': [Validators.required],
-    'Expirado': [Validators.required],
-    'Activo': [Validators.required],
-  };
+  calificacionesRiesgo = [
+    'AAA', 'AA+', 'AA', 'AA-', 'A+', 'A', 'A-',
+    'BBB+', 'BBB', 'BBB-', 'BB+', 'BB', 'BB-',
+    'B+', 'B', 'B-', 'CCC+', 'CCC', 'CCC-', 'CC', 'C', 'D'
+  ];
 
-  constructor ( public inversionService: InversionService,
+  constructor(
+    private inversionService: InversionService,
+    private fb: FormBuilder,
     private messageService: MessageService,
-    private formUpdateBuilder: FormBuilder) {this.ngOnInit();}
+    private confirmationService: ConfirmationService
+  ) {
+    this.formInversion = this.crearFormulario();
+  }
 
+  // Métodos para el diálogo de confirmación
+  accept(): void {
+    if (this.inversionSeleccionada) {
+      this.eliminarInversion(this.inversionSeleccionada);
+    }
+  }
 
+  reject(): void {
+    this.messageService.add({ severity: 'info', summary: 'Operación cancelada', detail: 'La eliminación fue cancelada', life: 3000 });
+  }
 
-    ngOnInit (): void{
-      this.obtenerRegistrosRest();
-      this.buildFormVariacion();
-      this.buildformUpdateRegistro();
+  ngOnInit(): void {
+    this.cargarInversiones();
+  }
 
-      this.loading = false;
-   }
+  ngOnDestroy(): void {
+    // Limpiar suscripciones si es necesario
+  }
 
-     onFilter(event: any): void {
-      if (event.target instanceof HTMLInputElement) {
-        const keyword = event.target.value;
-        this.dt2.filterGlobal(keyword, 'contains');
-      }
+  crearFormulario(): FormGroup {
+    return this.fb.group({
+      // Identificación
+      id: [null],
+      inv_tipo: [null, [Validators.required]],
+      inv_propietario: ['', [Validators.required, Validators.minLength(3)]],
+      inv_liquidacion: [''],
+
+      // Fechas
+      inv_fecha_compra: [null, [Validators.required]],
+      inv_fecha_emision: [null],
+      inv_fecha_vencimiento: [null],
+      inv_fecha_venta: [null],
+
+      // Información de la inversión
+      inv_emisor: ['', [Validators.required]],
+      inv_calificacion_riesgo: [null],  // Changed from [''] to [null] to properly handle the dropdown
+      inv_valor_nominal: [null],
+      inv_monto_a_negociar: [null],
+      inv_capital_invertido: [0, [Validators.required, Validators.min(0.01)]],
+      inv_precio: [null],
+
+      // Tasas y rendimientos
+      inv_tasa_interes: [0, [Validators.required, Validators.min(0)]],
+      inv_rendimiento_nominal: [0, [Validators.required, Validators.min(0)]],
+      inv_rendimiento_efectivo: [null],
+      inv_valor_efectivo: [null],
+      inv_valor_interes: [null],
+
+      // Comisiones e impuestos
+      inv_comision_bolsa: [null],
+      inv_comision_operador: [null],
+      inv_retencion: [null],
+
+      // Estados
+      inv_expirado: [false],
+      inv_pagada: [false],
+      is_active: [true],
+      is_deleted: [false]
+    });
+  }
+
+  cargarInversiones(): void {
+    this.cargando = true;
+    this.inversionService.ObtenerRegistrosInversiones$()
+      .pipe(finalize(() => this.cargando = false))
+      .subscribe({
+        next: (inversiones) => {
+          this.inversiones = inversiones;
+        },
+        error: (error) => {
+          console.error('Error al cargar las inversiones:', error);
+          this.mostrarError('Error al cargar las inversiones');
+        }
+      });
+  }
+
+  onFilter(event: Event): void {
+    const value = (event.target as HTMLInputElement).value;
+    this.dt2?.filterGlobal(value, 'contains');
+  }
+
+  abrirDialogoNuevo(): void {
+    this.esNuevoRegistro = true;
+    this.formInversion.reset({
+      is_active: true,
+      is_deleted: false,
+      inv_expirado: false,
+      inv_pagada: false
+    });
+    this.mostrarDialogo = true;
+  }
+
+  guardarInversion(): void {
+    if (this.formInversion.invalid) {
+      this.mostrarError('Por favor complete todos los campos requeridos');
+      Object.values(this.formInversion.controls).forEach(control => {
+        control.markAsTouched();
+      });
+      return;
     }
 
-   buildFormVariacion(): void {
-      this.formRegistro = new FormGroup({
-        id: new FormControl(0),
-        Tipo: new FormControl('', [Validators.required]),
-        FechaCompra: new FormControl('', [Validators.required]),
-        FechaVencimiento:  new FormControl('', [Validators.required]),
-        Propietario:  new FormControl('', [Validators.required]),
-        Empresa:  new FormControl('', [Validators.required]),
-        TasaInteres: new FormControl('', [Validators.required]),
-        Rendimiento: new FormControl('', [Validators.required]),
-        Capital: new FormControl('', [Validators.required]),
-        Retencion: new FormControl('', [Validators.required]),
-        Pagado: new FormControl('', [Validators.required]),
-        Expirado: new FormControl('', [Validators.required]),
-        Activo: new FormControl('', [Validators.required]),
-       });
+    const inversion: InversionModel = this.formInversion.getRawValue();
+    this.cargando = true;
 
-     }
+    const operacion = inversion.id
+      ? this.inversionService.ActualizarRegistrosInversiones$(inversion)
+      : this.inversionService.InsertarRegistrosInversiones$(inversion);
 
-   obtenerRegistrosRest(): void {
-      this.inversionService.ObtenerRegistrosInversiones$().subscribe(
-       (datos) => {
-         //console.log('DATOS DESDE HTTP', datos);
-         this.catalogoRegistros = datos;
-       },
-       (error) => {
-         console.error('Error al cargar los datos:', error);
-       }
-      )
-   }
-
-
-
- crearRegistro(): void {
-   this.registroDialog=true;
-   this.tipoCrud = 'C';
-
- }
-
-   guardarRegistro(): void {
-      const idRegistro = this.catalogoRegistros.length + 1;
-      const auxRegistro: InversionModel = {
-           id: idRegistro,
-           Tipo: this.formRegistro.controls['Tipo'].value,
-           FechaCompra: this.formRegistro.controls['FechaCompra'].value,
-           FechaVencimiento: this.formRegistro.controls['FechaVencimiento'].value,
-           Propietario: this.formRegistro.controls['Propietario'].value,
-           Empresa: this.formRegistro.controls['Empresa'].value,
-           TasaInteres: this.formRegistro.controls['TasaInteres'].value,
-           Rendimiento: this.formRegistro.controls['Rendimiento'].value,
-           Capital: this.formRegistro.controls['Capital'].value,
-           Retencion: this.formRegistro.controls['Retencion'].value,
-           Pagado: this.formRegistro.controls['Pagado'].value,
-           Expirado: this.formRegistro.controls['Expirado'].value,
-           Activo: this.formRegistro.controls['Activo'].value
-      }
-
-//      this.catalogoRegistros.push(auxRegistro);
-//      this.catalogoRegistros = [...this.catalogoRegistros];
-
-
-      this.inversionService.InsertarRegistrosInversiones$(auxRegistro).subscribe(
-        (datos) => {
-          console.log('DATOS DESDE HTTP - Guardar', datos);
-          this.messageService.add(
-            {
-             severity: 'success',
-             summary: 'Creación',
-             detail: 'Se ha creado el registro exitosamente',
-             id: 1
-             });
-             this.registroDialog = false;
-          this.obtenerRegistrosRest();
-          //this.catalogoRegistros = datos;
+    operacion.pipe(finalize(() => this.cargando = false))
+      .subscribe({
+        next: () => {
+          this.mostrarExito(`Inversión ${inversion.id ? 'actualizada' : 'creada'} correctamente`);
+          this.cargarInversiones();
+          this.cerrarDialogo();
         },
-        (error) => {
-          console.error('Error al cargar los datos:', error);
+        error: (error) => {
+          console.error('Error al guardar la inversión:', error);
+          this.mostrarError(`Error al ${inversion.id ? 'actualizar' : 'crear'} la inversión`);
         }
-       )
+      });
+  }
 
-     }
+  editarInversion(inversion: InversionModel): void {
+    this.inversionSeleccionada = { ...inversion };
 
+    // Asegurar que las fechas sean objetos Date válidos
+    const valoresFormulario = { ...inversion };
 
+    // Convertir fechas de string a Date si es necesario
+    if (typeof valoresFormulario.inv_fecha_compra === 'string') {
+      valoresFormulario.inv_fecha_compra = new Date(valoresFormulario.inv_fecha_compra);
+    }
+    if (valoresFormulario.inv_fecha_vencimiento && typeof valoresFormulario.inv_fecha_vencimiento === 'string') {
+      valoresFormulario.inv_fecha_vencimiento = new Date(valoresFormulario.inv_fecha_vencimiento);
+    }
+    if (valoresFormulario.inv_fecha_emision && typeof valoresFormulario.inv_fecha_emision === 'string') {
+      valoresFormulario.inv_fecha_emision = new Date(valoresFormulario.inv_fecha_emision);
+    }
+    if (valoresFormulario.inv_fecha_venta && typeof valoresFormulario.inv_fecha_venta === 'string') {
+      valoresFormulario.inv_fecha_venta = new Date(valoresFormulario.inv_fecha_venta);
+    }
 
-    public disableAction(): boolean {
-        if (
-            (this.formRegistro.invalid ||
-             this.formRegistro.untouched ||
-             this.formRegistro.dirty)
-        ) { return true; }
-         else {
-           return false;
-         }
-       }
+    this.formInversion.patchValue(valoresFormulario);
+    this.esNuevoRegistro = false;
+    this.mostrarDialogo = true;
+  }
 
+  confirmarEliminar(inversion: InversionModel): void {
+    if (!inversion.id) return;
 
-       buildformUpdateRegistro(): void {
-         this.formUpdateRegistro = this.formUpdateBuilder.group({})
-       }
+    this.inversionSeleccionada = inversion;
 
+    this.confirmationService.confirm({
+      message: '¿Está seguro de eliminar esta inversión?',
+      header: 'Confirmar eliminación',
+      icon: 'pi pi-exclamation-triangle',
+      acceptLabel: 'Sí, eliminar',
+      rejectLabel: 'Cancelar',
+      acceptButtonStyleClass: 'p-button-danger',
+      accept: () => this.accept(),
+      reject: () => this.reject()
+    });
+  }
 
-       modificarRegistro( registro: InversionModel ): void {
-         this.crearFormularioUpdate();
+  private eliminarInversion(inversion: InversionModel): void {
+    if (!inversion.id) return;
 
-         this.registroDialogUpdate = true;
-         this.tipoCrud = 'U';
-
-         this.formUpdateRegistro.controls['id'].setValue(registro.id);
-         this.formUpdateRegistro.controls['Tipo'].setValue(registro.Tipo);
-         this.formUpdateRegistro.controls['FechaCompra'].setValue(registro.FechaCompra);
-         this.formUpdateRegistro.controls['FechaVencimiento'].setValue(registro.FechaVencimiento);
-         this.formUpdateRegistro.controls['Propietario'].setValue(registro.Propietario);
-         this.formUpdateRegistro.controls['Empresa'].setValue(registro.Empresa);
-         this.formUpdateRegistro.controls['TasaInteres'].setValue(registro.TasaInteres);
-         this.formUpdateRegistro.controls['Rendimiento'].setValue(registro.Rendimiento);
-         this.formUpdateRegistro.controls['Capital'].setValue(registro.Capital);
-         this.formUpdateRegistro.controls['Retencion'].setValue(registro.Retencion);
-         this.formUpdateRegistro.controls['Pagado'].setValue(registro.Pagado);
-         this.formUpdateRegistro.controls['Expirado'].setValue(registro.Expirado);
-         this.formUpdateRegistro.controls['Activo'].setValue(registro.Activo);
-       }
-
-
-       crearFormularioUpdate(): void {
-
-         const formGroupConfig: { [key: string]: any } = {};
-         console.log('aqui toy');
-
-
-         for (const controlName of this.formControlNames) {
-           if( controlName ==='id'){
-             formGroupConfig[controlName] = [{value: null ,disabled: true},this.ControlValidadores[controlName] ];
-           }
-           else{
-             formGroupConfig[controlName] = [null, this.ControlValidadores[controlName]]
-           }
-
-         }
-
-         this.formUpdateRegistro = this.formUpdateBuilder.group(formGroupConfig);
-       /*   this.formUpdateRegistro.addControl('idRegistroHistorialModel', this.formUpdateBuilder.control({ value: 0, disabled: true }, Validators.required ));
-         this.formUpdateRegistro.addControl('nombre', this.formUpdateBuilder.control('', Validators.required));
-         this.formUpdateRegistro.addControl('descripcion', this.formUpdateBuilder.control(''));
-         this.formUpdateRegistro.addControl('fabricante', this.formUpdateBuilder.control(''));
-         this.formUpdateRegistro.addControl('anio', this.formUpdateBuilder.control(0, Validators.required));
-         this.formUpdateRegistro.addControl('precio', this.formUpdateBuilder.control(0, Validators.required));
-         this.formUpdateRegistro.addControl('tipo', this.formUpdateBuilder.control([], Validators.required));
-         this.formUpdateRegistro.addControl('plataformas', this.formUpdateBuilder.control([], Validators.required)); */
-
-
-       }
-
-       ngAfterViewInit(): void {
-         this.formRegistro.valueChanges.subscribe(value => console.log('Valor actualizado:', value));
-       }
-
-
-       actualizarRegistro(): void {
-        const auxRegistro: InversionModel = {
-             id: this.formUpdateRegistro.controls['id'].value,
-             Tipo: this.formUpdateRegistro.controls['Tipo'].value,
-             FechaCompra: this.formUpdateRegistro.controls['FechaCompra'].value,
-             FechaVencimiento: this.formUpdateRegistro.controls['FechaVencimiento'].value,
-             Propietario: this.formUpdateRegistro.controls['Propietario'].value,
-             Empresa: this.formUpdateRegistro.controls['Empresa'].value,
-             TasaInteres: this.formUpdateRegistro.controls['TasaInteres'].value,
-             Rendimiento: this.formUpdateRegistro.controls['Rendimiento'].value,
-             Capital: this.formUpdateRegistro.controls['Capital'].value,
-             Retencion: this.formUpdateRegistro.controls['Retencion'].value,
-             Pagado: this.formUpdateRegistro.controls['Pagado'].value,
-             Expirado: this.formUpdateRegistro.controls['Expirado'].value,
-             Activo: this.formUpdateRegistro.controls['Activo'].value
+    this.cargando = true;
+    this.inversionService.EliminarRegistrosInversiones$(inversion)
+      .pipe(finalize(() => this.cargando = false))
+      .subscribe({
+        next: () => {
+          this.mostrarExito('Inversión eliminada correctamente');
+          this.cargarInversiones();
+        },
+        error: (error) => {
+          console.error('Error al eliminar la inversión:', error);
+          this.mostrarError('Error al eliminar la inversión');
         }
+      });
+  }
 
-        //this.catalogoRegistros.push(auxRegistro);
-        //this.catalogoRegistros = [...this.catalogoRegistros];
+  private mostrarExito(mensaje: string): void {
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Éxito',
+      detail: mensaje,
+      life: 3000
+    });
+  }
 
+  private mostrarError(mensaje: string): void {
+    this.messageService.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: mensaje,
+      life: 5000
+    });
+  }
 
+  cerrarDialogo(): void {
+    this.mostrarDialogo = false;
+    this.formInversion.reset({
+      inv_tasa_interes: 0,
+      inv_rendimiento_nominal: 0,
+      inv_capital_invertido: 0,
+      is_active: true,
+      is_deleted: false
+    });
+    this.inversionSeleccionada = null;
+  }
 
-
-        this.inversionService.ActualizarRegistrosInversiones$(auxRegistro).subscribe(
-          (datos) => {
-            console.log('DATOS DESDE HTTP - Actualizar', datos);
-            //this.catalogoRegistros = datos;
-            this.messageService.add(
-              {
-               severity: 'success',
-               summary: 'Creación',
-               detail: 'Se ha actualizado el registro exitosamente',
-               id: 1
-               });
-               this.obtenerRegistrosRest();
-               this.registroDialog = false;
-          },
-          (error) => {
-            console.error('Error al cargar los datos:', error);
-          }
-         )
-        }
-
-
-        eliminarRegistro( registro: InversionModel): void {
-          console.log(registro)
-
-          this.inversionService.EliminarRegistrosInversiones$(registro).subscribe(
-           (datos) => {
-             console.log('DATOS DESDE HTTP - Eliminar', datos);
-             //this.catalogoRegistros = datos;
-
-
-             this.messageService.add(
-              {
-               severity: 'success',
-               summary: 'Creación',
-               detail: 'Se ha eliminado el registro exitosamente',
-               id: 1
-               });
-               this.obtenerRegistrosRest();
-               this.registroDialog = false;
-
-
-
-           },
-           (error) => {
-             console.error('Error al cargar los datos:', error);
-           }
-          )
-
-
-        }
-
-
-
- }
-
+  obtenerNombreTipo(tipoId: number): string {
+    const tipo = this.tiposInversion.find(t => t.value === tipoId);
+    return tipo ? tipo.label : 'Desconocido';
+  }
+}

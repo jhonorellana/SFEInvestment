@@ -1,630 +1,444 @@
 <p-toast></p-toast>
-
+<p-confirmDialog [style]="{width: '450px'}" [baseZIndex]="10000" [closeOnEscape]="true" [dismissableMask]="true">
+  <ng-template pTemplate="footer" let-message>
+    <button pButton pRipple icon="pi pi-times" label="No" class="p-button-text" (click)="reject()"></button>
+    <button pButton pRipple icon="pi pi-check" label="Sí" class="p-button-danger" (click)="accept()"></button>
+  </ng-template>
+</p-confirmDialog>
 
 <p-toolbar styleClass="mb-4 gap-2">
   <ng-template pTemplate="left">
-      <div class="flex">
-        <span class="p-input-icon-left ml-auto">
-          <i class="pi pi-search"></i>
-          <input pInputText type="text" (input)="onFilter($event)" placeholder="Palabra de busqueda" />
-        </span>
-      </div>
+    <h2>Gestión de Inversiones</h2>
   </ng-template>
   <ng-template pTemplate="right">
-      <button pButton pRipple label="Nuevo" icon="pi pi-plus" class="p-button-success mr-2" (click)="crearRegistro()"></button>
+    <span class="p-input-icon-left">
+      <i class="pi pi-search"></i>
+      <input pInputText type="text" (input)="onFilter($event)" placeholder="Buscar inversiones..." class="p-inputtext-sm" />
+    </span>
+    <button pButton pRipple
+            label="Nueva Inversión"
+            icon="pi pi-plus"
+            class="p-button-success ml-2"
+            (click)="abrirDialogoNuevo()">
+    </button>
   </ng-template>
 </p-toolbar>
 
-
-
-<!--p-table [styleClass]="{ 'p-datatable-sm' 'p-datatable-gridlines" } -->
-<p-table
-         #dt2
-         [styleClass]="'p-datatable-sm'"
-         [value]="catalogoRegistros"
-         [tableStyle]="{ 'min-width': '0.5rem'}"
+<p-table #dt2
+         [value]="inversiones"
          [paginator]="true"
-         [rows]="100"
+         [rows]="10"
          [showCurrentPageReport]="true"
-         currentPageReportTemplate="Mostrando del {first} al {last} de un total de {totalRecords} registros"
-         [rowsPerPageOptions]="[5, 10, 20, 30, 100]"
+         currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
+         [rowsPerPageOptions]="[10, 25, 50, 100]"
          dataKey="id"
-         [loading]="loading"
-         [globalFilterFields]="['FechaCompra','FechaVencimiento','Propietario', 'Empresa']"
-         >
+         [loading]="cargando"
+         [globalFilterFields]="['inv_propietario', 'inv_emisor', 'inv_tipo', 'inv_calificacion_riesgo']"
+         [scrollable]="true"
+         scrollHeight="flex"
+         [scrollDirection]="'both'"
+         styleClass="p-datatable-gridlines p-datatable-striped">
   <ng-template pTemplate="header">
-    <tr >
-      <!--th>id</th-->
-      <th class="small-font">Tipo</th>
-      <th class="small-font" pSortableColumn="FechaCompra">Compra <p-sortIcon field="FechaCompra"></p-sortIcon></th>
-      <th class="small-font" pSortableColumn="FechaVencimiento">Vencimiento<p-sortIcon field="FechaVencimiento"></p-sortIcon></th>
-      <th class="small-font" pSortableColumn="Propietario">Propietario<p-sortIcon field="Propietario"></p-sortIcon></th>
-      <th class="small-font" pSortableColumn="Empresa">Empresa<p-sortIcon field="Empresa"></p-sortIcon></th>
-      <th class="small-font-number">Interes</th>
-      <th class="small-font-number">Rend.</th>
-      <th class="small-font-number">Capital</th>
-      <th class="small-font-number">Ven.</th>
-      <th class="small-font-number">Exp.</th>
-      <th class="small-font-number">Act.</th>
-      <th class="small-font">Acción</th>
-    </tr>
     <tr>
-      <th class="small-font" >
-        <!--tipo -->
+      <th pSortableColumn="inv_tipo" style="width: 120px">Tipo <p-sortIcon field="inv_tipo"></p-sortIcon>
+        <p-columnFilter type="dropdown" [showMatchModes]="false" [showOperator]="false" field="inv_tipo" [showAddButton]="false">
+          <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+            <p-dropdown [options]="tiposInversion"
+                      [ngModel]="value"
+                      (onChange)="filter($event.value)"
+                      optionLabel="label"
+                      optionValue="value"
+                      placeholder="Todos"
+                      [showClear]="true">
+            </p-dropdown>
+          </ng-template>
+        </p-columnFilter>
       </th>
-      <th class="small-font" style="width:180px">
-        <p-columnFilter type="text" field="FechaCompra"></p-columnFilter>
+      <th pSortableColumn="inv_fecha_compra" style="width: 120px">Compra <p-sortIcon field="inv_fecha_compra"></p-sortIcon></th>
+      <th pSortableColumn="inv_fecha_vencimiento" style="width: 120px">Vencimiento <p-sortIcon field="inv_fecha_vencimiento"></p-sortIcon></th>
+      <th pSortableColumn="inv_propietario" style="min-width: 150px">Propietario <p-sortIcon field="inv_propietario"></p-sortIcon>
+        <p-columnFilter type="contains" field="inv_propietario"></p-columnFilter>
       </th>
-      <th class="small-font" style="width:180px">
-        <p-columnFilter type="text" field="FechaVencimiento"></p-columnFilter>
+      <th pSortableColumn="inv_emisor" style="min-width: 150px">Emisor <p-sortIcon field="inv_emisor"></p-sortIcon>
+        <p-columnFilter type="contains" field="inv_emisor"></p-columnFilter>
       </th>
-      <th class="small-font" style="width:180px">
-        <p-columnFilter type="text" field="Propietario"></p-columnFilter>
-      </th>
-      <th class="small-font">
-        <p-columnFilter type="text" field="Empresa"></p-columnFilter>
-      </th>
-      <th class="small-font-number">
-        <!--<p-columnFilter type="numeric" field="Interes"></p-columnFilter>-->
-      </th>
-      <th class="small-font-number">
-        <!--rendim -->
-      </th>
-      <th class="small-font-number">
-        <!--capital -->
-      </th>
-      <th class="small-font-number">
-        <!--Vencido -->
-      </th>
-      <th class="small-font-number">
-        <!--expirado -->
-      </th>
-      <th class="small-font-number">
-        <p-columnFilter type="boolean" field="Activo"></p-columnFilter>
-      </th>
-      <th class="small-font">
-        <!--accion -->
-      </th>
-
+      <th style="width: 100px; text-align: right" pSortableColumn="inv_tasa_interes">Tasa % <p-sortIcon field="inv_tasa_interes"></p-sortIcon></th>
+      <th style="width: 120px; text-align: right" pSortableColumn="inv_capital_invertido">Inversión <p-sortIcon field="inv_capital_invertido"></p-sortIcon></th>
+      <th style="width: 80px; text-align: center">Estado</th>
+      <th style="width: 140px; text-align: center">Acciones</th>
     </tr>
-
   </ng-template>
-  <ng-template pTemplate="body" let-registro>
-    <tr class="fondoverde">
-      <!--td>{{ registro.id}}</td -->
-      <td class="small-font">{{ registro.Tipo }}</td>
-      <td class="small-font">{{ registro.FechaCompra }}</td>
-      <td class="small-font">{{ registro.FechaVencimiento }}</td>
-      <td class="small-font">{{ registro.Propietario }}</td>
-      <td class="small-font">{{ registro.Empresa }}</td>
-      <td class="small-font-number">{{ registro.TasaInteres/100 | percent:'1.2-2'}}</td>
-      <td class="small-font-number">{{ registro.Rendimiento/100 | percent:'1.2-2' }}</td>
-      <td class="small-font-number">{{ registro.Capital | currency:'USD':'symbol':'1.2-2'}}</td>
-      <!--td style="text-align: right;">{{ registro.Retencion | currency:'USD':'symbol':'1.2-2'}}</td-->
-      <td class="small-font-number">{{ registro.Pagado }}</td>
-      <td class="small-font-number">{{ registro.Expirado }}</td>
-      <td class="small-font-number">{{ registro.Activo }}</td>
-<!--       <td>IMPLEMENTAR BOTONES</td> -->
-      <td class="small-font">
-        <p-button icon="uil uil-edit-alt"
-                  styleClass="small-button p-button-raised mr-2"
-                  [rounded]="true"
-                  [outlined]="true"
-                  severity="warning"
-                  [outlined]="false"
+
+  <ng-template pTemplate="body" let-inversion>
+    <tr [ngClass]="{'fila-vencida': inversion.inv_expirado}">
+      <td>
+        <span [class]="'inversion-badge tipo-' + (inversion.inv_tipo || 1)">
+          {{ obtenerNombreTipo(inversion.inv_tipo) }}
+        </span>
+      </td>
+      <td>{{ inversion.inv_fecha_compra | date:'dd/MM/yyyy' }}</td>
+      <td [ngClass]="{'text-red-500 font-bold': inversion.inv_expirado}">
+        {{ inversion.inv_fecha_vencimiento | date:'dd/MM/yyyy' }}
+      </td>
+      <td>{{ inversion.inv_propietario }}</td>
+      <td>
+        <div class="font-medium">{{ inversion.inv_emisor }}</div>
+        <div class="text-500 text-xs">{{ inversion.inv_calificacion_riesgo || 'Sin calificación' }}</div>
+      </td>
+      <td class="text-right">
+        <div class="font-bold">{{ inversion.inv_tasa_interes | number:'1.2-2' }}%</div>
+        <div class="text-500 text-xs">
+          {{ (inversion.inv_rendimiento_nominal || 0) | number:'1.2-2' }}% nom.
+        </div>
+      </td>
+      <td class="text-right">
+        <div class="font-bold">{{ inversion.inv_capital_invertido | currency:'USD':'symbol':'1.2-2' }}</div>
+        <div class="text-500 text-xs">
+          {{ (inversion.inv_valor_efectivo || 0) | currency:'USD':'symbol':'1.2-2' }}
+        </div>
+      </td>
+      <td class="text-center">
+        <div class="flex flex-column align-items-center">
+          <p-tag [severity]="inversion.inv_expirado ? 'danger' : (inversion.inv_pagada ? 'success' : 'info')"
+                 [value]="inversion.inv_expirado ? 'Vencida' : (inversion.inv_pagada ? 'Pagada' : 'Activa')"
+                 styleClass="mb-1">
+          </p-tag>
+          <p-tag [severity]="inversion.is_active ? 'success' : 'danger'"
+                 [value]="inversion.is_active ? 'Activo' : 'Inactivo'"
+                 styleClass="text-xs">
+          </p-tag>
+        </div>
+      </td>
+      <td class="text-center">
+        <div class="flex justify-content-center">
+          <button pButton pRipple
+                  icon="pi pi-pencil"
+                  class="p-button-rounded p-button-text p-button-sm p-button-info mr-1"
                   pTooltip="Editar"
-                  tooltipPosition="bottom"
-                  (click)="modificarRegistro(registro)"
-                  size="small"
-                  >
-        </p-button>
-        <p-button icon="uil uil-trash-alt"
-                  styleClass="small-button"
-                  [rounded]="true"
-                  [outlined]="true"
-                  severity="danger"
-                  [outlined]="false"
+                  tooltipPosition="top"
+                  (click)="editarInversion(inversion)">
+          </button>
+          <button pButton pRipple
+                  icon="pi pi-trash"
+                  class="p-button-rounded p-button-text p-button-sm p-button-danger"
                   pTooltip="Eliminar"
-                  tooltipPosition="bottom"
-                  (click)="eliminarRegistro(registro)"
-                  size="small"
-                  >
-        </p-button>
+                  (click)="confirmarEliminar(inversion)">
+          </button>
+        </div>
       </td>
     </tr>
   </ng-template>
+
   <ng-template pTemplate="emptymessage">
     <tr>
-        <td colspan="5">No se encontraron inversiones.</td>
+      <td colspan="9" class="text-center">No se encontraron inversiones.</td>
     </tr>
   </ng-template>
 </p-table>
 
+<!-- Diálogo para crear/editar inversión -->
+<p-dialog [(visible)]="mostrarDialogo"
+          [style]="{ width: '800px', 'min-height': '850px' }"
+          [contentStyle]="{ 'max-height': '80vh', 'overflow': 'auto' }"
+          [modal]="true"
+          [closable]="false"
+          [header]="esNuevoRegistro ? 'Nueva Inversión' : 'Editar Inversión'"
+          [styleClass]="'inversion-dialog'">
 
-<p-dialog
-  [(visible)]="registroDialog"
-  [style]="{ width: '750px' }"
-  header="Datos de la nueva inversión (* campos obligatorios)"
-  [modal]="true">
-    <ng-template pTemplate="content">
-        <form [formGroup]="formRegistro">
-            <br/>
-            <div class="formgrid grid">
-
-                          <div class="field col-12 md:col-12 mt-2">
-                            <span class="p-float-label">
-                                <input
-                                  pInputText
-                                  id="Empresa"
-                                  type="text"
-                                  class="inputfield w-full"
-                                  formControlName="Empresa"
-                                  required
-                                  autofocus
-                                />
-                                <label for="Empresa">* Empresa</label>
-                                <small *ngIf="formRegistro.get('Empresa')!.hasError('required')" class="p-error">
-                                     La Empresa es obligatoria.
-                                </small>
-                            </span>
-                        </div>
-
-                        <div class="field col-12 md:col-4 mt-2">
-                              <span class="p-float-label">
-                                  <input
-                                      pInputText
-                                      id="FechaCompra"
-                                      type="text"
-                                      class="inputfield w-full"
-                                      formControlName="FechaCompra"
-                                      required
-                                  />
-                                  <label for="FechaCompra">* FechaCompra</label>
-                                  <small *ngIf="formRegistro.get('FechaCompra')!.hasError('required')" class="p-error">
-                                      La FechaCompra es obligatoria.
-                                  </small>
-                              </span>
-                          </div>
-                        <div class="field col-12 md:col-4 mt-2">
-                              <span class="p-float-label">
-                                  <input
-                                    pInputText
-                                    id="FechaVencimiento"
-                                    type="text"
-                                    class="inputfield w-full"
-                                    formControlName="FechaVencimiento"
-                                  />
-                                  <label for="FechaCompra">* FechaVencimiento</label>
-                                  <small class="p-error">
-                                      {{ inversionService.getErrors(formRegistro.controls['FechaVencimiento'],"FechaVencimiento")}}
-                                  </small>
-                                </span>
-                          </div>
-                          <div class="field col-12 md:col-4 mt-2">
-                              <span class="p-float-label">
-                                  <input
-                                    pInputText
-                                    id="Propietario"
-                                    type="text"
-                                    class="inputfield w-full"
-                                    formControlName="Propietario"
-                                  />
-                                  <label for="Propietario">* Propietario</label>
-                                  <small class="p-error">
-                                      {{ inversionService.getErrors(formRegistro.controls['Propietario'],"Propietario")}}
-                                  </small>
-                              </span>
-                          </div>
-                          <div class="field col-12 md:col-4 mt-2">
-                            <span class="p-float-label">
-                                <input
-                                    pInputText
-                                    id="Tipo"
-                                    type="text"
-                                    class="inputfield w-full"
-                                    formControlName="Tipo"
-                                    required
-                                />
-                                <label for="Tipo">* Tipo</label>
-                                <small *ngIf="formRegistro.get('Tipo')!.hasError('required')" class="p-error">
-                                    El tipo es obligatorio.
-                                </small>
-                            </span>
-                        </div>
-                          <div class="field col-12 md:col-4 mt-2">
-                              <span class="p-float-label">
-                                <input
-                                  pInputText
-                                  id="TasaInteres"
-                                  type="number"
-                                  class="inputfield w-full"
-                                  formControlName="TasaInteres"
-                                />
-                                <label for="TasaInteres">* TasaInteres</label>
-                                <small class="p-error">
-                                  {{ inversionService.getErrors(formRegistro.controls['TasaInteres'],"TasaInteres")}}
-                                </small>
-                              </span>
-                          </div>
-                          <div class="field col-12 md:col-4 mt-2">
-                            <span class="p-float-label">
-                              <input
-                                pInputText
-                                id="Rendimiento"
-                                type="number"
-                                class="inputfield w-full"
-                                formControlName="Rendimiento"
-                              />
-                              <label for="Rendimiento">* Rendimiento</label>
-                              <small class="p-error">
-                                {{ inversionService.getErrors(formRegistro.controls['Rendimiento'],"Rendimiento")}}
-                              </small>
-                            </span>
-                        </div>
-                        <div class="field col-12 md:col-4 mt-2">
-                          <span class="p-float-label">
-                            <input
-                              pInputText
-                              id="Capital"
-                              type="number"
-                              class="inputfield w-full"
-                              formControlName="Capital"
-                            />
-                            <label for="Capital">* Capital</label>
-                            <small class="p-error">
-                              {{ inversionService.getErrors(formRegistro.controls['Capital'],"Capital")}}
-                            </small>
-                          </span>
-                      </div>
-                      <div class="field col-12 md:col-4 mt-2">
-                        <span class="p-float-label">
-                          <input
-                            pInputText
-                            id="Retencion"
-                            type="number"
-                            class="inputfield w-full"
-                            formControlName="Retencion"
-                          />
-                          <label for="Retencion">* Retencion</label>
-                          <small class="p-error">
-                            {{ inversionService.getErrors(formRegistro.controls['Retencion'],"Retencion")}}
-                          </small>
-                        </span>
-                    </div>
-
-                    <div class="field col-12 md:col-4 mt-2">
-                      <span class="p-float-label">
-                        <input
-                          pInputText
-                          id="Pagado"
-                          type="number"
-                          class="inputfield w-full"
-                          formControlName="Pagado"
-                        />
-                        <label for="Pagado">* Pagado</label>
-                        <small class="p-error">
-                          {{ inversionService.getErrors(formRegistro.controls['Pagado'],"Pagado")}}
-                        </small>
-                      </span>
-                  </div>
-
-                  <div class="field col-12 md:col-4 mt-2">
-                    <span class="p-float-label">
-                      <input
-                        pInputText
-                        id="Expirado"
-                        type="number"
-                        class="inputfield w-full"
-                        formControlName="Expirado"
-                      />
-                      <label for="Expirado">* Expirado</label>
-                      <small class="p-error">
-                        {{ inversionService.getErrors(formRegistro.controls['Expirado'],"Expirado")}}
-                      </small>
-                    </span>
-                </div>
-
-                <div class="field col-12 md:col-4 mt-2">
-                  <span class="p-float-label">
-                    <input
-                      pInputText
-                      id="Activo"
-                      type="number"
-                      class="inputfield w-full"
-                      formControlName="Activo"
-                    />
-                    <label for="Activo">* Activo</label>
-                    <small class="p-error">
-                      {{ inversionService.getErrors(formRegistro.controls['Activo'],"Activo")}}
-                    </small>
-                  </span>
-              </div>
-
-
-           </div>
-        </form>
-    </ng-template>
-    <ng-template pTemplate="footer">
-        <button
-          pButton
-          pRipple
-          label="Guardar"
-          icon="pi pi-check"
-          class="p-button-text"
-          (click)="guardarRegistro()"
-          [disabled]="formRegistro.invalid"
-          >
-        </button>
-      </ng-template>
-</p-dialog>
-
-
-<!-- UPDATE -->
-<p-dialog
-  [(visible)]="registroDialogUpdate"
-  [style]="{ width: '750px' }"
-  header="Actualización de la inversión (* campos obligatorios)"
-  [modal]="false">
-    <ng-template pTemplate="content">
-        <form [formGroup]="formUpdateRegistro">
-            <br/>
-            <div class="formgrid grid">
-                            <div class="field col-12 md:col-2 mt-2">
-                                <span class="p-float-label">
-                                    <input
-                                        pInputText
-                                        id="id"
-                                        type="text"
-                                        class="inputfield w-full"
-                                        formControlName="id"
-                                    />
-                                    <label for="id">Id registro</label>
-                                </span>
-                            </div>
-
-                            <div class="field col-12 md:col-10 mt-2">
-                              <span class="p-float-label">
-                                  <input
-                                    pInputText
-                                    id="Empresa"
-                                    type="text"
-                                    class="inputfield w-full"
-                                    formControlName="Empresa"
-                                    required
-                                    autofocus
-                                  />
-                                  <label for="Empresa">* Empresa</label>
-                                  <small class="p-error">
-                                      {{ inversionService.getErrors(formUpdateRegistro.controls['Empresa'],"Empresa")}}
-                                  </small>
-                              </span>
-                          </div>
-
-                          <div class="field col-12 md:col-4 mt-2">
-                            <span class="p-float-label">
-                                <input
-                                    pInputText
-                                    id="Tipo"
-                                    type="text"
-                                    class="inputfield w-full"
-                                    formControlName="Tipo"
-                                    required
-                                />
-                                <label for="Tipo">* Tipo</label>
-                                <small *ngIf="formUpdateRegistro.get('Tipo')!.hasError('required')" class="p-error">
-                                    La Tipo es obligatoria.
-                                </small>
-                            </span>
-                        </div>
-
-                          <div class="field col-12 md:col-4 mt-2">
-                              <span class="p-float-label">
-                                  <input
-                                      pInputText
-                                      id="FechaCompra"
-                                      type="text"
-                                      class="inputfield w-full"
-                                      formControlName="FechaCompra"
-                                      required
-                                  />
-                                  <label for="FechaCompra">* FechaCompra</label>
-                                  <small *ngIf="formUpdateRegistro.get('FechaCompra')!.hasError('required')" class="p-error">
-                                      La FechaCompra es obligatoria.
-                                  </small>
-                              </span>
-                          </div>
-
-                          <div class="field col-12 md:col-4 mt-2">
-                              <span class="p-float-label">
-                                  <input
-                                    pInputText
-                                    id="FechaVencimiento"
-                                    type="text"
-                                    class="inputfield w-full"
-                                    formControlName="FechaVencimiento"
-                                  />
-                                  <label for="FechaCompra">FechaVencimiento</label>
-                                  <small class="p-error">
-                                      {{ inversionService.getErrors(formUpdateRegistro.controls['FechaVencimiento'],"FechaVencimiento")}}
-                                  </small>
-                                </span>
-                          </div>
-                          <div class="field col-12 md:col-4 mt-2">
-                              <span class="p-float-label">
-                                  <input
-                                    pInputText
-                                    id="Propietario"
-                                    type="text"
-                                    class="inputfield w-full"
-                                    formControlName="Propietario"
-                                  />
-                                  <label for="Propietario">* Propietario</label>
-                                  <small class="p-error">
-                                      {{ inversionService.getErrors(formUpdateRegistro.controls['Propietario'],"Propietario")}}
-                                  </small>
-                              </span>
-                          </div>
-                          <div class="field col-12 md:col-4 mt-2">
-                              <span class="p-float-label">
-                                <input
-                                  pInputText
-                                  id="TasaInteres"
-                                  type="number"
-                                  class="inputfield w-full"
-                                  formControlName="TasaInteres"
-                                />
-                                <label for="TasaInteres">TasaInteres</label>
-                                <small class="p-error">
-                                  {{ inversionService.getErrors(formUpdateRegistro.controls['TasaInteres'],"TasaInteres")}}
-                                </small>
-                              </span>
-                          </div>
-                          <div class="field col-12 md:col-4 mt-2">
-                            <span class="p-float-label">
-                              <input
-                                pInputText
-                                id="Rendimiento"
-                                type="text"
-                                class="inputfield w-full"
-                                formControlName="Rendimiento"
-                              />
-                              <label for="Rendimiento">Rendimiento</label>
-                              <small class="p-error">
-                                {{ inversionService.getErrors(formUpdateRegistro.controls['Rendimiento'],"Rendimiento")}}
-                              </small>
-                            </span>
-                        </div>
-                        <div class="field col-12 md:col-4 mt-2">
-                          <span class="p-float-label">
-                            <input
-                              pInputText
-                              id="Capital"
-                              type="text"
-                              class="inputfield w-full"
-                              formControlName="Capital"
-                            />
-                            <label for="Capital">Capital</label>
-                            <small class="p-error">
-                              {{ inversionService.getErrors(formUpdateRegistro.controls['Capital'],"Capital")}}
-                            </small>
-                          </span>
-                      </div>
-                      <div class="field col-12 md:col-4 mt-2">
-                        <span class="p-float-label">
-                          <input
-                            pInputText
-                            id="Retencion"
-                            type="text"
-                            class="inputfield w-full"
-                            formControlName="Retencion"
-                          />
-                          <label for="Retencion">Retencion</label>
-                          <small class="p-error">
-                            {{ inversionService.getErrors(formUpdateRegistro.controls['Retencion'],"Retencion")}}
-                          </small>
-                        </span>
-                    </div>
-
-                    <div class="field col-12 md:col-4 mt-2">
-                      <span class="p-float-label">
-                          <input
-                              pInputText
-                              id="Pagado"
-                              type="text"
-                              class="inputfield w-full"
-                              formControlName="Pagado"
-                              required
-                          />
-                          <label for="Pagado">* Pagado</label>
-                          <small *ngIf="formUpdateRegistro.get('Pagado')!.hasError('required')" class="p-error">
-                              La Pagado es obligatoria.
-                          </small>
-                      </span>
-                  </div>
-
-                  <div class="field col-12 md:col-4 mt-2">
-                    <span class="p-float-label">
-                        <input
-                            pInputText
-                            id="Expirado"
-                            type="text"
-                            class="inputfield w-full"
-                            formControlName="Expirado"
-                            required
-                        />
-                        <label for="Expirado">* Expirado</label>
-                        <small *ngIf="formUpdateRegistro.get('Expirado')!.hasError('required')" class="p-error">
-                            La Expirado es obligatoria.
-                        </small>
-                    </span>
-                </div>
-
-                <div class="field col-12 md:col-4 mt-2">
-                  <span class="p-float-label">
-                      <input
-                          pInputText
-                          id="Activo"
-                          type="text"
-                          class="inputfield w-full"
-                          formControlName="Activo"
-                          required
-                      />
-                      <label for="Activo">* Activo</label>
-                      <small *ngIf="formUpdateRegistro.get('Activo')!.hasError('required')" class="p-error">
-                          La Activo es obligatoria.
-                      </small>
-                  </span>
-              </div>
-
-
-          </div>
-        </form>
-    </ng-template>
-    <ng-template pTemplate="footer">
-        <button
-          pButton
-          pRipple
-          label="Guardar"
-          icon="pi pi-check"
-          class="p-button-text"
-          (click)="actualizarRegistro()"
-          [disabled]="formUpdateRegistro.invalid">
-        </button>
-    </ng-template>
-</p-dialog>
-
-
-
-
-<!--p-dialog
-  [(visible)]="registroDialogUpdate"
-  [style]="{ width: '750px' }"
-  header="Datos del juego (* campos obligatorios)"
-  [modal]="true">
-    <ng-template pTemplate="content">
-        <form [FormGroup]="formUpdateRegistro">
-            <br/>
-            <div class="formgrid grid">
-                <div *ngFor="let controlName of formControlNames">
-                    <div class="field col-12 md:col-6 mt-2">
-                        <span class="p-float-label">
-                            <input pInputText [formControlName]="controlName" />
-                            <label>{{ controlName | titlecase }}</label>
-                        </span>
-                    </div>
-                </div>
+  <form [formGroup]="formInversion" (ngSubmit)="guardarInversion()">
+    <p-tabView>
+      <!-- Pestaña de Información Básica -->
+      <p-tabPanel header="Información Básica">
+        <div class="grid p-fluid">
+          <div class="col-12 md:col-6">
+            <div class="field">
+              <label for="inv_tipo">Tipo de Inversión *</label>
+              <p-dropdown id="inv_tipo"
+                         [options]="tiposInversion"
+                         formControlName="inv_tipo"
+                         optionLabel="label"
+                         optionValue="value"
+                         [showClear]="true"
+                         placeholder="Seleccione un tipo">
+              </p-dropdown>
+              <small class="p-error" *ngIf="formInversion.get('inv_tipo')?.invalid && formInversion.get('inv_tipo')?.touched">
+                El tipo de inversión es requerido
+              </small>
             </div>
-        </form>
-    </ng-template>
-    <ng-template pTemplate="footer">
-        <button
-          pButton
-          pRipple
-          label="Guardar"
-          icon="pi pi-check"
-          class="p-button-text"
-          (click)="guardarRegistro()"
-          [disabled]="formUpdateRegistro.invalid">
-        </button>
-    </ng-template>
-</p-dialog -->
+
+            <div class="field">
+              <label for="inv_propietario">Propietario *</label>
+              <input id="inv_propietario"
+                     type="text"
+                     pInputText
+                     formControlName="inv_propietario"
+                     placeholder="Nombre del propietario">
+              <small class="p-error" *ngIf="formInversion.get('inv_propietario')?.invalid && formInversion.get('inv_propietario')?.touched">
+                El propietario es requerido (mínimo 3 caracteres)
+              </small>
+            </div>
+
+            <div class="field">
+              <label for="inv_emisor">Emisor *</label>
+              <input id="inv_emisor"
+                     type="text"
+                     pInputText
+                     formControlName="inv_emisor"
+                     placeholder="Nombre del emisor">
+              <small class="p-error" *ngIf="formInversion.get('inv_emisor')?.invalid && formInversion.get('inv_emisor')?.touched">
+                El emisor es requerido
+              </small>
+            </div>
+
+            <div class="field">
+              <label for="inv_calificacion_riesgo">Calificación de Riesgo</label>
+              <p-dropdown id="inv_calificacion_riesgo"
+                         [options]="calificacionesRiesgo"
+                         formControlName="inv_calificacion_riesgo"
+                         [showClear]="true"
+                         placeholder="Seleccione calificación">
+              </p-dropdown>
+            </div>
+          </div>
+
+          <div class="col-12 md:col-6">
+            <div class="field">
+              <label for="inv_fecha_compra">Fecha de Compra *</label>
+              <p-calendar id="inv_fecha_compra"
+                         formControlName="inv_fecha_compra"
+                         [showIcon]="true"
+                         dateFormat="dd/mm/yy"
+                         [showButtonBar]="true">
+              </p-calendar>
+              <small class="p-error" *ngIf="formInversion.get('inv_fecha_compra')?.invalid && formInversion.get('inv_fecha_compra')?.touched">
+                La fecha de compra es requerida
+              </small>
+            </div>
+
+            <div class="field">
+              <label for="inv_fecha_emision">Fecha de Emisión</label>
+              <p-calendar id="inv_fecha_emision"
+                         formControlName="inv_fecha_emision"
+                         [showIcon]="true"
+                         dateFormat="dd/mm/yy"
+                         [showButtonBar]="true">
+              </p-calendar>
+            </div>
+
+            <div class="field">
+              <label for="inv_fecha_vencimiento">Fecha de Vencimiento</label>
+              <p-calendar id="inv_fecha_vencimiento"
+                         formControlName="inv_fecha_vencimiento"
+                         [showIcon]="true"
+                         dateFormat="dd/mm/yy"
+                         [showButtonBar]="true">
+              </p-calendar>
+            </div>
+
+            <div class="field">
+              <label for="inv_liquidacion">Liquidación</label>
+              <input id="inv_liquidacion"
+                     type="text"
+                     pInputText
+                     formControlName="inv_liquidacion"
+                     placeholder="Número de liquidación">
+            </div>
+          </div>
+        </div>
+      </p-tabPanel>
+
+      <!-- Pestaña de Valores y Tasas -->
+      <p-tabPanel header="Valores y Tasas">
+        <div class="grid p-fluid">
+          <div class="col-12 md:col-6">
+            <div class="field">
+              <label for="inv_capital_invertido">Capital Invertido *</label>
+              <p-inputNumber id="inv_capital_invertido"
+                           mode="currency"
+                           currency="USD"
+                           locale="en-US"
+                           formControlName="inv_capital_invertido"
+                           placeholder="0.00">
+              </p-inputNumber>
+              <small class="p-error" *ngIf="formInversion.get('inv_capital_invertido')?.invalid && formInversion.get('inv_capital_invertido')?.touched">
+                El capital invertido es requerido
+              </small>
+            </div>
+
+            <div class="field">
+              <label for="inv_tasa_interes">Tasa de Interés (%) *</label>
+              <p-inputNumber id="inv_tasa_interes"
+                           mode="decimal"
+                           [min]="0"
+                           [max]="100"
+                           [minFractionDigits]="2"
+                           [maxFractionDigits]="4"
+                           formControlName="inv_tasa_interes"
+                           placeholder="0.00">
+                <span class="p-inputgroup-addon">%</span>
+              </p-inputNumber>
+              <small class="p-error" *ngIf="formInversion.get('inv_tasa_interes')?.invalid && formInversion.get('inv_tasa_interes')?.touched">
+                La tasa de interés es requerida
+              </small>
+            </div>
+
+            <div class="field">
+              <label for="inv_valor_nominal">Valor Nominal</label>
+              <p-inputNumber id="inv_valor_nominal"
+                           mode="currency"
+                           currency="USD"
+                           locale="en-US"
+                           formControlName="inv_valor_nominal"
+                           placeholder="0.00">
+              </p-inputNumber>
+            </div>
+
+            <div class="field">
+              <label for="inv_valor_interes">Valor Interés</label>
+              <p-inputNumber id="inv_valor_interes"
+                           mode="currency"
+                           currency="USD"
+                           locale="en-US"
+                           formControlName="inv_valor_interes"
+                           placeholder="0.00">
+              </p-inputNumber>
+            </div>
+          </div>
+
+          <div class="col-12 md:col-6">
+            <div class="field">
+              <label for="inv_rendimiento_nominal">Rendimiento Nominal (%)</label>
+              <p-inputNumber id="inv_rendimiento_nominal"
+                           mode="decimal"
+                           [min]="0"
+                           [max]="100"
+                           [minFractionDigits]="2"
+                           [maxFractionDigits]="4"
+                           formControlName="inv_rendimiento_nominal"
+                           placeholder="0.00">
+                <span class="p-inputgroup-addon">%</span>
+              </p-inputNumber>
+            </div>
+
+            <div class="field">
+              <label for="inv_precio">Precio</label>
+              <p-inputNumber id="inv_precio"
+                           mode="decimal"
+                           [min]="0"
+                           [minFractionDigits]="2"
+                           [maxFractionDigits]="8"
+                           formControlName="inv_precio"
+                           placeholder="0.00000000">
+              </p-inputNumber>
+            </div>
+
+            <div class="field">
+              <label for="inv_rendimiento_efectivo">Rendimiento Efectivo (%)</label>
+              <p-inputNumber id="inv_rendimiento_efectivo"
+                           mode="decimal"
+                           [min]="0"
+                           [max]="100"
+                           [minFractionDigits]="2"
+                           [maxFractionDigits]="4"
+                           formControlName="inv_rendimiento_efectivo"
+                           placeholder="0.00">
+                <span class="p-inputgroup-addon">%</span>
+              </p-inputNumber>
+            </div>
+          </div>
+        </div>
+      </p-tabPanel>
+
+      <!-- Pestaña de Comisiones e Impuestos -->
+      <p-tabPanel header="Comisiones e Impuestos">
+        <div class="grid p-fluid">
+          <div class="col-12 md:col-6">
+            <div class="field">
+              <label for="inv_comision_bolsa">Comisión de Bolsa</label>
+              <p-inputNumber id="inv_comision_bolsa"
+                           mode="currency"
+                           currency="USD"
+                           locale="en-US"
+                           formControlName="inv_comision_bolsa"
+                           placeholder="0.00">
+              </p-inputNumber>
+            </div>
+
+            <div class="field">
+              <label for="inv_comision_operador">Comisión del Operador</label>
+              <p-inputNumber id="inv_comision_operador"
+                           mode="currency"
+                           currency="USD"
+                           locale="en-US"
+                           formControlName="inv_comision_operador"
+                           placeholder="0.00">
+              </p-inputNumber>
+            </div>
+          </div>
+
+          <div class="col-12 md:col-6">
+            <div class="field">
+              <label for="inv_retencion">Retención</label>
+              <p-inputNumber id="inv_retencion"
+                           mode="currency"
+                           currency="USD"
+                           locale="en-US"
+                           formControlName="inv_retencion"
+                           placeholder="0.00">
+              </p-inputNumber>
+            </div>
+          </div>
+        </div>
+      </p-tabPanel>
+
+      <!-- Pestaña de Estado -->
+      <p-tabPanel header="Estado">
+        <div class="grid p-fluid">
+          <div class="col-12 md:col-6">
+            <div class="field-checkbox">
+              <p-checkbox id="inv_pagada"
+                         formControlName="inv_pagada"
+                         [binary]="true"
+                         label="¿Inversión Pagada?">
+              </p-checkbox>
+            </div>
+
+            <div class="field-checkbox">
+              <p-checkbox id="inv_expirado"
+                         formControlName="inv_expirado"
+                         [binary]="true"
+                         label="¿Inversión Vencida?">
+              </p-checkbox>
+            </div>
+          </div>
+
+          <div class="col-12 md:col-6">
+            <div class="field-checkbox">
+              <p-checkbox id="is_active"
+                         formControlName="is_active"
+                         [binary]="true"
+                         label="¿Activo?">
+              </p-checkbox>
+            </div>
+          </div>
+        </div>
+      </p-tabPanel>
+    </p-tabView>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <button pButton pRipple
+            label="Cancelar"
+            icon="pi pi-times"
+            class="p-button-text"
+            (click)="cerrarDialogo()">
+    </button>
+    <button pButton pRipple
+            label="Guardar"
+            icon="pi pi-check"
+            class="p-button-success"
+            (click)="guardarInversion()"
+            [disabled]="formInversion.invalid">
+    </button>
+  </ng-template>
+</p-dialog>

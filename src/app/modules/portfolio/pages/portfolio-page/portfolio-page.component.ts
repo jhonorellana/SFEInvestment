@@ -28,7 +28,7 @@ export class PortfolioPageComponent implements OnInit, AfterViewInit, OnDestroy 
   dataInvertidoVencimientoInv: InvertidoVencimientoModel[] = [];
   dataRecuperacionAnual: RecuperacionAnualModel[] = [];
 
-  chartOptions1: any = {}; // Tipo de inversión por propietario
+  chartOptions1: any = {}; //  por propietario
   chartOptions2: any = {}; // Capital consolidado por propietario
   chartOptions3: any = {}; // Capital invertido por Empresa
   chartOptions4: any = {}; // Bonos VS Inversiones.
@@ -59,7 +59,7 @@ export class PortfolioPageComponent implements OnInit, AfterViewInit, OnDestroy 
             },
             data: [{
               type: "doughnut",
-              startAngle: -90,
+              startAngle: -145,
               indexLabel: "{name}: {y}",
               yValueFormatString: "'$'#,###.00",
               dataPoints: this.dataInvestownernewlist.map(entry => ({
@@ -118,7 +118,7 @@ export class PortfolioPageComponent implements OnInit, AfterViewInit, OnDestroy 
             },
             data: [{
               type: "doughnut",
-              startAngle: -90,
+              startAngle: -145,
               indexLabel: "{name}: {y}",
               yValueFormatString: "'$'#,###.00",
               dataPoints: this.dataInvestenterpriselist.map(entry => ({
@@ -148,7 +148,7 @@ export class PortfolioPageComponent implements OnInit, AfterViewInit, OnDestroy 
             },
             data: [{
               type: "doughnut",
-              startAngle: -90,
+              startAngle: -145,
               indexLabel: "{name}: {y}",
               yValueFormatString: "'$'#,###.00",
               dataPoints: this.dataTypeinvestlist.map(entry => ({
