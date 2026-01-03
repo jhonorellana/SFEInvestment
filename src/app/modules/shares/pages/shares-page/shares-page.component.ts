@@ -1,4 +1,4 @@
-import { Component, OnInit,ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { SearchService } from '../../services/search.service';
 import { SharesModel } from '@core/models/shares.model';
 import { Subscription } from 'rxjs';
@@ -7,1302 +7,402 @@ import { DividendosModel } from '@core/models/dividendos.model';
 import { SimulacionModel } from '@core/models/simulacion.model';
 import { CanvasJS } from '@canvasjs/angular-charts';
 
+interface ChartOptions {
+  [key: string]: any;
+}
+
+interface ChartDataPoint {
+  x: Date;
+  y: number;
+  data: {
+    transacciones: number;
+    cantidad: number;
+    valor: number;
+    emisor: string;
+  };
+}
+
+interface TooltipEntry {
+  dataPoint: {
+    x: Date;
+    y: number;
+    data: {
+      transacciones: number;
+      cantidad: number;
+      valor: number;
+      emisor: string;
+    };
+  };
+}
+
+interface TooltipEvent {
+  entries: TooltipEntry[];
+}
+
 @Component({
   selector: 'app-shares-page',
   templateUrl: './shares-page.component.html',
   styleUrls: ['./shares-page.component.css']
 })
-export class SharesPageComponent implements OnInit {
+export class SharesPageComponent implements OnInit, OnDestroy {
   formAcciones: FormGroup = new FormGroup({});
   formSimulacion: FormGroup = new FormGroup({});
 
-  listaObservadores$: Subscription[] = [];
+  private listaObservadores: Subscription[] = [];
   dataShareslist: SharesModel[] = [];
   dataDividendos: DividendosModel[] = [];
   dataSimulacion: SimulacionModel[] = [];
 
-  chartOptions1: any = {}; // Puedes ajustar el tipo según la estructura de tu objeto.
-  chartOptions2017: any = {}; // Puedes ajustar el tipo según la estructura de tu objeto.
-  chartOptions2018: any = {}; // Puedes ajustar el tipo según la estructura de tu objeto.
-  chartOptions2019: any = {}; // Puedes ajustar el tipo según la estructura de tu objeto.
-  chartOptions2020: any = {}; // Puedes ajustar el tipo según la estructura de tu objeto.
-  chartOptions2021: any = {}; // Puedes ajustar el tipo según la estructura de tu objeto.
-  chartOptions2022: any = {}; // Puedes ajustar el tipo según la estructura de tu objeto.
-  chartOptions2023: any = {}; // Puedes ajustar el tipo según la estructura de tu objeto.
-  chartOptions2024: any = {}; // Puedes ajustar el tipo según la estructura de tu objeto.
-  chartOptions2025: any = {}; // Puedes ajustar el tipo según la estructura de tu objeto.
-      chart: any;
+  chartOptions: ChartOptions = {
+    chartOptions1: {},
+    chartOptions2017: {},
+    chartOptions2018: {},
+    chartOptions2019: {},
+    chartOptions2020: {},
+    chartOptions2021: {},
+    chartOptions2022: {},
+    chartOptions2023: {},
+    chartOptions2024: {},
+    chartOptions2025: {},
+    chartOptions2026: {}
+  };
+
+  private chart: any;
 
   constructor(
     private searchService: SearchService,
     private cdr: ChangeDetectorRef
   ) {}
 
-      ngOnInit(): void {
+  ngOnInit(): void {
+    this.inicializarFormularios();
+    this.enviarConsulta();
+  }
 
-      this.formAcciones = new FormGroup(
-        {
-          cmbEmisor: new FormControl('16'),
-          cmbPrueba: new FormControl('Prueba')
-        }
-      )
+  private inicializarFormularios(): void {
+    this.formAcciones = new FormGroup({
+      cmbEmisor: new FormControl('16'),
+      cmbPrueba: new FormControl('Prueba')
+    });
 
-      this.formSimulacion = new FormGroup(
-        {
-          txtPrecio: new FormControl('1.5'),
-          txtCapital: new FormControl('1000')
-        }
-      )
+    this.formSimulacion = new FormGroup({
+      txtPrecio: new FormControl('1.5'),
+      txtCapital: new FormControl('1000')
+    });
+  }
 
-      this.ConstruirGraficoTotal();
-      this.ConstruirGraficoEmisorAnio2017('2017');
-      this.ConstruirGraficoEmisorAnio2018('2018');
-      this.ConstruirGraficoEmisorAnio2019('2019');
-      this.ConstruirGraficoEmisorAnio2020('2020');
-      this.ConstruirGraficoEmisorAnio2021('2021');
-      this.ConstruirGraficoEmisorAnio2022('2022');
-      this.ConstruirGraficoEmisorAnio2023('2023');
-      this.ConstruirGraficoEmisorAnio2024('2024');
-      this.ConstruirGraficoEmisorAnio2025('2025');
-      this.PresentarInformacionDividendos();
+  enviarConsulta(): void {
+    const { cmbEmisor } = this.formAcciones.value;
+    if (!cmbEmisor) return;
 
+    const sub = this.searchService.ObtenerTodasAccionesCompania$(cmbEmisor).subscribe({
+      next: (respuesta: SharesModel[]) => {
+        this.dataShareslist = respuesta;
+        // Construir el gráfico principal
+        this.construirGraficoTotal(respuesta);
+        // Construir todos los gráficos anuales con los mismos datos
+        this.construirTodosLosGraficosAnuales(respuesta);
+        this.PresentarInformacionDividendos();
+      },
+      error: (err: any) => {
+        console.error('Error al cargar los datos:', err);
+      }
+    });
+    this.listaObservadores.push(sub);
+  }
 
+  enviarSimulacion(): void {
+    this.PresentarSimulacion();
+  }
 
-     // this.listaObservadores$ = [ observador2020$, observador2021$, observador2022$, observador2023$];
-    }
+  private construirTodosLosGraficosAnuales(datos: SharesModel[]): void {
+    const years = ['2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024', '2025', '2026'];
 
+    years.forEach(year => {
+      const anioNum = parseInt(year, 10);
+      const datosAnio = datos.filter(dato => {
+        const fecha = new Date(dato.fecha);
+        return fecha.getFullYear() === anioNum;
+      });
 
-    PresentarSimulacion():void{
-      const {txtPrecio, txtCapital} = this.formSimulacion.value
-      const {cmbEmisor, cmbPrueba} = this.formAcciones.value
+      if (datosAnio.length > 0) {
+        const chartKey = `chartOptions${year}`;
+        this.construirGraficoConDatos(datosAnio, anioNum, chartKey);
+      }
+    });
 
-      const observador12$ = this.searchService.ObtenerSimulacion$(cmbEmisor, txtPrecio, txtCapital)
-      .subscribe((response: SimulacionModel[]) => {
-        this.dataSimulacion = response
-      }, err => {console.log('Error de conexion');}
-     )
+    this.cdr.detectChanges();
+  }
 
+  private construirGraficoConDatos(datos: SharesModel[], anio: number, chartKey: string): void {
+    this.chartOptions[chartKey] = {
+      backgroundColor: "#E0FFE0",
+      theme: "light2",
+      animationEnabled: true,
+      zoomEnabled: true,
+      title: {
+        text: `Precios año ${anio}`
+      },
+      axisX: {
+        labelFontSize: 12,
+        intervalType: "month",
+        interval: 1,
+        viewportMinimum: new Date(anio, 0, 1),
+        viewportMaximum: new Date(anio, 11, 31, 23, 59, 59),
+        minimum: new Date(anio, 0, 1),
+        maximum: new Date(anio, 11, 31, 23, 59, 59),
+        stripLines: this.generarLineasDivisoria(anio)
+      },
+      axisY: {},
+      toolTip: {
+        shared: true,
+        contentFormatter: (e: TooltipEvent) => this.formatearTooltip(e)
+      },
+      data: [{
+        type: "line",
+        xValueFormatString: "YYYY/MM/DD",
+        yValueFormatString: "$#,###.##",
+        dataPoints: this.mapearPuntosDatos(datos)
+      }]
     };
+  }
 
-    PresentarInformacionDividendos():void{
-      const {cmbEmisor, cmbPrueba} = this.formAcciones.value
+  private construirGraficoTotal(datos: SharesModel[]): void {
+    this.chartOptions['chartOptions1'] = {
+      backgroundColor: "#E0FFE0",
+      theme: "light2",
+      animationEnabled: true,
+      zoomEnabled: true,
+      title: {
+        text: "Acciones por día desde 2017 hasta 2026"
+      },
+      axisX: {
+        labelFontSize: 12,
+        intervalType: "year",
+            interval: 1,
+            minimum: new Date('2017-01-01'),
+            maximum: new Date('2027-01-01'),
+            stripLines: this.generarLineasDivisoriaAnual()
+          },
+          axisY: {},
+          toolTip: {
+        shared: true,
+        contentFormatter: (e: TooltipEvent) => this.formatearTooltip(e)
+      },
+      data: [{
+        type: "line",
+        xValueFormatString: "YYYY/MM/DD",
+        yValueFormatString: "$#,###.##",
+        dataPoints: this.mapearPuntosDatos(datos)
+      }]
+    };
+    this.cdr.detectChanges();
+    this.cdr.detectChanges();
+  }
 
-      const observador11$ = this.searchService.ObtenerDividendos$(cmbEmisor)
-      .subscribe((response: DividendosModel[]) => {
-        this.dataDividendos = response
-      }, err => {console.log('Error de conexion');}
-    )
+  private generarLineasDivisoriaAnual(): any[] {
+    const stripLines = [];
 
+    // Añadir líneas de inicio de año (1 de enero) para cada año
+    for (let year = 2017; year <= 2026; year++) {
+      stripLines.push({
+        value: new Date(year, 0, 1),  // 1 de enero de cada año
+        lineColor: "#A0A0A0",
+        lineThickness: 1,
+        showOnTop: true
+      });
     }
 
-    ConstruirGraficoTotal():void{
-            const {cmbEmisor, cmbPrueba} = this.formAcciones.value
-            const observador1$ = this.searchService.ObtenerTodasAccionesCompania$(cmbEmisor)
-            .subscribe(
-              (respuesta: SharesModel[]) => {
-               this.dataShareslist = respuesta;
-               //console.log(this.dataShareslist);
+    // Añadir línea para el 31 de diciembre de 2024
+    stripLines.push({
+      value: new Date(2024, 11, 31, 23, 59, 59),
+      lineColor: "#A0A0A0",
+      lineThickness: 1,
+      showOnTop: true
+    });
 
-               this.chartOptions1 = {
-                backgroundColor: "#E0FFE0",
-                theme: "light2",
-                animationEnabled: true,
-                zoomEnabled: true,
-                title: {
-                  text: "Acciones por día desde 2017 hasta 2025"
-                },
-                axisX: {
-                  labelFontSize: 12,
-                  intervalType: "year",
-                  interval: 1,
-                  minimum: new Date('2017-01-01'),
-                  maximum: new Date('2026-01-01'),
-                  stripLines:[
-                    {
-                      value: new Date('2017-01-01')
-                    },
-                    {
-                      value: new Date('2018-01-01')
-                    },
-                    {
-                      value: new Date('2019-01-01')
-                    },
-                    {
-                      value: new Date('2020-01-01')
-                    },
-                    {
-                      value: new Date('2021-01-01')
-                    },
-                    {
-                      value: new Date('2022-01-01')
-                    },
-                    {
-                      value: new Date('2023-01-01')
-                    },
-                    {
-                      value: new Date('2024-01-01')
-                    },
-                    {
-                      value: new Date('2025-01-01')
-                    },
-                    {
-                      value: new Date('2025-12-31')
-                    }
-                    ],
-                },
-                axisY: {
-                },
-                toolTip: {
-                  shared: true,
-                  contentFormatter: function (e: { entries: string | any[]; }) {
-                    let content = "";
-                    for (let i = 0; i < e.entries.length; i++) {
-                      let fecha = new Date(e.entries[i].dataPoint.x.getTime() + (e.entries[i].dataPoint.x.getTimezoneOffset() * 60000));
-                      content += `Emisor: ${e.entries[i].dataPoint.data.emisor}<br>`;
-                      content += `Fecha: ${CanvasJS.formatDate(fecha, "DD/MM/YYYY")}<br>`;
-                      content += `Precio: ${CanvasJS.formatNumber(e.entries[i].dataPoint.y, "$#,##0.00")}<br>`;
-                      content += `Transacciones: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.transacciones, "#,###.##")}<br>`;
-                      content += `Numero Acciones: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.cantidad, "#,###.##")}<br>`;
-                      content += `Valor Total: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.valor, "$#,##0.00")}<br>`;
-                       }
-                    return content;
-                  }
-                },
-                data: [{
-                  type: "line",
-                  xValueFormatString: "YYYY/MM/DD",
-                  yValueFormatString: "$#,###.##",
-                  dataPoints: this.dataShareslist.map(entry => ({
-                    x: new Date(entry.fecha),
-                    y: entry.precio,
-                    data: { transacciones: entry.transacciones, cantidad: entry.cantidad, valor: entry.valor, emisor: entry.emisor }
-                  }))
+    // Añadir línea para el 31 de diciembre de 2026 (en rojo con etiqueta)
+    stripLines.push({
+      value: new Date(2026, 11, 31, 23, 59, 59),
+      label: "31/12/2026",
+      labelFontColor: "#666666",
+      labelAlign: "far",
+      labelBackgroundColor: "#E0FFE0",
+      labelFontSize: 10,
+      lineColor: "#FF0000",
+      lineThickness: 1,
+      showOnTop: true
+    });
+
+    return stripLines;
+  }
 
 
-                }]
+  private crearOpcionesGrafico(
+    titulo: string,
+    datos: SharesModel[],
+    opciones: {
+      intervalType: string;
+      interval: number;
+      minDate: string;
+      maxDate: string;
+      year?: number;
+    }
+  ): any {
+    return {
+      backgroundColor: "#E0FFE0",
+      theme: "light2",
+      animationEnabled: true,
+      zoomEnabled: true,
+      title: { text: titulo },
+      axisX: {
+        labelFontSize: 12,
+        intervalType: opciones.intervalType,
+        interval: opciones.interval,
+        minimum: new Date(opciones.minDate),
+        maximum: new Date(opciones.maxDate),
+        stripLines: opciones.year ? this.generarLineasDivisoria(opciones.year) : []
+      },
+      axisY: {},
+      toolTip: {
+        shared: true,
+        contentFormatter: (e: TooltipEvent) => this.formatearTooltip(e)
+      },
+      data: [{
+        type: "line",
+        xValueFormatString: "YYYY/MM/DD",
+        yValueFormatString: "$#,###.##",
+        dataPoints: this.mapearPuntosDatos(datos)
+      }]
+    };
+  }
 
-              };
+  private crearGraficoVacio(titulo: string): any {
+    return {
+      backgroundColor: "#E0FFE0",
+      theme: "light2",
+      animationEnabled: true,
+      zoomEnabled: true,
+      title: { text: titulo },
+      data: []
+    };
+  }
 
-              this.cdr.detectChanges();
-              },
-              err => {
-                console.log('Error de conexion');
-              }
-            );
+  private mapearPuntosDatos(datos: SharesModel[]): ChartDataPoint[] {
+    return datos.map(entry => ({
+      x: new Date(entry.fecha),
+      y: entry.precio,
+      data: {
+        transacciones: entry.transacciones,
+        cantidad: entry.cantidad,
+        valor: entry.valor,
+        emisor: entry.emisor
+      }
+    }));
+  }
 
+  private generarLineasDivisoria(anio: number): any[] {
+    const stripLines = [];
+
+    // Línea al inicio del año (1 de enero)
+    stripLines.push({
+      value: new Date(anio, 0, 1),
+      lineColor: "#A0A0A0",
+      lineThickness: 1.5,  // Línea más gruesa para inicio de año
+      showOnTop: true
+    });
+
+    // Líneas mensuales (del 1 de febrero al 1 de noviembre)
+    for (let month = 1; month < 11; month++) {
+      stripLines.push({
+        value: new Date(anio, month, 1),
+        lineColor: "#F0F0F0",  // Gris muy claro para las líneas mensuales
+        lineThickness: 0.8,    // Línea más fina
+        showOnTop: true
+      });
     }
 
+    // Línea al inicio de diciembre (1 de diciembre)
+    stripLines.push({
+      value: new Date(anio, 11, 1),  // 1 de diciembre
+      lineColor: "#A0A0A0",
+      lineThickness: 1.5,
+      showOnTop: true
+    });
 
-    ConstruirGraficoEmisorAnio2017(anio: string): void{
-      const {cmbEmisor, cmbPrueba} = this.formAcciones.value
-      const observador2017$ = this.searchService.ObtenerAccionesCompaniaAnio$(cmbEmisor,anio)
-      .subscribe(
-        (respuesta: SharesModel[]) => {
-          if (respuesta && respuesta.length >= 2) {
-            this.dataShareslist = respuesta;
-                        this.dataShareslist = respuesta;
-                        this.chartOptions2017 = {
-                          backgroundColor: "#EEFFEE",
-                          theme: "light2",
-                          animationEnabled: true,
-                          zoomEnabled: true,
-                          title: {
-                            text: `Precios año ${anio}`
-                          },
-                          axisX: {
-                            labelFontSize: 12,
-                            intervalType: "month",
-                            interval: 1,
-                            minimum: new Date('2017-01-01'),
-                            maximum: new Date('2018-01-01'),
-                              stripLines:[
-                              {
-                                value: new Date('2017-01-01')
-                              },
-                              {
-                                value: new Date('2017-02-01')
-                              },
-                              {
-                                value: new Date('2017-03-01')
-                              },
-                              {
-                                value: new Date('2017-04-01')
-                              },
-                              {
-                                value: new Date('2017-05-01')
-                              },
-                              {
-                                value: new Date('2017-06-01')
-                              },
-                              {
-                                value: new Date('2017-07-01')
-                              },
-                              {
-                                value: new Date('2017-08-01')
-                              },
-                              {
-                                value: new Date('2017-09-01')
-                              },
-                              {
-                                value: new Date('2017-10-01')
-                              },
-                              {
-                                value: new Date('2017-11-01')
-                              },
-                              {
-                                value: new Date('2017-12-01')
-                              },
-                              {
-                                value: new Date('2017-12-31')
-                              }
-                              ],
-                          },
-                          axisY: {
-                          },
-                          toolTip: {
-                            shared: true,
-                            contentFormatter: function (e: { entries: string | any[]; }) {
-                              let content = "";
-                              for (let i = 0; i < e.entries.length; i++) {
-                                let fecha = new Date(e.entries[i].dataPoint.x.getTime() + (e.entries[i].dataPoint.x.getTimezoneOffset() * 60000));
-                                content += `Emisor: ${e.entries[i].dataPoint.data.emisor}<br>`;
-                                content += `Fecha: ${CanvasJS.formatDate(fecha, "DD/MM/YYYY")}<br>`;
-                                content += `Precio: ${CanvasJS.formatNumber(e.entries[i].dataPoint.y, "$#,##0.00")}<br>`;
-                                content += `Transacciones: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.transacciones, "#,###.##")}<br>`;
-                                content += `Numero Acciones: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.cantidad, "#,###.##")}<br>`;
-                                content += `Valor Total: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.valor, "$#,##0.00")}<br>`;
-                              }
-                              return content;
-                            }
-                          },
-                          data: [{
-                            type: "line",
-                            xValueFormatString: "YYYY/MM/DD",
-                            yValueFormatString: "$#,###.##",
-                            dataPoints: this.dataShareslist.map(entry => ({
-                              x: new Date(entry.fecha),
-                              y: entry.precio,
-                              data: { transacciones: entry.transacciones, cantidad: entry.cantidad, valor: entry.valor, emisor: entry.emisor }
-                            }))
+    // Línea al final del año (31 de diciembre) en rojo
+    const endOfYear = new Date(anio, 11, 31, 12, 0, 0); // Mediodía del 31 de diciembre
+    stripLines.push({
+      value: endOfYear,
+      lineColor: "#FF0000",  // Rojo para destacar el fin de año
+      lineThickness: 1.5,
+      showOnTop: true,
+      label: anio === 2026 ? '31/12/2026' : '',  // Solo mostrar etiqueta para 2026
+      labelFontColor: "#FF0000",
+      labelAlign: "far",
+      labelBackgroundColor: "#FFFFFF",
+      labelFontSize: 10
+    });
 
+    return stripLines;
+  }
 
-                          }]
-                        }
-        }
-        else{
-          this.chartOptions2017 = {
-            backgroundColor: "#EEFFEE",
-            theme: "light2",
-            animationEnabled: true,
-            zoomEnabled: true,
-            title: {
-              text: `Precios año ${anio}`
-            },
-            data: []
-          };
-        };
-
-        this.cdr.detectChanges();
-        },
-        err => {
-          console.log('Error de conexion');
-        }
+  private formatearTooltip(e: TooltipEvent): string {
+    return e.entries.map(entry => {
+      const fecha = new Date(
+        entry.dataPoint.x.getTime() + (entry.dataPoint.x.getTimezoneOffset() * 60000)
       );
+      return `
+        Emisor: ${entry.dataPoint.data.emisor}<br>
+        Fecha: ${CanvasJS.formatDate(fecha, "DD/MM/YYYY")}<br>
+        Precio: ${CanvasJS.formatNumber(entry.dataPoint.y, "$#,##0.00")}<br>
+        Transacciones: ${CanvasJS.formatNumber(entry.dataPoint.data.transacciones, "#,###.##")}<br>
+        Numero Acciones: ${CanvasJS.formatNumber(entry.dataPoint.data.cantidad, "#,###.##")}<br>
+        Valor Total: ${CanvasJS.formatNumber(entry.dataPoint.data.valor, "$#,##0.00")}<br>
+      `;
+    }).join('');
+  }
 
-    }
+  private PresentarSimulacion(): void {
+    const { txtPrecio, txtCapital } = this.formSimulacion.value;
+    const { cmbEmisor } = this.formAcciones.value;
 
-    ConstruirGraficoEmisorAnio2018(anio: string): void{
-    const {cmbEmisor, cmbPrueba} = this.formAcciones.value
-    const observador2018$ = this.searchService.ObtenerAccionesCompaniaAnio$(cmbEmisor,anio)
-    .subscribe(
-      (respuesta: SharesModel[]) => {
-        if (respuesta && respuesta.length >= 2) {
-          this.dataShareslist = respuesta;
-
-
-                          this.chartOptions2018 = {
-                            backgroundColor: "#E0FFE0",
-                            theme: "light2",
-                            animationEnabled: true,
-                            zoomEnabled: true,
-                            title: {
-                              text: `Precios año ${anio}`
-                            },
-                            axisX: {
-                              labelFontSize: 12,
-                              intervalType: "month",
-                              interval: 1,
-                              minimum: new Date('2018-01-01'),
-                              maximum: new Date('2019-01-01'),
-                              stripLines:[
-                                {
-                                  value: new Date('2018-01-01')
-                                },
-                                {
-                                  value: new Date('2018-02-01')
-                                },
-                                {
-                                  value: new Date('2018-03-01')
-                                },
-                                {
-                                  value: new Date('2018-04-01')
-                                },
-                                {
-                                  value: new Date('2018-05-01')
-                                },
-                                {
-                                  value: new Date('2018-06-01')
-                                },
-                                {
-                                  value: new Date('2018-07-01')
-                                },
-                                {
-                                  value: new Date('2018-08-01')
-                                },
-                                {
-                                  value: new Date('2018-09-01')
-                                },
-                                {
-                                  value: new Date('2018-10-01')
-                                },
-                                {
-                                  value: new Date('2018-11-01')
-                                },
-                                {
-                                  value: new Date('2018-12-01')
-                                },
-                                {
-                                  value: new Date('2018-12-31')
-                                }
-                                ],
-                            },
-                            axisY: {
-                            },
-                            toolTip: {
-                              shared: true,
-                              contentFormatter: function (e: { entries: string | any[]; }) {
-                                let content = "";
-                                for (let i = 0; i < e.entries.length; i++) {
-                                  let fecha = new Date(e.entries[i].dataPoint.x.getTime() + (e.entries[i].dataPoint.x.getTimezoneOffset() * 60000));
-                                  content += `Emisor: ${e.entries[i].dataPoint.data.emisor}<br>`;
-                                  content += `Fecha: ${CanvasJS.formatDate(fecha, "DD/MM/YYYY")}<br>`;
-                                  content += `Precio: ${CanvasJS.formatNumber(e.entries[i].dataPoint.y, "$#,##0.00")}<br>`;
-                                  content += `Transacciones: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.transacciones, "#,###.##")}<br>`;
-                                  content += `Numero Acciones: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.cantidad, "#,###.##")}<br>`;
-                                  content += `Valor Total: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.valor, "$#,##0.00")}<br>`;
-                                  }
-                                return content;
-                              }
-                            },
-                            data: [{
-                              type: "line",
-                              xValueFormatString: "YYYY/MM/DD",
-                              yValueFormatString: "$#,###.##",
-                              dataPoints: this.dataShareslist.map(entry => ({
-                                x: new Date(entry.fecha),
-                                y: entry.precio,
-                                data: { transacciones: entry.transacciones, cantidad: entry.cantidad, valor: entry.valor, emisor: entry.emisor }
-                              }))
-
-
-                            }]
-                          }
-          }
-      else{
-        this.chartOptions2018 = {
-          backgroundColor: "#E0FFE0",
-          theme: "light2",
-          animationEnabled: true,
-          zoomEnabled: true,
-          title: {
-            text: `Precios año ${anio}`
-          },
-          data: []
-        };
-      };
-
-      this.cdr.detectChanges();
-      },
-      err => {
-        console.log('Error de conexion');
-      }
-    );
-    }
-
-
-    ConstruirGraficoEmisorAnio2019(anio: string): void{
-      const {cmbEmisor, cmbPrueba} = this.formAcciones.value
-      const observador2019$ = this.searchService.ObtenerAccionesCompaniaAnio$(cmbEmisor,anio)
-    .subscribe(
-      (respuesta: SharesModel[]) => {
-        if (respuesta && respuesta.length >= 2) {
-          this.dataShareslist = respuesta;
-
-                      this.chartOptions2019 = {
-                        backgroundColor: "#EEFFEE",
-                        theme: "light2",
-                        animationEnabled: true,
-                        zoomEnabled: true,
-                        title: {
-                          text: `Precios año ${anio}`
-                        },
-                        axisX: {
-                          labelFontSize: 12,
-                          intervalType: "month",
-                          interval: 1,
-                          minimum: new Date('2019-01-01'),
-                          maximum: new Date('2020-01-01'),
-                          stripLines:[
-                            {
-                              value: new Date('2019-01-01')
-                            },
-                            {
-                              value: new Date('2019-02-01')
-                            },
-                            {
-                              value: new Date('2019-03-01')
-                            },
-                            {
-                              value: new Date('2019-04-01')
-                            },
-                            {
-                              value: new Date('2019-05-01')
-                            },
-                            {
-                              value: new Date('2019-06-01')
-                            },
-                            {
-                              value: new Date('2019-07-01')
-                            },
-                            {
-                              value: new Date('2019-08-01')
-                            },
-                            {
-                              value: new Date('2019-09-01')
-                            },
-                            {
-                              value: new Date('2019-10-01')
-                            },
-                            {
-                              value: new Date('2019-11-01')
-                            },
-                            {
-                              value: new Date('2019-12-01')
-                            },
-                            {
-                              value: new Date('2019-12-31')
-                            }
-                            ],
-                        },
-                        axisY: {
-                        },
-                        toolTip: {
-                          shared: true,
-                          contentFormatter: function (e: { entries: string | any[]; }) {
-                            let content = "";
-                            for (let i = 0; i < e.entries.length; i++) {
-                              let fecha = new Date(e.entries[i].dataPoint.x.getTime() + (e.entries[i].dataPoint.x.getTimezoneOffset() * 60000));
-                              content += `Emisor: ${e.entries[i].dataPoint.data.emisor}<br>`;
-                              content += `Fecha: ${CanvasJS.formatDate(fecha, "DD/MM/YYYY")}<br>`;
-                              content += `Precio: ${CanvasJS.formatNumber(e.entries[i].dataPoint.y, "$#,##0.00")}<br>`;
-                              content += `Transacciones: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.transacciones, "#,###.##")}<br>`;
-                              content += `Numero Acciones: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.cantidad, "#,###.##")}<br>`;
-                              content += `Valor Total: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.valor, "$#,##0.00")}<br>`;
-                          }
-                            return content;
-                          }
-                        },
-                        data: [{
-                          type: "line",
-                          xValueFormatString: "YYYY/MM/DD",
-                          yValueFormatString: "$#,###.##",
-                          dataPoints: this.dataShareslist.map(entry => ({
-                            x: new Date(entry.fecha),
-                            y: entry.precio,
-                            data: { transacciones: entry.transacciones, cantidad: entry.cantidad, valor: entry.valor, emisor: entry.emisor }
-                          }))
-
-
-                        }]
-                      }
-      }
-       else{
-        this.chartOptions2019 = {
-          backgroundColor: "#EEFFEE",
-          theme: "light2",
-          animationEnabled: true,
-          zoomEnabled: true,
-          title: {
-            text: `Precios año ${anio}`
-          },
-          data: []
-        };
-      };
-
-      this.cdr.detectChanges();
-      },
-      err => {
-        console.log('Error de conexion');
-      }
-    );
-    }
-
-
-    ConstruirGraficoEmisorAnio2020(anio: string): void{
-      const {cmbEmisor, cmbPrueba} = this.formAcciones.value
-      const observador2020$ = this.searchService.ObtenerAccionesCompaniaAnio$(cmbEmisor,anio)
-      .subscribe(
-      (respuesta: SharesModel[]) => {
-        if (respuesta && respuesta.length >= 2) {
-          this.dataShareslist = respuesta;
-
-
-                              this.chartOptions2020 = {
-                                backgroundColor: "#E0FFE0",
-                                theme: "light2",
-                                animationEnabled: true,
-                                zoomEnabled: true,
-                                title: {
-                                  text: `Precios año ${anio}`
-                                },
-                                axisX: {
-                                  labelFontSize: 12,
-                                  intervalType: "month",
-                                  interval: 1,
-                                  minimum: new Date('2020-01-01'),
-                                  maximum: new Date('2021-01-01'),
-                                  stripLines:[
-                                    {
-                                      value: new Date('2020-01-01')
-                                    },
-                                    {
-                                      value: new Date('2020-02-01')
-                                    },
-                                    {
-                                      value: new Date('2020-03-01')
-                                    },
-                                    {
-                                      value: new Date('2020-04-01')
-                                    },
-                                    {
-                                      value: new Date('2020-05-01')
-                                    },
-                                    {
-                                      value: new Date('2020-06-01')
-                                    },
-                                    {
-                                      value: new Date('2020-07-01')
-                                    },
-                                    {
-                                      value: new Date('2020-08-01')
-                                    },
-                                    {
-                                      value: new Date('2020-09-01')
-                                    },
-                                    {
-                                      value: new Date('2020-10-01')
-                                    },
-                                    {
-                                      value: new Date('2020-11-01')
-                                    },
-                                    {
-                                      value: new Date('2020-12-01')
-                                    },
-                                    {
-                                      value: new Date('2020-12-31')
-                                    }
-                                    ],
-                                },
-                                axisY: {
-                                },
-                                toolTip: {
-                                  shared: true,
-                                  contentFormatter: function (e: { entries: string | any[]; }) {
-                                    let content = "";
-                                    for (let i = 0; i < e.entries.length; i++) {
-                                      let fecha = new Date(e.entries[i].dataPoint.x.getTime() + (e.entries[i].dataPoint.x.getTimezoneOffset() * 60000));
-                                      content += `Emisor: ${e.entries[i].dataPoint.data.emisor}<br>`;
-                                      content += `Fecha: ${CanvasJS.formatDate(fecha, "DD/MM/YYYY")}<br>`;
-                                      content += `Precio: ${CanvasJS.formatNumber(e.entries[i].dataPoint.y, "$#,##0.00")}<br>`;
-                                      content += `Transacciones: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.transacciones, "#,###.##")}<br>`;
-                                      content += `Numero Acciones: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.cantidad, "#,###.##")}<br>`;
-                                      content += `Valor Total: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.valor, "$#,##0.00")}<br>`;
-                                          }
-                                    return content;
-                                  }
-                                },
-                                data: [{
-                                  type: "line",
-                                  xValueFormatString: "YYYY/MM/DD",
-                                  yValueFormatString: "$#,###.##",
-                                  dataPoints: this.dataShareslist.map(entry => ({
-                                    x: new Date(entry.fecha),
-                                    y: entry.precio,
-                                    data: { transacciones: entry.transacciones, cantidad: entry.cantidad, valor: entry.valor, emisor: entry.emisor }
-                                  }))
-
-
-                                }]
-                              }
-              }
-       else{
-        this.chartOptions2020 = {
-          backgroundColor: "#E0FFE0",
-          theme: "light2",
-          animationEnabled: true,
-          zoomEnabled: true,
-          title: {
-            text: `Precios año ${anio}`
-          },
-          data: []
-        };
-      };
-
-
-      this.cdr.detectChanges();
-      },
-      err => {
-        console.log('Error de conexion');
-      }
-    );
-    }
-
-
-    ConstruirGraficoEmisorAnio2021(anio: string): void{
-      const {cmbEmisor, cmbPrueba} = this.formAcciones.value
-      const observador2021$ = this.searchService.ObtenerAccionesCompaniaAnio$(cmbEmisor,anio)
-    .subscribe(
-      (respuesta: SharesModel[]) => {
-        if (respuesta && respuesta.length >= 2) {
-          this.dataShareslist = respuesta;
-
-
-                        this.chartOptions2021 = {
-                          backgroundColor: "#EEFFEE",
-                          theme: "light2",
-                          animationEnabled: true,
-                          zoomEnabled: true,
-                          title: {
-                            text: `Precios año ${anio}`
-                          },
-                          axisX: {
-                            labelFontSize: 12,
-                            intervalType: "month",
-                            interval: 1,
-                            minimum: new Date('2021-01-01'),
-                            maximum: new Date('2022-01-01'),
-                              stripLines:[
-                              {
-                                value: new Date('2021-01-01')
-                              },
-                              {
-                                value: new Date('2021-02-01')
-                              },
-                              {
-                                value: new Date('2021-03-01')
-                              },
-                              {
-                                value: new Date('2021-04-01')
-                              },
-                              {
-                                value: new Date('2021-05-01')
-                              },
-                              {
-                                value: new Date('2021-06-01')
-                              },
-                              {
-                                value: new Date('2021-07-01')
-                              },
-                              {
-                                value: new Date('2021-08-01')
-                              },
-                              {
-                                value: new Date('2021-09-01')
-                              },
-                              {
-                                value: new Date('2021-10-01')
-                              },
-                              {
-                                value: new Date('2021-11-01')
-                              },
-                              {
-                                value: new Date('2021-12-01')
-                              },
-                              {
-                                value: new Date('2021-12-31')
-                              }
-                              ],
-                          },
-                          axisY: {
-                          },
-                          toolTip: {
-                            shared: true,
-                            contentFormatter: function (e: { entries: string | any[]; }) {
-                              let content = "";
-                              for (let i = 0; i < e.entries.length; i++) {
-                                let fecha = new Date(e.entries[i].dataPoint.x.getTime() + (e.entries[i].dataPoint.x.getTimezoneOffset() * 60000));
-                                content += `Emisor: ${e.entries[i].dataPoint.data.emisor}<br>`;
-                                content += `Fecha: ${CanvasJS.formatDate(fecha, "DD/MM/YYYY")}<br>`;
-                                content += `Precio: ${CanvasJS.formatNumber(e.entries[i].dataPoint.y, "$#,##0.00")}<br>`;
-                                content += `Transacciones: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.transacciones, "#,###.##")}<br>`;
-                                content += `Numero Acciones: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.cantidad, "#,###.##")}<br>`;
-                                content += `Valor Total: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.valor, "$#,##0.00")}<br>`;
-                              }
-                              return content;
-                            }
-                          },
-                          data: [{
-                            type: "line",
-                            xValueFormatString: "YYYY/MM/DD",
-                            yValueFormatString: "$#,###.##",
-                            dataPoints: this.dataShareslist.map(entry => ({
-                              x: new Date(entry.fecha),
-                              y: entry.precio,
-                              data: { transacciones: entry.transacciones, cantidad: entry.cantidad, valor: entry.valor, emisor: entry.emisor }
-                            }))
-
-
-                          }]
-                        }
+    const sub = this.searchService.ObtenerSimulacion$(cmbEmisor, txtPrecio, txtCapital)
+      .subscribe({
+        next: (response: SimulacionModel[]) => {
+          this.dataSimulacion = response;
+          this.cdr.detectChanges();
+        },
+        error: (err: any) => {
+          console.error('Error en la simulación:', err);
         }
-        else{
-        this.chartOptions2021 = {
-          backgroundColor: "#EEFFEE",
-          theme: "light2",
-          animationEnabled: true,
-          zoomEnabled: true,
-          title: {
-            text: `Precios año ${anio}`
-          },
-          data: []
-        };
-      };
+      });
+    this.listaObservadores.push(sub);
+  }
 
+  private PresentarInformacionDividendos(): void {
+    const { cmbEmisor } = this.formAcciones.value;
+    if (!cmbEmisor) return;
 
-      this.cdr.detectChanges();
-      },
-      err => {
-        console.log('Error de conexion');
+    const sub = this.searchService.ObtenerDividendos$(cmbEmisor)
+      .subscribe({
+        next: (response: DividendosModel[]) => {
+          this.dataDividendos = response;
+          this.cdr.detectChanges();
+        },
+        error: (err: any) => {
+          console.error('Error al cargar dividendos:', err);
+        }
+      });
+    this.listaObservadores.push(sub);
+  }
+
+  ngOnDestroy(): void {
+    this.listaObservadores.forEach(sub => {
+      if (sub && !sub.closed) {
+        sub.unsubscribe();
       }
-    );
-
-
+    });
+    this.listaObservadores = [];
   }
-
-
-
-  ConstruirGraficoEmisorAnio2022(anio: string): void{
-    const {cmbEmisor, cmbPrueba} = this.formAcciones.value
-    const observador2022$ = this.searchService.ObtenerAccionesCompaniaAnio$(cmbEmisor,anio)
-  .subscribe(
-    (respuesta: SharesModel[]) => {
-      if (respuesta && respuesta.length >= 2) {
-        this.dataShareslist = respuesta;
-
-
-
-                            this.chartOptions2022 = {
-                              backgroundColor: "#E0FFE0",
-                              theme: "light2",
-                              animationEnabled: true,
-                              zoomEnabled: true,
-                              title: {
-                                text: `Precios año ${anio}`
-                              },
-                              axisX: {
-                                labelFontSize: 12,
-                                intervalType: "month",
-                                interval: 1,
-                                minimum: new Date('2022-01-01'),
-                                maximum: new Date('2023-01-01'),
-                                stripLines:[
-                                  {
-                                    value: new Date('2022-01-01')
-                                  },
-                                  {
-                                    value: new Date('2022-02-01')
-                                  },
-                                  {
-                                    value: new Date('2022-03-01')
-                                  },
-                                  {
-                                    value: new Date('2022-04-01')
-                                  },
-                                  {
-                                    value: new Date('2022-05-01')
-                                  },
-                                  {
-                                    value: new Date('2022-06-01')
-                                  },
-                                  {
-                                    value: new Date('2022-07-01')
-                                  },
-                                  {
-                                    value: new Date('2022-08-01')
-                                  },
-                                  {
-                                    value: new Date('2022-09-01')
-                                  },
-                                  {
-                                    value: new Date('2022-10-01')
-                                  },
-                                  {
-                                    value: new Date('2022-11-01')
-                                  },
-                                  {
-                                    value: new Date('2022-12-01')
-                                  },
-                                  {
-                                    value: new Date('2022-12-31')
-                                  }
-                                  ],
-                              },
-                              axisY: {
-                              },
-                              toolTip: {
-                                shared: true,
-                                contentFormatter: function (e: { entries: string | any[]; }) {
-                                  let content = "";
-                                  for (let i = 0; i < e.entries.length; i++) {
-                                    let fecha = new Date(e.entries[i].dataPoint.x.getTime() + (e.entries[i].dataPoint.x.getTimezoneOffset() * 60000));
-                                    content += `Emisor: ${e.entries[i].dataPoint.data.emisor}<br>`;
-                                    content += `Fecha: ${CanvasJS.formatDate(fecha, "DD/MM/YYYY")}<br>`;
-                                    content += `Precio: ${CanvasJS.formatNumber(e.entries[i].dataPoint.y, "$#,##0.00")}<br>`;
-                                    content += `Transacciones: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.transacciones, "#,###.##")}<br>`;
-                                    content += `Numero Acciones: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.cantidad, "#,###.##")}<br>`;
-                                    content += `Valor Total: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.valor, "$#,##0.00")}<br>`;
-                                      }
-                                  return content;
-                                }
-                              },
-                              data: [{
-                                type: "line",
-                                xValueFormatString: "YYYY/MM/DD",
-                                yValueFormatString: "$#,###.##",
-                                dataPoints: this.dataShareslist.map(entry => ({
-                                  x: new Date(entry.fecha),
-                                  y: entry.precio,
-                                  data: { transacciones: entry.transacciones, cantidad: entry.cantidad, valor: entry.valor, emisor: entry.emisor }
-                                }))
-
-
-                              }]
-                            }
-            }
-            else{
-      this.chartOptions2022 = {
-        backgroundColor: "#E0FFE0",
-        theme: "light2",
-        animationEnabled: true,
-        zoomEnabled: true,
-        title: {
-          text: `Precios año ${anio}`
-        },
-        data: []
-      };
-    };
-
-
-    this.cdr.detectChanges();
-    },
-    err => {
-      console.log('Error de conexion');
-    }
-  );
-  }
-
-
-
-  ConstruirGraficoEmisorAnio2023(anio: string): void{
-    const {cmbEmisor, cmbPrueba} = this.formAcciones.value
-    const observador2023$ = this.searchService.ObtenerAccionesCompaniaAnio$(cmbEmisor,anio)
-  .subscribe(
-    (respuesta: SharesModel[]) => {
-      if (respuesta && respuesta.length >= 2) {
-        this.dataShareslist = respuesta;
-
-
-                          this.chartOptions2023 = {
-                            backgroundColor: "#EEFFEE",
-                            theme: "light2",
-                            animationEnabled: true,
-                            zoomEnabled: true,
-                            title: {
-                              text: `Precios año ${anio}`
-                            },
-                            axisX: {
-                              labelFontSize: 12,
-                              intervalType: "month",
-                              interval: 1,
-                              minimum: new Date('2023-01-01'),
-                              maximum: new Date('2024-01-01'),
-                              stripLines:[
-                                {
-                                  value: new Date('2023-01-01')
-                                },
-                                {
-                                  value: new Date('2023-02-01')
-                                },
-                                {
-                                  value: new Date('2023-03-01')
-                                },
-                                {
-                                  value: new Date('2023-04-01')
-                                },
-                                {
-                                  value: new Date('2023-05-01')
-                                },
-                                {
-                                  value: new Date('2023-06-01')
-                                },
-                                {
-                                  value: new Date('2023-07-01')
-                                },
-                                {
-                                  value: new Date('2023-08-01')
-                                },
-                                {
-                                  value: new Date('2023-09-01')
-                                },
-                                {
-                                  value: new Date('2023-10-01')
-                                },
-                                {
-                                  value: new Date('2023-11-01')
-                                },
-                                {
-                                  value: new Date('2023-12-01')
-                                },
-                                {
-                                  value: new Date('2023-12-31')
-                                }
-                                ],
-                            },
-                            axisY: {
-                            },
-                            toolTip: {
-                              shared: true,
-                              contentFormatter: function (e: { entries: string | any[]; }) {
-                                let content = "";
-                                for (let i = 0; i < e.entries.length; i++) {
-                                  let fecha = new Date(e.entries[i].dataPoint.x.getTime() + (e.entries[i].dataPoint.x.getTimezoneOffset() * 60000));
-                                  content += `Emisor: ${e.entries[i].dataPoint.data.emisor}<br>`;
-                                  content += `Fecha: ${CanvasJS.formatDate(fecha, "DD/MM/YYYY")}<br>`;
-                                  content += `Precio: ${CanvasJS.formatNumber(e.entries[i].dataPoint.y, "$#,##0.00")}<br>`;
-                                  content += `Transacciones: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.transacciones, "#,###.##")}<br>`;
-                                  content += `Numero Acciones: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.cantidad, "#,###.##")}<br>`;
-                                  content += `Valor Total: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.valor, "$#,##0.00")}<br>`;
-                                  }
-                                return content;
-                              }
-                            },
-                            data: [{
-                              type: "line",
-                              xValueFormatString: "YYYY/MM/DD",
-                              yValueFormatString: "$#,###.##",
-                              dataPoints: this.dataShareslist.map(entry => ({
-                                x: new Date(entry.fecha),
-                                y: entry.precio,
-                                data: { transacciones: entry.transacciones, cantidad: entry.cantidad, valor: entry.valor, emisor: entry.emisor }
-                              }))
-
-
-                            }]
-                          }
-          }
-    else{
-      this.chartOptions2023 = {
-        backgroundColor: "#EEFFEE",
-        theme: "light2",
-        animationEnabled: true,
-        zoomEnabled: true,
-        title: {
-          text: `Precios año ${anio}`
-        },
-        data: []
-      };
-    };
-
-
-    this.cdr.detectChanges();
-    },
-    err => {
-      console.log('Error de conexion');
-    }
-  );
-
-  }
-
-
-
-  ConstruirGraficoEmisorAnio2024(anio: string): void{
-    const {cmbEmisor, cmbPrueba} = this.formAcciones.value
-    const observador2024$ = this.searchService.ObtenerAccionesCompaniaAnio$(cmbEmisor,anio)
-  .subscribe(
-    (respuesta: SharesModel[]) => {
-      if (respuesta && respuesta.length >= 2) {
-        this.dataShareslist = respuesta;
-
-                      this.chartOptions2024 = {
-                        backgroundColor: "#E0FFE0",
-                        theme: "light2",
-                        animationEnabled: true,
-                        zoomEnabled: true,
-                        title: {
-                          text: `Precios año ${anio}`
-                        },
-                        axisX: {
-                          labelFontSize: 12,
-                          intervalType: "month",
-                          interval: 1,
-                          minimum: new Date('2024-01-01'),
-                          maximum: new Date('2025-01-01'),
-                          stripLines:[
-                            {
-                              value: new Date('2024-01-01')
-                            },
-                            {
-                              value: new Date('2024-02-01')
-                            },
-                            {
-                              value: new Date('2024-03-01')
-                            },
-                            {
-                              value: new Date('2024-04-01')
-                            },
-                            {
-                              value: new Date('2024-05-01')
-                            },
-                            {
-                              value: new Date('2024-06-01')
-                            },
-                            {
-                              value: new Date('2024-07-01')
-                            },
-                            {
-                              value: new Date('2024-08-01')
-                            },
-                            {
-                              value: new Date('2024-09-01')
-                            },
-                            {
-                              value: new Date('2024-10-01')
-                            },
-                            {
-                              value: new Date('2024-11-01')
-                            },
-                            {
-                              value: new Date('2024-12-01')
-                            },
-                            {
-                              value: new Date('2024-12-31')
-                            }
-                            ],
-                        },
-                        axisY: {
-                        },
-                        toolTip: {
-                          shared: true,
-                          contentFormatter: function (e: { entries: string | any[]; }) {
-                            let content = "";
-                            for (let i = 0; i < e.entries.length; i++) {
-                              let fecha = new Date(e.entries[i].dataPoint.x.getTime() + (e.entries[i].dataPoint.x.getTimezoneOffset() * 60000));
-                              content += `Emisor: ${e.entries[i].dataPoint.data.emisor}<br>`;
-                              content += `Fecha: ${CanvasJS.formatDate(fecha, "DD/MM/YYYY")}<br>`;
-                              content += `Precio: ${CanvasJS.formatNumber(e.entries[i].dataPoint.y, "$#,##0.00")}<br>`;
-                              content += `Transacciones: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.transacciones, "#,###.##")}<br>`;
-                              content += `Numero Acciones: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.cantidad, "#,###.##")}<br>`;
-                              content += `Valor Total: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.valor, "$#,##0.00")}<br>`;
-                          }
-                            return content;
-                          }
-                        },
-                        data: [{
-                          type: "line",
-                          xValueFormatString: "YYYY/MM/DD",
-                          yValueFormatString: "$#,###.##",
-                          dataPoints: this.dataShareslist.map(entry => ({
-                            x: new Date(entry.fecha),
-                            y: entry.precio,
-                            data: { transacciones: entry.transacciones, cantidad: entry.cantidad, valor: entry.valor, emisor: entry.emisor }
-                          }))
-
-
-                        }]
-                      }
-      }else{
-      this.chartOptions2024 = {
-        backgroundColor: "#E0FFE0",
-        theme: "light2",
-        animationEnabled: true,
-        zoomEnabled: true,
-        title: {
-          text: `Precios año ${anio}`
-        },
-        data: []
-      };
-    };
-
-
-    this.cdr.detectChanges();
-    },
-    err => {
-      console.log('Error de conexion');
-    }
-  );
-
-
-  }
-
-
-  ConstruirGraficoEmisorAnio2025(anio: string): void{
-    const {cmbEmisor, cmbPrueba} = this.formAcciones.value
-    const observador2025$ = this.searchService.ObtenerAccionesCompaniaAnio$(cmbEmisor,anio)
-  .subscribe(
-    (respuesta: SharesModel[]) => {
-      if (respuesta && respuesta.length >= 2) {
-        this.dataShareslist = respuesta;
-
-                      this.chartOptions2025 = {
-                        backgroundColor: "#EEFFEE",
-                        theme: "light2",
-                        animationEnabled: true,
-                        zoomEnabled: true,
-                        title: {
-                          text: `Precios año ${anio}`
-                        },
-                        axisX: {
-                          labelFontSize: 12,
-                          intervalType: "month",
-                          interval: 1,
-                          minimum: new Date('2025-01-01'),
-                          maximum: new Date('2026-01-01'),
-                          stripLines:[
-                            {
-                              value: new Date('2025-01-01')
-                            },
-                            {
-                              value: new Date('2025-02-01')
-                            },
-                            {
-                              value: new Date('2025-03-01')
-                            },
-                            {
-                              value: new Date('2025-04-01')
-                            },
-                            {
-                              value: new Date('2025-05-01')
-                            },
-                            {
-                              value: new Date('2025-06-01')
-                            },
-                            {
-                              value: new Date('2025-07-01')
-                            },
-                            {
-                              value: new Date('2025-08-01')
-                            },
-                            {
-                              value: new Date('2025-09-01')
-                            },
-                            {
-                              value: new Date('2025-10-01')
-                            },
-                            {
-                              value: new Date('2025-11-01')
-                            },
-                            {
-                              value: new Date('2025-12-01')
-                            },
-                            {
-                              value: new Date('2025-12-31')
-                            }
-                            ],
-                        },
-                        axisY: {
-                        },
-                        toolTip: {
-                          shared: true,
-                          contentFormatter: function (e: { entries: string | any[]; }) {
-                            let content = "";
-                            for (let i = 0; i < e.entries.length; i++) {
-                              let fecha = new Date(e.entries[i].dataPoint.x.getTime() + (e.entries[i].dataPoint.x.getTimezoneOffset() * 60000));
-                              content += `Emisor: ${e.entries[i].dataPoint.data.emisor}<br>`;
-                              content += `Fecha: ${CanvasJS.formatDate(fecha, "DD/MM/YYYY")}<br>`;
-                              content += `Precio: ${CanvasJS.formatNumber(e.entries[i].dataPoint.y, "$#,##0.00")}<br>`;
-                              content += `Transacciones: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.transacciones, "#,###.##")}<br>`;
-                              content += `Numero Acciones: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.cantidad, "#,###.##")}<br>`;
-                              content += `Valor Total: ${CanvasJS.formatNumber(e.entries[i].dataPoint.data.valor, "$#,##0.00")}<br>`;
-                          }
-                            return content;
-                          }
-                        },
-                        data: [{
-                          type: "line",
-                          xValueFormatString: "YYYY/MM/DD",
-                          yValueFormatString: "$#,###.##",
-                          dataPoints: this.dataShareslist.map(entry => ({
-                            x: new Date(entry.fecha),
-                            y: entry.precio,
-                            data: { transacciones: entry.transacciones, cantidad: entry.cantidad, valor: entry.valor, emisor: entry.emisor }
-                          }))
-
-
-                        }]
-                      }
-      }else{
-      this.chartOptions2025 = {
-        backgroundColor: "#EEFFEE",
-        theme: "light2",
-        animationEnabled: true,
-        zoomEnabled: true,
-        title: {
-          text: `Precios año ${anio}`
-        },
-        data: []
-      };
-    };
-
-
-    this.cdr.detectChanges();
-    },
-    err => {
-      console.log('Error de conexion');
-    }
-  );
-
-  }
-
-
-
-
-
-
-
-
-    ngOnDestroy(): void {
-      this.listaObservadores$.forEach(u => u.unsubscribe());
-    }
-
-
-    enviarConsulta(): void {
-      this.ConstruirGraficoTotal();
-      this.ConstruirGraficoEmisorAnio2017('2017');
-      this.ConstruirGraficoEmisorAnio2018('2018');
-      this.ConstruirGraficoEmisorAnio2019('2019');
-      this.ConstruirGraficoEmisorAnio2020('2020');
-      this.ConstruirGraficoEmisorAnio2021('2021');
-      this.ConstruirGraficoEmisorAnio2022('2022');
-      this.ConstruirGraficoEmisorAnio2023('2023');
-      this.ConstruirGraficoEmisorAnio2024('2024');
-      this.ConstruirGraficoEmisorAnio2025('2025');
-      this.PresentarInformacionDividendos();
-
-
-    }
-
-    enviarSimulacion(): void {
-      this.PresentarSimulacion();
-    }
-
 }
